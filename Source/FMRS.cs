@@ -31,6 +31,9 @@ using System.IO;
 using System.Reflection;
 using UnityEngine;
 using KSP.IO;
+using Contracts;
+using KSP.UI.Screens;
+
 
 
 namespace FMRS
@@ -40,18 +43,20 @@ namespace FMRS
     {
         public ApplicationLauncherButton Stock_Toolbar_Button = new ApplicationLauncherButton();
 
-/*************************************************************************************************************************/
+        /*************************************************************************************************************************/
         public FMRS()
         {
             //nothing
         }
 
 
-/*************************************************************************************************************************/
+        /*************************************************************************************************************************/
         void Awake()
         {
-            Debug.Log("#### FMRS: FMRS On Awake"); 
-            
+#if DEBUG
+            Debug.Log("#### FMRS: FMRS On Awake");
+#endif
+
             FMRS_core_awake();
 
             stb_texture = new Texture2D(38, 38);
@@ -62,27 +67,31 @@ namespace FMRS
                 add_toolbar_button();
             }
 
+#if DEBUG
             Debug.Log("#### FMRS Version: " + mod_vers);
-            
+#endif
+
             _SAVE_SaveFolder = HighLogic.SaveFolder;
         }
 
-        
-/*************************************************************************************************************************/
+
+        /*************************************************************************************************************************/
         void Start()
         {
-            RenderingManager.AddToPostDrawQueue(3, new Callback(drawGUI));     
-
+#if DEBUG
             if (Debug_Level_1_Active)
                 Debug.Log("#### FMRS: entering Start()");
+#endif
 
             if (!_SAVE_Has_Launched)
                 _SETTING_Enabled = false;
 
             if (FlightGlobals.ActiveVessel.situation == Vessel.Situations.PRELAUNCH)
             {
+#if DEBUG
                 if (Debug_Active)
                     Debug.Log("#### FMRS: ActiveVessel is prelaunch");
+#endif
                 _SETTING_Enabled = true;
                 GameEvents.onLaunch.Add(launch_routine);
             }
@@ -109,25 +118,35 @@ namespace FMRS
                 stb_texture.LoadImage(System.IO.File.ReadAllBytes(Path.Combine(KSPUtil.ApplicationRootPath, "GameData/FMRS/icons/tb_st_en.png")));
             }
 
+#if DEBUG
             if (Debug_Level_1_Active)
                 Debug.Log("#### FMRS: leaving Start ()");
+#endif
         }
 
 
-/*************************************************************************************************************************/
+        /*************************************************************************************************************************/
         void Update()
         {
             flight_scene_update_routine();
 
             if (ThrottleLogger != null)
+#if DEBUG
                 ThrottleLogger.Update(Debug_Active, Debug_Level_1_Active);
+#else
+                ThrottleLogger.Update();
+#endif
 
-            if(ThrottleReplay != null)
+            if (ThrottleReplay != null)
+#if DEBUG
                 ThrottleReplay.Update(Debug_Active, Debug_Level_1_Active);
+#else
+                ThrottleReplay.Update();
+#endif
         }
 
 
-/*************************************************************************************************************************/
+        /*************************************************************************************************************************/
         void FixedUpdate()
         {
             if (ThrottleLogger != null)
@@ -137,11 +156,13 @@ namespace FMRS
         }
 
 
-/*************************************************************************************************************************/
+        /*************************************************************************************************************************/
         void OnDestroy()
         {
+#if DEBUG
             if (Debug_Level_1_Active)
                 Debug.Log("#### FMRS: enter OnDestroy()");
+#endif
 
             destroy_FMRS();
 
@@ -151,14 +172,14 @@ namespace FMRS
             GameEvents.onGUIApplicationLauncherReady.Remove(add_toolbar_button);
             ApplicationLauncher.Instance.RemoveModApplication(Stock_Toolbar_Button);
 
-            RenderingManager.RemoveFromPostDrawQueue(3, new Callback(drawGUI));
-
+#if DEBUG
             if (Debug_Level_1_Active)
                 Debug.Log("#### FMRS: leave OnDestroy()");
+#endif
         }
 
 
-/*************************************************************************************************************************/
+        /*************************************************************************************************************************/
         public void add_toolbar_button()
         {
             Stock_Toolbar_Button = ApplicationLauncher.Instance.AddModApplication(
@@ -168,13 +189,18 @@ namespace FMRS
                 ApplicationLauncher.AppScenes.FLIGHT | ApplicationLauncher.AppScenes.MAPVIEW,
                 (Texture)stb_texture);
         }
+
+
+
+
+
+
+        /*************************************************************************************************************************/
+        private void OnGUI()
+        {
+            drawGUI();
+        }
     }
-
-
-
-
-
-/*************************************************************************************************************************/
 /*************************************************************************************************************************/
 /*************************************************************************************************************************/
 /*************************************************************************************************************************/
@@ -201,16 +227,20 @@ namespace FMRS
 
             _SAVE_SaveFolder = HighLogic.SaveFolder;
 
+#if DEBUG
             if (Debug_Active)
                 Debug.Log("#### FMRS: FMRS_Space_Center On Awake");
+#endif
         }
 
 
 /*************************************************************************************************************************/
         void Start()
         {
+#if DEBUG
             if (Debug_Active)
                 Debug.Log("#### FMRS: FMRS_Space_Center On Start");
+#endif
         }
 
 
@@ -234,8 +264,10 @@ namespace FMRS
                     delay--;
                 else
                 {
+#if DEBUG
                     if (Debug_Active)
                         Debug.Log("#### FMRS: FMRS_Space_Center kick to main");
+#endif
 
                     _SAVE_Kick_To_Main = false;
                     write_save_values_to_file();
@@ -294,16 +326,20 @@ namespace FMRS
 
             _SAVE_SaveFolder = HighLogic.SaveFolder;
 
+#if DEBUG
             if (Debug_Active)
                 Debug.Log("#### FMRS: TrackingStation On Awake");
+#endif
         }
 
 
 /*************************************************************************************************************************/
         void Start()
         {
+#if DEBUG
             if (Debug_Active)
                 Debug.Log("#### FMRS: TrackingStation On Start");
+#endif
         }
 
 /*************************************************************************************************************************/
@@ -326,8 +362,10 @@ namespace FMRS
                     delay--;
                 else
                 {
+#if DEBUG
                     if (Debug_Active)
                         Debug.Log("#### FMRS: TrackingStation kick to main");
+#endif
 
                     _SAVE_Kick_To_Main = false;
                     write_save_values_to_file();
@@ -379,16 +417,20 @@ namespace FMRS
 
             Debug.Log("#### FMRS Version: " + mod_vers);
 
+#if DEBUG
             if (Debug_Active)
                 Debug.Log("#### FMRS: FMRS_MainMenu On Awake");
+#endif
         }
 
 
 /*************************************************************************************************************************/
         void Start()
         {
+#if DEBUG
             if (Debug_Active)
                 Debug.Log("#### FMRS: FMRS_MainMenu On Start");
+#endif
 
             if (_SETTING_Enabled)
             {

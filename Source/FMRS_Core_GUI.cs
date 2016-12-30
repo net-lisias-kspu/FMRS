@@ -51,7 +51,7 @@ namespace FMRS
                 windowPos.x = Mathf.Clamp(windowPos.x, 0, Screen.width - windowPos.width);
                 windowPos.y = Mathf.Clamp(windowPos.y, 0, Screen.height - windowPos.height);
 
-#if BETA //**************************
+#if BETA && !DEBUG//**************************
                 beta_windowPos.x = windowPos.x;
                 beta_windowPos.y = windowPos.y + windowPos.height;
                 beta_windowPos =  GUILayout.Window(3,beta_windowPos, BetaGUI, "FMRS Beta");
@@ -161,8 +161,10 @@ namespace FMRS
                 _SETTING_Auto_Recover = GUI.Toggle(new Rect(5, 35 + (30 * 3), 25, 25), _SETTING_Auto_Recover, "Auto Recover Landed Crafts");
                 window_height += 30;
                 _SETTING_Throttle_Log = GUI.Toggle(new Rect(6, 35 + (30 * 4), 25, 25), _SETTING_Throttle_Log, "Throttle Logger WIP");
+#if DEBUG
                 window_height += 30;
                 Debug_Active = GUI.Toggle(new Rect(5, 35 + (30 * 5), 25, 25), Debug_Active, "write debug messages to log file");
+#endif
                 GUILayout.EndVertical();
                 window_height += 42;
             }
@@ -399,6 +401,11 @@ namespace FMRS
             GUILayout.EndHorizontal();
             GUILayout.Space(5);
 
+            if (GUILayout.Button("mark bug", button_small, GUILayout.Width(115)))
+                Debug.Log("#### FMRS: ##################### BUG MARKER #####################");
+
+            GUILayout.Space(5);
+
             debug_message[0] = _SAVE_Switched_To_Savefile;
             debug_message[1] = loaded_vessels.Count.ToString();
             //debug_message[2] = "";
@@ -429,7 +436,7 @@ namespace FMRS
         }
 #endif
 
-#if BETA
+#if BETA && !DEBUG
 /*************************************************************************************************************************/
         public void BetaGUI(int windowID)
         {
@@ -447,10 +454,12 @@ namespace FMRS
 /*************************************************************************************************************************/
         private void init_skin()
         {
+#if DEBUG
             if (Debug_Level_1_Active)
                 Debug.Log("#### FMRS: enter sinit_skin()");
             if (Debug_Active)
                 Debug.Log("#### FMRS: init_skin");
+#endif
 
             GUIStyle MyButton = new GUIStyle(HighLogic.Skin.button);
             GUIStyle MyTextArea = new GUIStyle(HighLogic.Skin.textArea);
@@ -519,8 +528,10 @@ namespace FMRS
 
             skin_init = true;
 
+#if DEBUG
             if (Debug_Level_1_Active)
                 Debug.Log("#### FMRS: leave init_skin()");
+#endif
         }
     }
 }
