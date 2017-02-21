@@ -51,7 +51,7 @@ namespace FMRS
                 windowPos.x = Mathf.Clamp(windowPos.x, 0, Screen.width - windowPos.width);
                 windowPos.y = Mathf.Clamp(windowPos.y, 0, Screen.height - windowPos.height);
 
-#if BETA //**************************
+#if BETA && !DEBUG //**************************
                 beta_windowPos.x = windowPos.x;
                 beta_windowPos.y = windowPos.y + windowPos.height;
                 beta_windowPos =  GUILayout.Window(3,beta_windowPos, BetaGUI, "FMRS Beta");
@@ -152,7 +152,7 @@ namespace FMRS
             {
                 GUILayout.Space(5);
                 window_height += 5;
-                GUILayout.BeginVertical(area_style, GUILayout.Width(266));
+                GUILayout.BeginVertical( /* area_style ,*/ GUILayout.Width(266));
                 GUILayout.Space((5 * 30) + 5);
                 _SETTING_Messages = GUI.Toggle(new Rect(5, 35 + (30 * 1), 25, 25), _SETTING_Messages, "Messaging System");
                 window_height += 30;
@@ -161,8 +161,11 @@ namespace FMRS
                 _SETTING_Auto_Recover = GUI.Toggle(new Rect(5, 35 + (30 * 3), 25, 25), _SETTING_Auto_Recover, "Auto Recover Landed Crafts");
                 window_height += 30;
                 _SETTING_Throttle_Log = GUI.Toggle(new Rect(6, 35 + (30 * 4), 25, 25), _SETTING_Throttle_Log, "Throttle Logger WIP");
+
+#if DEBUG
                 window_height += 30;
                 Debug_Active = GUI.Toggle(new Rect(5, 35 + (30 * 5), 25, 25), Debug_Active, "write debug messages to log file");
+#endif
                 GUILayout.EndVertical();
                 window_height += 42;
             }
@@ -205,7 +208,7 @@ namespace FMRS
                     }
                     else
                     {
-                        GUILayout.BeginVertical(area_style, GUILayout.Width(266));
+                        GUILayout.BeginVertical(/* area_style, */ GUILayout.Width(266));
                         window_height += scrollbar_size;
                         scrollbar_width_offset = 20;
                     }
@@ -213,7 +216,7 @@ namespace FMRS
                     while (save_files.Count != 0)
                     {
                         GUILayout.Space(5);
-                        GUILayout.BeginVertical(area_style);
+                        GUILayout.BeginVertical(); //  area_style);
                         if (save_files.Last().Contains("separated_"))
                             GUILayout.Box("Separated at " + get_time_string(Convert.ToDouble(get_save_value(save_cat.SAVEFILE, save_files.Last())) - _SAVE_Launched_At), text_main, GUILayout.Width(230 + scrollbar_width_offset));
                         else
@@ -239,7 +242,7 @@ namespace FMRS
                                     {
                                         GUILayout.EndHorizontal();
                                         GUILayout.Space(5);
-                                        GUILayout.BeginVertical(area_style, GUILayout.Width(230));
+                                        GUILayout.BeginVertical(/* area_style, */ GUILayout.Width(230));
                                         temp_float = 222 + scrollbar_width_offset;
                                     }
                                     if (FlightGlobals.ActiveVessel.LandedOrSplashed)
@@ -372,9 +375,9 @@ namespace FMRS
                 delete_dropped_vessel(guid_delete_vessel);
 
             windowPos.height = window_height;
-            windowPos.width = window_width;
+         //   windowPos.width = window_width;
 
-            GUI.DragWindow(new Rect(0, 0, 10000, 20));
+            GUI.DragWindow();
         }
 
 
@@ -385,7 +388,7 @@ namespace FMRS
             GUILayout.BeginVertical();
 
             GUILayout.Space(10);
-            GUI.Toggle(new Rect(5, 3, 25, 25), plugin_active, " ");
+            //GUI.Toggle(new Rect(5, 3, 25, 25), plugin_active, " ");
 
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("print savefile", button_small, GUILayout.Width(132)))
@@ -397,6 +400,11 @@ namespace FMRS
             Debug_Level_1_Active = GUILayout.Toggle(Debug_Level_1_Active, "debug lv 1", button_small, GUILayout.Width(132));
             Debug_Level_2_Active = GUILayout.Toggle(Debug_Level_2_Active, "debug lv 2", button_small, GUILayout.Width(132));
             GUILayout.EndHorizontal();
+            GUILayout.Space(5);
+
+            if (GUILayout.Button("mark bug", button_small, GUILayout.Width(115)))
+                Log.Info("##################### BUG MARKER #####################");
+            
             GUILayout.Space(5);
 
             debug_message[0] = _SAVE_Switched_To_Savefile;
@@ -429,14 +437,14 @@ namespace FMRS
         }
 #endif
 
-#if BETA
+#if BETA && !DEBUG
 /*************************************************************************************************************************/
         public void BetaGUI(int windowID)
         {
             GUILayout.BeginVertical();
 
             if (GUILayout.Button("mark bug", button_small, GUILayout.Width(115)))
-                Debug.Log("#### FMRS: ##################### BUG MARKER #####################");
+                Log.Info("##################### BUG MARKER #####################");
 
             GUILayout.EndVertical();
             GUI.DragWindow(new Rect(0, 0, 10000, 20));
@@ -447,11 +455,12 @@ namespace FMRS
 /*************************************************************************************************************************/
         private void init_skin()
         {
+#if DEBUG
             if (Debug_Level_1_Active)
-                Debug.Log("#### FMRS: enter sinit_skin()");
+                Log.Info("enter sinit_skin()");
             if (Debug_Active)
-                Debug.Log("#### FMRS: init_skin");
-
+                Log.Info("init_skin");
+#endif
             GUIStyle MyButton = new GUIStyle(HighLogic.Skin.button);
             GUIStyle MyTextArea = new GUIStyle(HighLogic.Skin.textArea);
             GUIStyle MyScrollView = new GUIStyle(HighLogic.Skin.scrollView);
@@ -518,9 +527,10 @@ namespace FMRS
             scrollbar_stlye.overflow = new RectOffset(1, 1, 1, 1);
 
             skin_init = true;
-
+#if DEBUG
             if (Debug_Level_1_Active)
-                Debug.Log("#### FMRS: leave init_skin()");
+                Log.Info("leave init_skin()");
+#endif
         }
     }
 }

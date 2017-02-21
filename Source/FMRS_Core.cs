@@ -38,7 +38,7 @@ namespace FMRS
 {
     public partial class FMRS_Core : FMRS_Util , IFMRS
     {
-        private string version_number = "1.0.01";
+        private string version_number = "1.0.3";
         public bool plugin_active = false;
         public double Time_Trigger_Staging, Time_Trigger_Start_Delay, Time_Trigger_Cuto;
         public bool timer_staging_active = false, timer_start_delay_active = false, timer_cuto_active = false;
@@ -86,9 +86,10 @@ namespace FMRS
 /*************************************************************************************************************************/
         public void FMRS_core_awake()
         {
+#if DEBUG
             if (Debug_Level_1_Active)
-                Debug.Log("#### FMRS: entering FMRS_core_awake()");
-
+                Log.Info("entering FMRS_core_awake()");
+#endif
             mod_vers = "v";
 
 #if DEBUG //**************************
@@ -107,25 +108,31 @@ namespace FMRS
             init_Save_File_Content();
             load_save_file();
 
+#if DEBUG
             if (Debug_Level_1_Active)
-                Debug.Log("#### FMRS: leaving FMRS_core_awake()");
+                Log.Info("leaving FMRS_core_awake()");
+#endif
         }
 
 
 /*************************************************************************************************************************/
         public void flight_scene_start_routine()
         {
+#if DEBUG
             if (Debug_Level_1_Active)
-                Debug.Log("#### FMRS: entering flight_scene_start_routine()");
+                Log.Info("entering flight_scene_start_routine()");
             if (Debug_Active)
-                Debug.Log("#### FMRS: FMRS flight_scene_start_routine");
+                Log.Info("FMRS flight_scene_start_routine");
+#endif
 
             plugin_active = true;
 
             if (FlightGlobals.ActiveVessel.situation == Vessel.Situations.PRELAUNCH || n_launchpad_preflight || flight_preflight)
             {
+#if DEBUG
                 if (Debug_Active)
-                    Debug.Log("#### FMRS: FMRS Vessel is prelaunch");
+                    Log.Info("FMRS Vessel is prelaunch");
+#endif
 
                 delete_dropped_vessels();
                 _SETTING_Enabled = true;
@@ -181,12 +188,15 @@ namespace FMRS
                         }
                     }
                 }
+#if DEBUG
                 if (Debug_Active)
-                    Debug.Log("#### FMRS: loaded_vessels: " + loaded_vessels.Count.ToString());
-
+                    Log.Info("loaded_vessels: " + loaded_vessels.Count.ToString());
+#endif
                 if (_SETTING_Throttle_Log)
                 {
+#if DEBUG
                     ThrottleReplay = new FMRS_THL.FMRS_THL_Rep(Debug_Active, Debug_Level_1_Active);
+#endif
 
                     foreach (Vessel v in FlightGlobals.Vessels)
                     {
@@ -194,7 +204,7 @@ namespace FMRS
                         {
                             //if (v.loaded)
                             {
-                                Debug.Log("#### FMRS: appling flybywire callback to main vessel");
+                                Log.Info("appling flybywire callback to main vessel");
 
                                 v.OnFlyByWire += new FlightInputCallback(ThrottleReplay.flybywire);
                             }
@@ -205,7 +215,7 @@ namespace FMRS
 
             if ((windowPos.x == 0) && (windowPos.y == 0))
             {
-                windowPos = new Rect(Screen.width / 2, Screen.height / 2, 10, 10);
+                windowPos = new Rect(Screen.width / 2, Screen.height / 2, 50, 50);
                 write_save_values_to_file();
             }
 
@@ -226,12 +236,16 @@ namespace FMRS
             if (!main_ui_active)
             {
                 main_ui_active = true;
+#if DEBUG
                 if (Debug_Active)
-                    Debug.Log("#### FMRS: activate drawMainGUI");
+                    Log.Info("activate drawMainGUI");
+#endif
             }
 
+#if DEBUG
             if (Debug_Level_1_Active)
-                Debug.Log("#### FMRS: leaving flight_scene_start_routine()");
+                Log.Info("leaving flight_scene_start_routine()");
+#endif
         }
 
 
@@ -258,13 +272,16 @@ namespace FMRS
                             }
                             foreach (Guid id in temp_guid_list)
                             {
+#if DEBUG
                                 if (Debug_Active)
-                                    Debug.Log("#### FMRS: loaded_vessels: removing " + id.ToString());
+                                    Log.Info("loaded_vessels: removing " + id.ToString());
+#endif
                                 loaded_vessels.Remove(id);
                             }
-
+#if DEBUG
                             if (Debug_Active)
-                                Debug.Log("#### FMRS: loaded_vessels: " + loaded_vessels.Count.ToString());
+                                Log.Info("loaded_vessels: " + loaded_vessels.Count.ToString());
+#endif
                         }
                         timer_start_delay_active = false;
                     }
@@ -275,9 +292,10 @@ namespace FMRS
                     {
                         if ((Time_Trigger_Cuto + 0.1) <= Planetarium.GetUniversalTime())
                         {
+#if DEBUG
                             if (Debug_Active)
-                                Debug.Log("#### FMRS: auto thrust cut off");
-
+                                Log.Info("auto thrust cut off");
+#endif
                             foreach (Vessel temp_vessel in FlightGlobals.Vessels)
                             {
                                 if (!Vessels.Contains(temp_vessel.id))
@@ -292,8 +310,10 @@ namespace FMRS
 
                     if ((Time_Trigger_Staging + Timer_Stage_Delay) <= Planetarium.GetUniversalTime())
                     {
+#if DEBUG
                         if (Debug_Active)
-                            Debug.Log("#### FMRS: Has Staged Delayed");
+                            Log.Info("Has Staged Delayed");
+#endif
 
                         last_staging_event = Planetarium.GetUniversalTime();
 
@@ -334,9 +354,10 @@ namespace FMRS
                 if (n_launchpad_preflight && !FlightGlobals.ActiveVessel.Landed)
                 {
                     EventReport dummy_event = null;
-
+#if DEBUG
                     if (Debug_Active)
-                        Debug.Log("#### FMRS: non launchpad launch");
+                        Log.Info("non launchpad launch");
+#endif
                     n_launchpad_preflight = false;
                     launch_routine(dummy_event);
                 }
@@ -347,10 +368,12 @@ namespace FMRS
 /*************************************************************************************************************************/
         public void toolbar_button_clicked()
         {
+#if DEBUG
             if (Debug_Level_1_Active)
-                Debug.Log("#### FMRS: enter toolbar_button_clicked()");
+                Log.Info("enter toolbar_button_clicked()");
             if (Debug_Active)
-                Debug.Log("#### FMRS: Toolbar Button Clicked");
+                Log.Info("Toolbar Button Clicked");
+#endif
 
             if(_SETTING_Enabled)
             {              
@@ -368,9 +391,10 @@ namespace FMRS
                 toolbar_open();
           
             write_save_values_to_file();
-
+#if DEBUG
             if (Debug_Level_1_Active)
-                Debug.Log("#### FMRS: leave toolbar_button_clicked()");
+                Log.Info("leave toolbar_button_clicked()");
+#endif
         }
 
 
@@ -379,38 +403,45 @@ namespace FMRS
         {
             bool arm_save = false;
 
+#if DEBUG
             if (Debug_Level_1_Active)
-                Debug.Log("#### FMRS: enter toolbar_open()");
+                Log.Info("enter toolbar_open()");
             if (Debug_Active)
-                Debug.Log("#### FMRS: enable plugin form toolbar");
+                Log.Info("enable plugin form toolbar");
+#endif
 
             if (blz_toolbar_available)
                 Toolbar_Button.TexturePath = "FMRS/icons/tb_blz_en";
-            stb_texture.LoadImage(System.IO.File.ReadAllBytes(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "icons/tb_st_en.png")));
+            // stb_texture.LoadImage(System.IO.File.ReadAllBytes(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "icons/tb_st_en.png")));
+			stb_texture.LoadImage(System.IO.File.ReadAllBytes("FRMS/icons/tb_st_en.png"));
+			
 
             _SETTING_Enabled = true;
 
             if (FlightGlobals.ActiveVessel.situation == Vessel.Situations.PRELAUNCH)
             {
+#if DEBUG
                 if (Debug_Active)
-                    Debug.Log("#### FMRS: start plugin on launchpad");
-
+                    Log.Info("start plugin on launchpad");
+#endif
                 GameEvents.onLaunch.Add(launch_routine);
                 flight_scene_start_routine();
             }
             else if (FlightGlobals.ActiveVessel.Landed)
             {
+#if DEBUG
                 if (Debug_Active)
-                    Debug.Log("#### FMRS: start plugin not on launchpad");
-
+                    Log.Info("start plugin not on launchpad");
+#endif
                 n_launchpad_preflight = true;
                 flight_scene_start_routine();
             }
             else
             {
+#if DEBUG
                 if (Debug_Active)
-                    Debug.Log("#### FMRS: start plugin during flight");
-
+                    Log.Info("start plugin during flight");
+#endif
                 if (!_SETTING_Armed)
                 {
                     _SETTING_Armed = true;
@@ -424,20 +455,22 @@ namespace FMRS
                     _SETTING_Armed = false;
                 flight_preflight = false;
             }
-
+#if DEBUG
             if (Debug_Level_1_Active)
-                Debug.Log("#### FMRS: leave toolbar_open()");
+                Log.Info("leave toolbar_open()");
+#endif
         }
 
 
 /*************************************************************************************************************************/
         public void close_FMRS()
         {
+#if DEBUG
             if (Debug_Level_1_Active)
-                Debug.Log("#### FMRS: enter close_FMRS()");
+                Log.Info("enter close_FMRS()");
             if (Debug_Active)
-                Debug.Log("#### FMRS: close plugin");
-
+                Log.Info("close plugin");
+#endif
             _SETTING_Enabled = false;
             _SAVE_Has_Launched = false;
             delete_dropped_vessels();
@@ -446,24 +479,27 @@ namespace FMRS
 
             if (blz_toolbar_available)
                 Toolbar_Button.TexturePath = "FMRS/icons/tb_blz_di";
-            stb_texture.LoadImage(System.IO.File.ReadAllBytes(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "icons/tb_st_di.png")));
+            //stb_texture.LoadImage(System.IO.File.ReadAllBytes(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "icons/tb_st_di.png")));
+			stb_texture.LoadImage(System.IO.File.ReadAllBytes("FRMS/icons/tb_st_di.png"));
 
             if (_SAVE_Has_Launched && _SAVE_Switched_To_Dropped)
                 jump_to_vessel("Main");
 
             destroy_FMRS();
-
+#if DEBUG
             if (Debug_Level_1_Active)
-                Debug.Log("#### FMRS: leave close_FMRS()");
+                Log.Info("leave close_FMRS()");
+#endif
         }
 
 
 /*************************************************************************************************************************/
         public void destroy_FMRS()
         {
+#if DEBUG
             if (Debug_Level_1_Active)
-                Debug.Log("#### FMRS: enter destroy_FMRS()");
-
+                Log.Info("enter destroy_FMRS()");
+#endif
             plugin_active = false;
 
             if (!_SETTING_Enabled)
@@ -481,8 +517,10 @@ namespace FMRS
             if (main_ui_active)
             {
                 main_ui_active = false;
+#if DEBUG
                 if (Debug_Active)
-                    Debug.Log("#### FMRS: close drawMainGUI");
+                    Log.Info("close drawMainGUI");
+#endif
             }
 
             detach_handlers();
@@ -491,9 +529,10 @@ namespace FMRS
 
             if (ThrottleLogger != null)
                 ThrottleLogger.EndLog();
-
+#if DEBUG
             if (Debug_Level_1_Active)
-                Debug.Log("#### FMRS: leave destroy_FMRS()");
+                Log.Info("leave destroy_FMRS()");
+#endif
         }
     }
 }

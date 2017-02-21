@@ -1,0 +1,31 @@
+{
+	"NAME":"Flight Manager for Reusable Stages",
+	"URL":"http://ksp-avc.cybutek.net/version.php?id=374",
+	"DOWNLOAD":"http://forum.kerbalspaceprogram.com/index.php?/topic/72605-110-flight-manager-for-reusable-stages-fmrs-x110-experimental/&do=findComment&comment=2822472",
+	"CHANGE_LOG_URL":"http://forum.kerbalspaceprogram.com/index.php?/topic/72605-110-flight-manager-for-reusable-stages-fmrs-x110-experimental/&do=findComment&comment=2822472",
+	"VERSION":
+	{
+		"MAJOR":1,
+		"MINOR":2,
+		"PATCH":0,
+		"BUILD":0
+	},
+	"KSP_VERSION":
+	{
+		"MAJOR":1,
+		"MINOR":2,
+		"PATCH":0
+	},
+	"KSP_VERSION_MIN":
+	{
+		"MAJOR":1,
+		"MINOR":2,
+		"PATCH":0
+	},
+	"KSP_VERSION_MAX":
+	{
+		"MAJOR":1,
+		"MINOR":2,
+		"PATCH":99
+	}
+}
