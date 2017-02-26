@@ -456,8 +456,8 @@ namespace FMRS
         private void init_skin()
         {
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter sinit_skin()");
+            //if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.init_skin", "enter init_skin()");
             if (Debug_Active)
                 Log.Info("init_skin");
 #endif
@@ -528,8 +528,8 @@ namespace FMRS
 
             skin_init = true;
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leave init_skin()");
+            //if (Debug_Level_1_Active)
+                Log.PopStackInfo("leave init_skin()");
 #endif
         }
     }

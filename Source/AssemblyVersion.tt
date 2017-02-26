@@ -16,7 +16,7 @@
 	//
 	//		if %textTemplatingPath%=="\Microsoft Shared\TextTemplating\$(VisualStudioVersion)\texttransform.exe" set textTemplatingPath="%CommonProgramFiles%\Microsoft Shared\TextTemplating\$(VisualStudioVersion)\texttransform.exe"
 	//
-	//		%textTemplatingPath% "$(ProjectDir)AssemblyFileVersion.tt"
+	//		%textTemplatingPath% "$(ProjectDir)AssemblyVersion.tt"
 
     int major = 0; 
     int minor = 0; 

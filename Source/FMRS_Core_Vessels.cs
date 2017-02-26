@@ -49,8 +49,8 @@ namespace FMRS
             Dictionary<Guid, List<ProtoVessel>> vessel_dict = new Dictionary<Guid, List<ProtoVessel>>();
             string message;
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("entering save_landed_vessel(bool auto_recover_allowed) " + auto_recover_allowed.ToString());
+           // if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.save_landed_vessel", "entering save_landed_vessel(bool auto_recover_allowed) " + auto_recover_allowed.ToString());
 
             if (Debug_Active)
                 Log.Info("save landed vessels");
@@ -64,7 +64,8 @@ namespace FMRS
                 return;
             }
 
-            GamePersistence.SaveGame("FMRS_quicksave", HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
+            //GamePersistence.SaveGame("FMRS_quicksave", HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
+            FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.save_landed_vessel", "FMRS_quicksave", HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
             loadgame = GamePersistence.LoadGame("FMRS_quicksave", HighLogic.SaveFolder + "/FMRS", false, false);
             savegame = GamePersistence.LoadGame("FMRS_main_save", HighLogic.SaveFolder, false, false);
 
@@ -234,14 +235,15 @@ namespace FMRS
                     set_recoverd_value("message", "FMRS: Building Destroyed", message);
             }
 
-            GamePersistence.SaveGame(savegame, "FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
+            //GamePersistence.SaveGame(savegame, "FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
+            FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.save_landed_vessel", savegame, "FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
 
             write_recover_file();
             write_save_values_to_file();
 
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leaving save_landed_vessel(bool auto_recover_allowed)");
+           // if (Debug_Level_1_Active)
+                Log.PopStackInfo("leaving save_landed_vessel(bool auto_recover_allowed)");
 #endif
         }
 
@@ -250,8 +252,8 @@ namespace FMRS
         public void fill_Vessels_list()
         {
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("entering fill_Vessels_list()");
+           // if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.fill_Vessels_list", "entering fill_Vessels_list()");
 #endif
 
             foreach (Vessel temp_vessel in FlightGlobals.Vessels)
@@ -266,8 +268,8 @@ namespace FMRS
                 }
             }
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leaving fill_Vessels_list()");
+           // if (Debug_Level_1_Active)
+                Log.PopStackInfo("leaving fill_Vessels_list()");
 #endif
         }
 
@@ -277,8 +279,8 @@ namespace FMRS
         {
             bool new_vessel_found = false, controllable = false;
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("entering search_for_new_vessels(string save_file_name) " + save_file_name);
+           // if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.search_for_new_vessels(string)", "entering search_for_new_vessels(string save_file_name) " + save_file_name);
 #endif
             foreach (Vessel temp_vessel in FlightGlobals.Vessels)
             {
@@ -363,8 +365,8 @@ namespace FMRS
                 }
             }
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leaving search_for_new_vessels(string save_file_name)");
+           // if (Debug_Level_1_Active)
+                Log.PopStackInfo("leaving search_for_new_vessels(string save_file_name)");
 #endif
             return (new_vessel_found);
         }
@@ -375,8 +377,8 @@ namespace FMRS
         {
             List<ProtoVessel> return_list = new List<ProtoVessel>();
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("entering List<Guid> search_for_new_vessels(Game loadgame, Game savegame)");
+           // if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.search_for_new_vessels(string, string)", "entering List<Guid> search_for_new_vessels(Game loadgame, Game savegame)");
 #endif
 
             foreach (ProtoVessel vessel_load in loadgame.flightState.protoVessels)
@@ -393,8 +395,8 @@ namespace FMRS
                     }
             }
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leaving List<Guid> search_for_new_vessels(Game loadgame, Game savegame)");
+           // if (Debug_Level_1_Active)
+                Log.PopStackInfo("leaving List<Guid> search_for_new_vessels(Game loadgame, Game savegame)");
 #endif
             return (return_list);
         }
@@ -405,8 +407,8 @@ namespace FMRS
         {
             int load_vessel;
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("entering jump_to_vessel(Guid vessel_id) " + vessel_id.ToString() + " " + save_landed.ToString());
+           // if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.jump_to_vessel(Guid, bool)", "entering jump_to_vessel(Guid vessel_id) " + vessel_id.ToString() + " " + save_landed.ToString());
 
             if (Debug_Active)
                 Log.Info("Jump to " + vessel_id.ToString());
@@ -416,7 +418,8 @@ namespace FMRS
             {
                 if (FlightGlobals.ActiveVessel.id == _SAVE_Main_Vessel)
                 {
-                    GamePersistence.SaveGame("FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
+                    //GamePersistence.SaveGame("FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
+                    FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.jump_to_vessel(Guid, bool)", "FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
                 }
                 save_landed_vessel(true, false);
             }
@@ -432,14 +435,15 @@ namespace FMRS
 
                 // TODO: semantics refactor. load_vessel is the incentive
                 for (load_vessel = 0; load_vessel < loadgame.flightState.protoVessels.Count && loadgame.flightState.protoVessels[load_vessel].vesselID != vessel_id; load_vessel++) ;
-
-                if (load_vessel <= loadgame.flightState.protoVessels.Count)
+              
+              
+                if (load_vessel < loadgame.flightState.protoVessels.Count)
                 {
 #if DEBUG
                     if (Debug_Active)
                         Log.Info("FMRS_save found, Vessel found, try to start");
 #endif
-
+                    
                     if (vessel_id != _SAVE_Main_Vessel)
                     {
                         _SAVE_Switched_To_Savefile = get_save_value(save_cat.DROPPED, vessel_id.ToString());
@@ -450,13 +454,23 @@ namespace FMRS
                     {
                         _SAVE_Switched_To_Dropped = false;
                     }
+                    Log.Info("load_vessel: " + load_vessel.ToString());
+                    Log.Info("loadgame.flightState.protoVessels.Count: " + loadgame.flightState.protoVessels.Count.ToString());
+                    //Log.Info("loadgame: " + loadgame.ToString());
+                    Log.Info("File loaded: " + HighLogic.SaveFolder + "/FMRS/" + get_save_value(save_cat.DROPPED, vessel_id.ToString()));
 
-                    FlightDriver.StartAndFocusVessel(loadgame, load_vessel);
+                    Log.ShowStackInfo();
+                    // detach_handlers();
+                    FMRS_SAVE_Util.Instance.StartAndFocusVessel(loadgame, load_vessel);
+//                    FlightDriver.StartAndFocusVessel(loadgame, load_vessel);
+                    // attach_handlers();
+                    return;
                 }
             }
+           
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leaving jump_to_vessel(Guid vessel_id)");
+           // if (Debug_Level_1_Active)
+                Log.PopStackInfo("leaving jump_to_vessel(Guid vessel_id)");
 #endif
         }
 
@@ -467,8 +481,8 @@ namespace FMRS
             Game loadgame;
             int load_vessel;
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("entering jump_to_vessel(string main)");
+           // if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.jump_to_vessel(string)", "entering jump_to_vessel(string main)");
             if (Debug_Active)
                 Log.Info("Jump to Main");
 #endif
@@ -487,8 +501,8 @@ namespace FMRS
                     Log.Info("try to load gamefile FMRS_main_save");
 #endif
 
-                for (load_vessel = 0; load_vessel <= loadgame.flightState.protoVessels.Count && loadgame.flightState.protoVessels[load_vessel].vesselID != _SAVE_Main_Vessel; load_vessel++) ;
-                if (load_vessel <= loadgame.flightState.protoVessels.Count)
+                for (load_vessel = 0; load_vessel < loadgame.flightState.protoVessels.Count && loadgame.flightState.protoVessels[load_vessel].vesselID != _SAVE_Main_Vessel; load_vessel++) ;
+                if (load_vessel < loadgame.flightState.protoVessels.Count)
                 {
 #if DEBUG
                     if (Debug_Active)
@@ -496,7 +510,8 @@ namespace FMRS
 #endif
                     _SAVE_Switched_To_Savefile = "FMRS_main_save";
                     _SAVE_Switched_To_Dropped = false;
-                    FlightDriver.StartAndFocusVessel(loadgame, load_vessel);
+                    FMRS_SAVE_Util.Instance.StartAndFocusVessel(loadgame, load_vessel);
+//                    FlightDriver.StartAndFocusVessel(loadgame, load_vessel);
                 }
 #if DEBUG
                 else
@@ -509,8 +524,8 @@ namespace FMRS
                 if (Debug_Active)
                 Log.Info("Loading gamefile FMRS_main_save failed");
 
-            if (Debug_Level_1_Active)
-                Log.Info("leaving jump_to_vessel(string main)");
+           // if (Debug_Level_1_Active)
+                Log.PopStackInfo("leaving jump_to_vessel(string main)");
 #endif
         }
 
@@ -521,8 +536,8 @@ namespace FMRS
             Game loadgame;
             int load_vessel;
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("entering jump_to_vessel(string vessel_id,string save_file " + vessel_id.ToString() + " " + save_file);
+           // if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.jump_to_vessel(Guid, string)", "entering jump_to_vessel(string vessel_id,string save_file " + vessel_id.ToString() + " " + save_file);
             if (Debug_Active)
                 Log.Info("Jump to " + save_file);
 #endif
@@ -536,7 +551,7 @@ namespace FMRS
 #endif
 
                 for (load_vessel = 0; load_vessel < loadgame.flightState.protoVessels.Count && loadgame.flightState.protoVessels[load_vessel].vesselID != vessel_id; load_vessel++) ;
-                if (load_vessel <= loadgame.flightState.protoVessels.Count)
+                if (load_vessel < loadgame.flightState.protoVessels.Count)
                 {
                     if (vessel_id != _SAVE_Main_Vessel)
                     {
@@ -545,7 +560,8 @@ namespace FMRS
                     }
                     else
                         _SAVE_Switched_To_Dropped = false;
-                    FlightDriver.StartAndFocusVessel(loadgame, load_vessel);
+                    FMRS_SAVE_Util.Instance.StartAndFocusVessel(loadgame, load_vessel);
+//                    FlightDriver.StartAndFocusVessel(loadgame, load_vessel);
                 }
             }
 #if DEBUG
@@ -553,8 +569,8 @@ namespace FMRS
                 if (Debug_Active)
                 Log.Info("Loading gamefile " + save_file + " failed");
 
-            if (Debug_Level_1_Active)
-                Log.Info("leaving jump_to_vessel(string vessel_id,string save_file)");
+           // if (Debug_Level_1_Active)
+                Log.PopStackInfo("leaving jump_to_vessel(string vessel_id,string save_file)");
 #endif
         }
 
@@ -563,8 +579,8 @@ namespace FMRS
         public void main_vessel_changed(string save_file)
         {
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter main_vessel_changed(string save_file) " + save_file);
+           // if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.main_vessel_changed", "enter main_vessel_changed(string save_file) " + save_file);
             if (Debug_Active)
                 Log.Info("switching main vessel");
 #endif
@@ -599,8 +615,8 @@ namespace FMRS
                 if (Debug_Active)
                 Log.Info("unable to load savefile");
 
-            if (Debug_Level_1_Active)
-                Log.Info("leaving main_vessel_changed(string save_file)");
+           // if (Debug_Level_1_Active)
+                Log.PopStackInfo("leaving main_vessel_changed(string save_file)");
 #endif
         }
 
@@ -609,8 +625,8 @@ namespace FMRS
         public void vessel_create_routine(Vessel input)
         {
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter vessel_create_routine(Vessel input) " + input.id.ToString());
+           // if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.vessel_create_routine", "enter vessel_create_routine(Vessel input) " + input.id.ToString());
             if (Debug_Active)
                 Log.Info("Vessel created");
 #endif
@@ -623,8 +639,8 @@ namespace FMRS
                 Time_Trigger_Cuto = Planetarium.GetUniversalTime();
             }
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leaving vessel_create_routine(Vessel input)");
+           // if (Debug_Level_1_Active)
+                Log.PopStackInfo("leaving vessel_create_routine(Vessel input)");
 #endif
         }
 
@@ -634,8 +650,8 @@ namespace FMRS
         {
             List<ProtoCrewMember> member_list = new List<ProtoCrewMember>();
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter vessel_on_rails(Vessel vessel) " + vessel.id.ToString());
+           // if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.vessel_on_rails", "enter vessel_on_rails(Vessel vessel) " + vessel.id.ToString());
             if (Debug_Active)
                 Log.Info("Vessel will be on rails: " + vessel.vesselName);
 #endif
@@ -688,8 +704,8 @@ namespace FMRS
                 }
             }
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leave vessel_on_rails(Vessel vessel)");
+           // if (Debug_Level_1_Active)
+                Log.PopStackInfo("leave vessel_on_rails(Vessel vessel)");
 #endif
         }
 
@@ -698,8 +714,8 @@ namespace FMRS
         void vessel_off_rails(Vessel vessel)
         {
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter vessel_off_rails(Vessel vessel) " + vessel.id.ToString());
+           // if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.vessel_off_rails", "enter vessel_off_rails(Vessel vessel) " + vessel.id.ToString());
             if (Debug_Active)
                 Log.Info("Vessel will be off rails: " + vessel.vesselName);
 #endif
@@ -742,8 +758,8 @@ namespace FMRS
 #endif
             }
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leave vessel_off_rails(Vessel vessel)");
+           // if (Debug_Level_1_Active)
+                Log.PopStackInfo("leave vessel_off_rails(Vessel vessel)");
 #endif
         }
     }

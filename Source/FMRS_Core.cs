@@ -87,8 +87,8 @@ namespace FMRS
         public void FMRS_core_awake()
         {
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("entering FMRS_core_awake()");
+            //if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.FMRS_core_awake", "entering FMRS_core_awake()");
 #endif
             mod_vers = "v";
 
@@ -109,8 +109,8 @@ namespace FMRS
             load_save_file();
 
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leaving FMRS_core_awake()");
+            //if (Debug_Level_1_Active)
+                Log.PopStackInfo("leaving FMRS_core_awake()");
 #endif
         }
 
@@ -119,8 +119,8 @@ namespace FMRS
         public void flight_scene_start_routine()
         {
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("entering flight_scene_start_routine()");
+            //if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.flight_scene_start_routine", "entering flight_scene_start_routine()");
             if (Debug_Active)
                 Log.Info("FMRS flight_scene_start_routine");
 #endif
@@ -154,8 +154,10 @@ namespace FMRS
 
                 recover_values.Clear();
 
-                GamePersistence.SaveGame("before_launch", HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
-                GamePersistence.SaveGame("FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
+                //GamePersistence.SaveGame("before_launch", HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
+                // GamePersistence.SaveGame("FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
+                FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.flight_scene_start_routine", "before_launch", HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
+                FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.flight_scene_start_routine", "FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
             }
 
             can_restart = HighLogic.CurrentGame.Parameters.Flight.CanRestart;
@@ -243,8 +245,8 @@ namespace FMRS
             }
 
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leaving flight_scene_start_routine()");
+            //if (Debug_Level_1_Active)
+                Log.PopStackInfo("leaving flight_scene_start_routine()");
 #endif
         }
 
@@ -252,6 +254,7 @@ namespace FMRS
 /*************************************************************************************************************************/
         public void flight_scene_update_routine()
         {
+            Log.PushStackInfo("FMRS_Core.flight_scene_update_routine", "entering flight_scene_update_routine()");
             Instance = this;
             if (_SETTING_Enabled)
             {
@@ -340,7 +343,8 @@ namespace FMRS
 
                         if (search_for_new_vessels(quicksave_file_name))
                         {
-                            GamePersistence.SaveGame(quicksave_file_name, HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
+                            // GamePersistence.SaveGame(quicksave_file_name, HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
+                            FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.flight_scene_update_routine", quicksave_file_name, HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
 
                             if (_SAVE_Main_Vessel != FlightGlobals.ActiveVessel.id && !_SAVE_Switched_To_Dropped)
                                 main_vessel_changed(quicksave_file_name);
@@ -362,15 +366,18 @@ namespace FMRS
                     launch_routine(dummy_event);
                 }
             }
+#if DEBUG
+            Log.PopStackInfo("leaving flight_scene_update_routine");
+#endif
         }
 
 
-/*************************************************************************************************************************/
+        /*************************************************************************************************************************/
         public void toolbar_button_clicked()
         {
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter toolbar_button_clicked()");
+            //if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.toolbar_button_clicked", "enter toolbar_button_clicked()");
             if (Debug_Active)
                 Log.Info("Toolbar Button Clicked");
 #endif
@@ -392,8 +399,8 @@ namespace FMRS
           
             write_save_values_to_file();
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leave toolbar_button_clicked()");
+            //if (Debug_Level_1_Active)
+                Log.PopStackInfo("leave toolbar_button_clicked()");
 #endif
         }
 
@@ -404,8 +411,8 @@ namespace FMRS
             bool arm_save = false;
 
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter toolbar_open()");
+            //if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.toolbar_open", "enter toolbar_open()");
             if (Debug_Active)
                 Log.Info("enable plugin form toolbar");
 #endif
@@ -456,8 +463,8 @@ namespace FMRS
                 flight_preflight = false;
             }
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leave toolbar_open()");
+            //if (Debug_Level_1_Active)
+                Log.PopStackInfo("leave toolbar_open()");
 #endif
         }
 
@@ -466,8 +473,8 @@ namespace FMRS
         public void close_FMRS()
         {
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter close_FMRS()");
+            //if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.close_FMRS", "enter close_FMRS()");
             if (Debug_Active)
                 Log.Info("close plugin");
 #endif
@@ -487,8 +494,8 @@ namespace FMRS
 
             destroy_FMRS();
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leave close_FMRS()");
+            //if (Debug_Level_1_Active)
+                Log.PopStackInfo("leave close_FMRS()");
 #endif
         }
 
@@ -497,8 +504,8 @@ namespace FMRS
         public void destroy_FMRS()
         {
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter destroy_FMRS()");
+            //if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.destroy_FMRS", "enter destroy_FMRS()");
 #endif
             plugin_active = false;
 
@@ -530,8 +537,8 @@ namespace FMRS
             if (ThrottleLogger != null)
                 ThrottleLogger.EndLog();
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leave destroy_FMRS()");
+            //if (Debug_Level_1_Active)
+                Log.PopStackInfo("leave destroy_FMRS()");
 #endif
         }
     }

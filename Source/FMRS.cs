@@ -75,8 +75,8 @@ namespace FMRS
         {
             //RenderingManager.AddToPostDrawQueue(3, new Callback(drawGUI));     
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("entering Start()");
+            //if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS.Start", "entering Start()");
 #endif
             if (!_SAVE_Has_Launched)
                 _SETTING_Enabled = false;
@@ -113,8 +113,8 @@ namespace FMRS
                 stb_texture.LoadImage(System.IO.File.ReadAllBytes(Path.Combine(KSPUtil.ApplicationRootPath, "GameData/FMRS/icons/tb_st_en.png")));
             }
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leaving Start ()");
+           // if (Debug_Level_1_Active)
+                Log.PopStackInfo("leaving FMRS.Start ()");
 #endif
         }
 
@@ -127,6 +127,7 @@ namespace FMRS
 /*************************************************************************************************************************/
         void Update()
         {
+
             flight_scene_update_routine();
 
             if (ThrottleLogger != null)
@@ -161,8 +162,8 @@ namespace FMRS
         void OnDestroy()
         {
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter OnDestroy()");
+            //if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS.OnDestroy", "enter OnDestroy()");
 #endif
             destroy_FMRS();
 
@@ -174,8 +175,8 @@ namespace FMRS
 
             //RenderingManager.RemoveFromPostDrawQueue(3, new Callback(drawGUI));
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leave OnDestroy()");
+            //if (Debug_Level_1_Active)
+                Log.PopStackInfo("leave OnDestroy()");
 #endif
         }
 
@@ -279,8 +280,9 @@ namespace FMRS
                     {
                         for (load_vessel = 0; load_vessel < savegame.flightState.protoVessels.Count && savegame.flightState.protoVessels[load_vessel].vesselID.ToString() != temp_proto.vesselID.ToString(); load_vessel++) ;
 
-                        if (load_vessel < savegame.flightState.protoVessels.Count)
-                            FlightDriver.StartAndFocusVessel(savegame, load_vessel);
+                        if (load_vessel  < savegame.flightState.protoVessels.Count)
+                            FMRS_SAVE_Util.Instance.StartAndFocusVessel(savegame, load_vessel);
+//                        FlightDriver.StartAndFocusVessel(savegame, load_vessel);
                     }
 
                     write_save_values_to_file();
@@ -377,7 +379,8 @@ namespace FMRS
                         for (load_vessel = 0; load_vessel < savegame.flightState.protoVessels.Count && savegame.flightState.protoVessels[load_vessel].vesselID.ToString() != temp_proto.vesselID.ToString(); load_vessel++) ;
 
                         if (load_vessel < savegame.flightState.protoVessels.Count)
-                            FlightDriver.StartAndFocusVessel(savegame, load_vessel);
+                            FMRS_SAVE_Util.Instance.StartAndFocusVessel(savegame, load_vessel);
+//                        FlightDriver.StartAndFocusVessel(savegame, load_vessel);
                     }
                 }
             }
@@ -444,7 +447,8 @@ namespace FMRS
             {
                 Log.Info("FMRS_MainMenu _SAVE_Switched_To_Dropped");
                 Game loadgame = GamePersistence.LoadGame("FMRS_main_save", _SAVE_SaveFolder, false, false);
-                GamePersistence.SaveGame(loadgame, "persistent", _SAVE_SaveFolder, SaveMode.OVERWRITE);
+                // GamePersistence.SaveGame(loadgame, "persistent", _SAVE_SaveFolder, SaveMode.OVERWRITE);
+                FMRS_SAVE_Util.Instance.SaveGame("FMRS.Start", loadgame, "persistent", _SAVE_SaveFolder, SaveMode.OVERWRITE);
                 _SAVE_Switched_To_Dropped = false;
             }
 

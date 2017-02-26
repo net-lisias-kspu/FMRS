@@ -4,7 +4,7 @@ cd
 @echo off
 set H=R:\KSP_1.2.2_dev
 echo %H%
-pause
+
 copy bin\%1\FMRS.dll ..\GameData\FMRS\Plugins
 xcopy /E /Y ..\GameData\FMRS %H%\GameData\FMRS
 pause
@@ -50,9 +50,9 @@ if "%build%" NEQ "0"  set VERSION=%VERSION%.%build%
 
 echo %VERSION%
 del a.version
-copy FlightManagerforReusableStages.version GameData\FMRS
-
-set FILE="%RELEASEDIR%\FMRS-%VERSION%-beta.zip"
-IF EXIST %FILE% del /F %FILE%
-%ZIP% a -tzip %FILE% GameData\FMRS 
+copy FlightManagerforReusableStages.version ..\GameData\FMRS
 pause
+
+set FILE="%RELEASEDIR%\FMRS-%VERSION%-%1.zip"
+IF EXIST %FILE% del /F %FILE%
+%ZIP% a -tzip %FILE% ..\GameData\FMRS 

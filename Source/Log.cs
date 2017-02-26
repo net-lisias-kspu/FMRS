@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections;
 using System.Diagnostics;
 //using UnityEngine;
 namespace FMRS
@@ -82,6 +82,39 @@ namespace FMRS
             }
         }
 
+        static Stack funcStack = new Stack();
+
+        [ConditionalAttribute("DEBUG")]
+        public static void PushStackInfo(string funcName, string msg)
+        {
+            funcStack.Push(funcName);
+            if (FMRS_Util.Debug_Level_1_Active)
+                Log.Info(msg);
+        }
+
+        [ConditionalAttribute("DEBUG")]
+        public static void PopStackInfo(string msg)
+        {
+            if (funcStack.Count > 0)
+            {
+                string f = (string)funcStack.Pop();
+            }
+            else
+                Log.Info("Pop failed, no values on stack");
+            if (FMRS_Util.Debug_Level_1_Active)
+                Log.Info(msg);
+        }
+        [ConditionalAttribute("DEBUG")]
+        public static void ShowStackInfo()
+        {
+            int cnt = 0;
+            Log.Info("Stack size: " + funcStack.Count.ToString());
+            foreach(var obj in funcStack)
+            {
+                Log.Info("Stack["+ cnt.ToString() + "] = " + (string)obj);
+                cnt++;
+            }
+        }
 
         public static void Warning(String msg)
         {

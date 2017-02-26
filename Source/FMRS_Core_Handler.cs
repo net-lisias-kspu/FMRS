@@ -51,7 +51,7 @@ namespace FMRS
         }
 
 /*************************************************************************************************************************/
-        private void attach_handlers()
+        public void attach_handlers()
         {
             if (_SAVE_Switched_To_Dropped)
             {
@@ -83,7 +83,7 @@ namespace FMRS
 
 
 /*************************************************************************************************************************/
-        private void detach_handlers()
+        public void detach_handlers()
         {
             GameEvents.onStageSeparation.Remove(staging_routine);
             GameEvents.onLaunch.Remove(launch_routine);
@@ -109,8 +109,8 @@ namespace FMRS
         public void staging_routine(EventReport event_input)
         {
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("entering staging_routine(EventReport event_input) " + event_input.sender);
+            //if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.staging_routine", "entering staging_routine(EventReport event_input) " + event_input.sender);
 #endif
 
             Time_Trigger_Staging = Planetarium.GetUniversalTime();
@@ -122,8 +122,8 @@ namespace FMRS
 #if DEBUG
             if (Debug_Active)
                 Log.Info("Has Staged");
-            if (Debug_Level_1_Active)
-                Log.Info("leaving staging_routine(EventReport event_imput)");
+            //if (Debug_Level_1_Active)
+                Log.PopStackInfo("leaving staging_routine(EventReport event_imput)");
 #endif
         }
 
@@ -132,8 +132,8 @@ namespace FMRS
         public void launch_routine(EventReport event_input)
         {
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("entering launch_routine(EventReport event_imput)");
+            //if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.launch_routine", "entering launch_routine(EventReport event_imput)");
             if (Debug_Active)
                 Log.Info("LAUNCH");
 #endif
@@ -169,8 +169,8 @@ namespace FMRS
                 ThrottleLogger.StartLog();
             }
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leaving launch_routine(EventReport event_imput)");
+            //if (Debug_Level_1_Active)
+                Log.PopStackInfo("leaving launch_routine(EventReport event_imput)");
 #endif
         }
 
@@ -180,8 +180,8 @@ namespace FMRS
         {
             List<Guid> new_vessels = new List<Guid>();
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter crash_handler (EventReport report) " + report.sender);
+            //if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.crash_handler", "enter crash_handler (EventReport report) " + report.sender);
             if (Debug_Active)
                 Log.Info("crash detected");
 #endif
@@ -194,8 +194,8 @@ namespace FMRS
                 anz_id = FlightGlobals.ActiveVessel.id;
             }*/
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leave crash_handler (EventReport report)");
+            //if (Debug_Level_1_Active)
+                Log.PopStackInfo("leave crash_handler (EventReport report)");
 #endif
         }
 
@@ -291,8 +291,8 @@ namespace FMRS
         public void scene_change_handler(GameScenes input_scene)
         {
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter scene_change_handler(GameScenes input_scene) " + input_scene.ToString());
+            //if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.scene_change_handler","enter scene_change_handler(GameScenes input_scene) " + input_scene.ToString());
             if (Debug_Active)
                 Log.Info("scene_change_handler");
 #endif
@@ -323,8 +323,8 @@ namespace FMRS
                     _SETTING_Enabled = false;
             }
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leave scene_change_handler(GameScenes input_scene)");
+            //if (Debug_Level_1_Active)
+                Log.PopStackInfo("leave scene_change_handler(GameScenes input_scene)");
 #endif
         }
 
@@ -333,8 +333,8 @@ namespace FMRS
         public void contract_routine(Contracts.Contract input_contract)
         {
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter vcontract_routine(Contracts.Contract input_contract) " + input_contract.Title);
+            //if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.contract_routine", "enter vcontract_routine(Contracts.Contract input_contract) " + input_contract.Title);
             if (Debug_Active)
                 Log.Info("contract " + input_contract.Title + " " + input_contract.ContractState.ToString());
 #endif
@@ -352,8 +352,8 @@ namespace FMRS
 
             contract_complete[FlightGlobals.ActiveVessel.id].Add(input_contract);
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leave vcontract_routine(Contracts.Contract input_contract)");
+            //if (Debug_Level_1_Active)
+                Log.PopStackInfo("leave vcontract_routine(Contracts.Contract input_contract)");
 #endif
         }
 
@@ -363,8 +363,8 @@ namespace FMRS
         {
             science_data_sent data;
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter science_routine(float amount, ScienceSubject input_science_sub) " + science.ToString() + " " + input_science_sub.title);
+            //if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.science_sent_routine", "enter science_routine(float amount, ScienceSubject input_science_sub) " + science.ToString() + " " + input_science_sub.title);
             if (Debug_Active)
                 Log.Info("Science received");
 #endif
@@ -385,8 +385,8 @@ namespace FMRS
             data.amount = science;
             science_sent.Add(data);
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leave science_routine(float amount, ScienceSubject input_science_sub)");
+            //if (Debug_Level_1_Active)
+                Log.PopStackInfo("leave science_routine(float amount, ScienceSubject input_science_sub)");
 #endif
         }
 
@@ -395,8 +395,8 @@ namespace FMRS
         void crew_killed_handler(EventReport report)
         {
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter crew_killed_handler(EventReport report) " + report.sender);
+            //if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.crew_killed_handler", "enter crew_killed_handler(EventReport report) " + report.sender);
             if (Debug_Active)
                 Log.Info("crew member killed: " + report.sender + " rep los: " + last_rep_change.ToString());
 #endif
@@ -417,8 +417,8 @@ namespace FMRS
 #endif
             }
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leave crew_killed_handler(EventReport report)");
+            //if (Debug_Level_1_Active)
+                Log.PopStackInfo("leave crew_killed_handler(EventReport report)");
 #endif
         }
 
@@ -427,8 +427,8 @@ namespace FMRS
         void rep_changed(float rep, TransactionReasons reason)
         {
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter rep_changed(float rep, TransactionReasons reason) " + rep.ToString() + " " + reason.ToString());
+            //if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.rep_changed", "enter rep_changed(float rep, TransactionReasons reason) " + rep.ToString() + " " + reason.ToString());
 #endif
             if (HighLogic.CurrentGame.Mode != Game.Modes.CAREER)
                 return;
@@ -441,8 +441,8 @@ namespace FMRS
 
             current_rep = rep;
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leave rep_changed(float rep)");
+            //if (Debug_Level_1_Active)
+                Log.PopStackInfo("leave rep_changed(float rep)");
 #endif
         }
 
@@ -451,16 +451,16 @@ namespace FMRS
         private void building_destroyed(DestructibleBuilding building)
         {
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter building_destroyed(DestructibleBuilding building) " + building.name);
+           // if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMS_Core.building_destroyed", "enter building_destroyed(DestructibleBuilding building) " + building.name);
             if (Debug_Active)
                 Log.Info("" + building.name + " destroyed");
 #endif
             if (!damaged_buildings.Contains(building.name))
                 damaged_buildings.Add(building.name);
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leaving building_destroyed(DestructibleBuilding building)");
+           // if (Debug_Level_1_Active)
+                Log.PopStackInfo("leaving building_destroyed(DestructibleBuilding building)");
 #endif
         }
 
@@ -468,15 +468,15 @@ namespace FMRS
 /*************************************************************************************************************************/
         private void vessel_state_changed(GameEvents.HostedFromToAction<Vessel, Vessel.Situations> input)
         {
-            /*if (Debug_Level_1_Active)
-                Log.Info("enter vessel_state_changed(DestructibleBuilding building) " + input.host.ToString());
+           // if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.vessel_state_changed", "enter vessel_state_changed(DestructibleBuilding building) " + input.host.ToString());
             if (Debug_Active)
                 Log.Info("" + input.host.ToString() + " destroyed");
 
             
 
-            if (Debug_Level_1_Active)
-                Log.Info("leaving vessel_state_changed(DestructibleBuilding building)");*/
+           // if (Debug_Level_1_Active)
+                Log.PopStackInfo("leaving vessel_state_changed(DestructibleBuilding building)");
         }
     }
 }

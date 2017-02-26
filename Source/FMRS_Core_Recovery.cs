@@ -213,8 +213,8 @@ namespace FMRS
                 }
             }
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leave recover_vessel(Guid parent_vessel, List<ProtoVessel> recover_vessels, Game recover_save, Game savegame)");
+           // if (Debug_Level_1_Active)
+                Log.PopStackInfo("leave recover_vessel(Guid parent_vessel, List<ProtoVessel> recover_vessels, Game recover_save, Game savegame)");
 #endif
             return savegame;
         }
@@ -224,8 +224,8 @@ namespace FMRS
         public void recovery_requested_handler(Vessel vessel_recovered)
         {
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter recovery_requested_handler(Vessel input) " + vessel_recovered.vesselName);
+           // if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.recovery_request_handler", "enter recovery_requested_handler(Vessel input) " + vessel_recovered.vesselName);
             if (Debug_Active)
                 Log.Info("Vessel recovery_requested_handler");
 #endif
@@ -246,8 +246,8 @@ namespace FMRS
 
             write_save_values_to_file();
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leave recovery_requested_handler(Vessel input)");
+            //if (Debug_Level_1_Active)
+                Log.PopStackInfo("leave recovery_requested_handler(Vessel input)");
 #endif
         }
 
@@ -258,8 +258,8 @@ namespace FMRS
             float partcost, float_dummy, vesselcost = 0;
             PartResourceDefinition resc_def;
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter float vessels_cost(ProtoVessel temp_vessel) " + temp_vessel.vesselID.ToString());
+           // if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.vessels_cost", "enter float vessels_cost(ProtoVessel temp_vessel) " + temp_vessel.vesselID.ToString());
             if (Debug_Active)
                 Log.Info("Calculate cost from: " + temp_vessel.vesselName);
 #endif
@@ -278,8 +278,8 @@ namespace FMRS
 #if DEBUG
             if (Debug_Active)
                 Log.Info("FMRS cost: " + vesselcost.ToString());
-            if (Debug_Level_1_Active)
-                Log.Info("leave float vessels_cost(ProtoVessel temp_vessel)");
+           // if (Debug_Level_1_Active)
+                Log.PopStackInfo("leave float vessels_cost(ProtoVessel temp_vessel)");
 #endif
             return (vesselcost);
         }
@@ -292,8 +292,8 @@ namespace FMRS
             Dictionary<string, int> parts = new Dictionary<string, int>();
             Dictionary<string, float> resources = new Dictionary<string, float>();
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter get_vessel_part_list(ProtoVessel vessel)");
+           // if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.get_vessel_part_list", "enter get_vessel_part_list(ProtoVessel vessel)");
             if (Debug_Active)
                 Log.Info("get vessel part list");
 #endif
@@ -336,8 +336,8 @@ namespace FMRS
                 return_string += "@       ";
             }
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leave get_vessel_part_list(ProtoVessel vessel)");
+           // if (Debug_Level_1_Active)
+                Log.PopStackInfo("leave get_vessel_part_list(ProtoVessel vessel)");
 #endif
             return return_string;
         }
@@ -349,8 +349,8 @@ namespace FMRS
             List<ScienceData> science_data = new List<ScienceData>();
 
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter recover_science(GUI Vessel_id, Game save) " + proto_vessel.vesselID.ToString());
+           // if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.recover_science", "enter recover_science(GUI Vessel_id, Game save) " + proto_vessel.vesselID.ToString());
             if (Debug_Active)
                 Log.Info("Try recover science from: " + proto_vessel.vesselName);
 #endif
@@ -369,8 +369,8 @@ namespace FMRS
                 }
             }
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leave recover_science(GUI Vessel_id, Game save)");
+           // if (Debug_Level_1_Active)
+                Log.PopStackInfo("leave recover_science(GUI Vessel_id, Game save)");
 #endif
             return science_data;
         }
@@ -382,8 +382,8 @@ namespace FMRS
             float factor, landing_distance;
 
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter calc_recovery_factor(ProtoVessel proto_Vessel) " + proto_Vessel.vesselID.ToString());
+           // if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.calc_recovery_factor", "enter calc_recovery_factor(ProtoVessel proto_Vessel) " + proto_Vessel.vesselID.ToString());
             if (Debug_Active)
                 Log.Info("calculate recovery factor for " + proto_Vessel.vesselName);
 #endif
@@ -402,6 +402,7 @@ namespace FMRS
                 factor = Mathf.Lerp(0.98f, 0.1f, (float)(landing_distance / (SpaceCenter.Instance.cb.Radius * Math.PI)));
             }
 #if DEBUG
+            Log.PopStackInfo("leaving calc_recovery_factor");
             if (Debug_Active)
                 Log.Info("recovery factor " + factor.ToString());
 #endif
@@ -413,8 +414,8 @@ namespace FMRS
         private void write_recovered_values_to_save()
         {
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("enter add_recvoered_values_to_save()");
+           // if (Debug_Level_1_Active)
+                Log.PushStackInfo("FMRS_Core.write_recovered_values_to_save", "enter add_recvoered_values_to_save()");
             if (Debug_Active)
                 Log.Info("add recovered values to game save");
 #endif
@@ -532,8 +533,8 @@ namespace FMRS
             //recover_values.Clear();
             //write_recover_file();
 #if DEBUG
-            if (Debug_Level_1_Active)
-                Log.Info("leave add_recvoered_values_to_save()");
+           // if (Debug_Level_1_Active)
+                Log.PopStackInfo("leave add_recvoered_values_to_save()");
 #endif
         }
     }
