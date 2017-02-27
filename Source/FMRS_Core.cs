@@ -32,7 +32,8 @@ using System.Reflection;
 using UnityEngine;
 using KSP.IO;
 using Contracts;
-
+using KSP.UI;
+using KSP.UI.Screens;
 
 namespace FMRS
 {
@@ -42,7 +43,8 @@ namespace FMRS
         public bool plugin_active = false;
         public double Time_Trigger_Staging, Time_Trigger_Start_Delay, Time_Trigger_Cuto;
         public bool timer_staging_active = false, timer_start_delay_active = false, timer_cuto_active = false;
-        public double Timer_Stage_Delay = 0.2, Timer_Start_Delay = 2;
+        public float Timer_Stage_Delay = 0.2f;
+        public double Timer_Start_Delay = 2;
         public double last_staging_event = 0;
         public string quicksave_file_name;
         public Guid anz_id;
@@ -112,6 +114,8 @@ namespace FMRS
             //if (Debug_Level_1_Active)
                 Log.PopStackInfo("leaving FMRS_core_awake()");
 #endif
+            if (HighLogic.CurrentGame != null)
+                Timer_Stage_Delay = HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>().Timer_Stage_Delay;
         }
 
 
@@ -126,7 +130,9 @@ namespace FMRS
 #endif
 
             plugin_active = true;
-
+            if (FlightGlobals.ActiveVessel == null)
+                Log.Info("ActiveVessel is null");
+            else
             if (FlightGlobals.ActiveVessel.situation == Vessel.Situations.PRELAUNCH || n_launchpad_preflight || flight_preflight)
             {
 #if DEBUG

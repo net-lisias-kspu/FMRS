@@ -36,9 +36,14 @@ using Contracts;
 
 namespace FMRS
 {
-    public partial class FMRS_Core : FMRS_Util , IFMRS
+    public partial class FMRS_Core : FMRS_Util, IFMRS
     {
         /*************************************************************************************************************************/
+        private void Start()
+        {
+
+        }
+
         public void drawGUI()
         {
             if (!skin_init)
@@ -69,7 +74,7 @@ namespace FMRS
         }
 
 
-/*************************************************************************************************************************/
+        /*************************************************************************************************************************/
         public void MainGUI(int windowID)
         {
             List<string> save_files = new List<string>();
@@ -107,7 +112,7 @@ namespace FMRS
                 _SETTING_Armed = GUILayout.Toggle(_SETTING_Armed, temp_string, button_small, GUILayout.Width(50));
             else
                 if (_SETTING_Minimize)
-                    GUILayout.Box("Flight", text_main, GUILayout.Width(50));
+                GUILayout.Box("Flight", text_main, GUILayout.Width(50));
 
             if (!_SETTING_Minimize)
                 show_setting = GUILayout.Toggle(show_setting, "s", button_small, GUILayout.Width(25));
@@ -160,7 +165,11 @@ namespace FMRS
                 window_height += 30;
                 _SETTING_Auto_Recover = GUI.Toggle(new Rect(5, 35 + (30 * 3), 25, 25), _SETTING_Auto_Recover, "Auto Recover Landed Crafts");
                 window_height += 30;
-                _SETTING_Throttle_Log = GUI.Toggle(new Rect(6, 35 + (30 * 4), 25, 25), _SETTING_Throttle_Log, "Throttle Logger WIP");
+                _SETTING_Throttle_Log = GUI.Toggle(new Rect(5, 35 + (30 * 4), 25, 25), _SETTING_Throttle_Log, "Throttle Logger WIP");
+                window_height += 30;
+                Timer_Stage_Delay = GUI.HorizontalSlider(new Rect(45, 35 + (30 * 6) + 15, 205, 25), Timer_Stage_Delay, 0.2f, 5.0f);
+                window_height += 30;
+                GUI.Label(new Rect(20, 35 + (30 * 7), 225, 25), "Stage Save Delay: " + Timer_Stage_Delay.ToString("F1"));
 
 #if DEBUG
                 window_height += 30;
@@ -186,7 +195,7 @@ namespace FMRS
                             save_files.Add(temp_keyvalue.Value);
                     }
 
-                    save_files.Sort(delegate(string x, string y)
+                    save_files.Sort(delegate (string x, string y)
                     {
                         return get_save_value(save_cat.SAVEFILE, y).CompareTo(get_save_value(save_cat.SAVEFILE, x));
                     });
@@ -224,6 +233,9 @@ namespace FMRS
 
                         foreach (KeyValuePair<Guid, string> vessel_in_savefile in Vessels_dropped)
                         {
+
+                            if (FMRS_SAVE_Util.Instance.jumpInProgress)
+                                GUI.enabled = false;
                             if (vessel_in_savefile.Value == save_files.Last())
                             {
                                 GUILayout.BeginHorizontal();
@@ -254,11 +266,10 @@ namespace FMRS
                                         GUILayout.Box("contr.: " + Vessels_dropped_names[vessel_in_savefile.Key], text_yellow, GUILayout.Width(temp_float));
                                     }
                                     if (can_q_save_load)
-                                        if (GUILayout.Button("Jump back to Separation", button_main, GUILayout.Width(222 + scrollbar_width_offset)))
-                                            jump_to_vessel(vessel_in_savefile.Key, false);
-
-                                    if (can_q_save_load)
                                     {
+                                        if (GUILayout.Button("Jump back to Separation", button_main, GUILayout.Width(222 + scrollbar_width_offset)))
+                                            jump_to_vessel(vessel_in_savefile.Key, false);                                        
+
                                         GUILayout.EndVertical();
                                         GUILayout.Space(5);
                                         GUILayout.BeginHorizontal();
@@ -311,6 +322,7 @@ namespace FMRS
                                 GUILayout.EndHorizontal();
                                 button_main.normal.textColor = button_main.focused.textColor = Color.white;
                             }
+                            GUI.enabled = true;
                         }
                         GUILayout.EndVertical();
                         temp_string = save_files.Last();
@@ -330,10 +342,13 @@ namespace FMRS
                 {
                     GUILayout.Space(5);
                     window_height += 5;
+                    if (FMRS_SAVE_Util.Instance.jumpInProgress)
+                        GUI.enabled = false;
                     if (GUILayout.Button("Jump back to Main Mission", button_big, GUILayout.Width(266)))
                     {
                         jump_to_vessel("Main");
                     }
+                    GUI.enabled = true;
                     window_height += 31;
                 }
 
@@ -341,7 +356,8 @@ namespace FMRS
                 {
                     GUILayout.Space(5);
                     window_height += 5;
-
+                    if (FMRS_SAVE_Util.Instance.jumpInProgress)
+                        GUI.enabled = false;
                     if (revert_to_launch)
                     {
                         GUILayout.Box("Revert Flight?", text_heading, GUILayout.Width(266));
@@ -367,6 +383,7 @@ namespace FMRS
                             revert_to_launch = GUILayout.Toggle(revert_to_launch, "Revert To Launch", button_big, GUILayout.Width(266));
                         window_height += 31;
                     }
+                    GUI.enabled = true;
                 }
             }
             GUILayout.EndVertical();
@@ -375,14 +392,14 @@ namespace FMRS
                 delete_dropped_vessel(guid_delete_vessel);
 
             windowPos.height = window_height;
-         //   windowPos.width = window_width;
+            //   windowPos.width = window_width;
 
             GUI.DragWindow();
         }
 
 
 #if DEBUG
-/*************************************************************************************************************************/
+        /*************************************************************************************************************************/
         public void DebugGUI(int windowID)
         {
             GUILayout.BeginVertical();
@@ -404,7 +421,7 @@ namespace FMRS
 
             if (GUILayout.Button("mark bug", button_small, GUILayout.Width(115)))
                 Log.Info("##################### BUG MARKER #####################");
-            
+
             GUILayout.Space(5);
 
             debug_message[0] = _SAVE_Switched_To_Savefile;
@@ -452,12 +469,12 @@ namespace FMRS
 #endif
 
 
-/*************************************************************************************************************************/
+        /*************************************************************************************************************************/
         private void init_skin()
         {
 #if DEBUG
             //if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS_Core.init_skin", "enter init_skin()");
+            Log.PushStackInfo("FMRS_Core.init_skin", "enter init_skin()");
             if (Debug_Active)
                 Log.Info("init_skin");
 #endif
@@ -529,7 +546,7 @@ namespace FMRS
             skin_init = true;
 #if DEBUG
             //if (Debug_Level_1_Active)
-                Log.PopStackInfo("leave init_skin()");
+            Log.PopStackInfo("leave init_skin()");
 #endif
         }
     }

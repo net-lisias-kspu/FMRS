@@ -42,12 +42,16 @@ namespace FMRS
         Game gameToLoad = null;
         int vesselToFocus = 0;
 
+        public bool jumpInProgress { get; private set; }
+
         public static FMRS_SAVE_Util Instance;
 
         public void Wait(float seconds, Action action)
         {
+            jumpInProgress = true;
             StartCoroutine(_wait(seconds, action));
         }
+
         IEnumerator _wait(float time, Action callback)
         {
             yield return new WaitForSeconds(time);
@@ -57,8 +61,11 @@ namespace FMRS
         private void Start()
         {
             Instance = this;
+            jumpInProgress = false;
             GameEvents.onGameStateSaved.Add(OnGameStateSaved);
+            jumpInProgress = false;
         }
+
         private void OnDestroy()
         {
             GameEvents.onGameStateSaved.Remove(OnGameStateSaved);
@@ -170,7 +177,8 @@ namespace FMRS
         public Rect windowPos;
         public Guid _SAVE_Main_Vessel;
         public string _SAVE_Switched_To_Savefile, _SAVE_SaveFolder;
-        public bool _SETTING_Enabled, _SETTING_Armed, _SETTING_Messages, _SETTING_Auto_Cut_Off, _SETTING_Auto_Recover, _SETTING_Minimize, _SETTING_Throttle_Log, _SAVE_Has_Launched, _SAVE_Flight_Reset, _SAVE_Kick_To_Main, _SAVE_Switched_To_Dropped;
+        public bool _SETTING_Enabled, _SETTING_Armed, _SETTING_Minimize, _SAVE_Has_Launched, _SAVE_Flight_Reset, _SAVE_Kick_To_Main, _SAVE_Switched_To_Dropped;
+        public static bool _SETTING_Messages, _SETTING_Auto_Cut_Off, _SETTING_Auto_Recover, _SETTING_Throttle_Log;
         public double _SAVE_Launched_At;
 
         public string mod_vers
@@ -180,8 +188,12 @@ namespace FMRS
         }
 
         /*************************************************************************************************************************/
+        private void Start()
+        {
 
-        public void set_save_value(save_cat cat, string key, string value)
+
+        }
+    public void set_save_value(save_cat cat, string key, string value)
         {
 #if DEBUG
             if (Debug_Level_2_Active)
@@ -235,10 +247,10 @@ namespace FMRS
             set_save_value(save_cat.SETTING, "Armed", _SETTING_Armed.ToString());
             set_save_value(save_cat.SETTING, "Minimized", _SETTING_Minimize.ToString());
             set_save_value(save_cat.SETTING, "Enabled", _SETTING_Enabled.ToString());
-            set_save_value(save_cat.SETTING, "Messages", _SETTING_Messages.ToString());
-            set_save_value(save_cat.SETTING, "Auto_Cut_Off", _SETTING_Auto_Cut_Off.ToString());
-            set_save_value(save_cat.SETTING, "Auto_Recover", _SETTING_Auto_Recover.ToString());
-            set_save_value(save_cat.SETTING, "Throttle_Log", _SETTING_Throttle_Log.ToString());
+            //set_save_value(save_cat.SETTING, "Messages", _SETTING_Messages.ToString());
+            //set_save_value(save_cat.SETTING, "Auto_Cut_Off", _SETTING_Auto_Cut_Off.ToString());
+            //set_save_value(save_cat.SETTING, "Auto_Recover", _SETTING_Auto_Recover.ToString());
+            //set_save_value(save_cat.SETTING, "Throttle_Log", _SETTING_Throttle_Log.ToString());
 #if DEBUG
             set_save_value(save_cat.SETTING, "Debug", Debug_Active.ToString());
 #endif
@@ -472,8 +484,8 @@ namespace FMRS
                     catch (Exception)
                     {
 #if DEBUG
-                        Debug_Active = true;
-                        Debug_Level_1_Active = true;
+                    //    Debug_Active = true;
+                    //    Debug_Level_1_Active = true;
 #endif
                         Log.Info("inconsistent save file, flush save file");
                         bflush_save_file = true;
@@ -498,7 +510,8 @@ namespace FMRS
             }
             catch (Exception)
             {
-#if DEBUG
+#if false
+                // DEBUG
                 Debug_Active = true;
                 Debug_Level_1_Active = true;
 #endif
@@ -514,7 +527,8 @@ namespace FMRS
 
             if (bflush_save_file)
                 return;
-#if DEBUG
+#if false
+            // DEBUG
             if (get_save_value(save_cat.SETTING,"Debug_Level") == "1" && Debug_Active)
                 Debug_Level_1_Active = true;
 
@@ -525,8 +539,8 @@ namespace FMRS
             }
 #endif
 #if BETA && DEBUG //**************************
-            Debug_Active = true;
-            Debug_Level_1_Active = true;
+          //  Debug_Active = true;
+          //  Debug_Level_1_Active = true;
 #endif //**************************
 
             try
@@ -534,10 +548,10 @@ namespace FMRS
                 _SETTING_Armed = Convert.ToBoolean(get_save_value(save_cat.SETTING, "Armed"));
                 _SETTING_Minimize = Convert.ToBoolean(get_save_value(save_cat.SETTING, "Minimized"));
                 _SETTING_Enabled = Convert.ToBoolean(get_save_value(save_cat.SETTING, "Enabled"));
-                _SETTING_Messages = Convert.ToBoolean(get_save_value(save_cat.SETTING, "Messages"));
-                _SETTING_Auto_Cut_Off = Convert.ToBoolean(get_save_value(save_cat.SETTING, "Auto_Cut_Off"));
-                _SETTING_Auto_Recover = Convert.ToBoolean(get_save_value(save_cat.SETTING, "Auto_Recover"));
-                _SETTING_Throttle_Log = Convert.ToBoolean(get_save_value(save_cat.SETTING, "Throttle_Log"));
+                //_SETTING_Messages = Convert.ToBoolean(get_save_value(save_cat.SETTING, "Messages"));
+                //_SETTING_Auto_Cut_Off = Convert.ToBoolean(get_save_value(save_cat.SETTING, "Auto_Cut_Off"));
+                //_SETTING_Auto_Recover = Convert.ToBoolean(get_save_value(save_cat.SETTING, "Auto_Recover"));
+                //_SETTING_Throttle_Log = Convert.ToBoolean(get_save_value(save_cat.SETTING, "Throttle_Log"));
                 _SAVE_Main_Vessel = new Guid(get_save_value(save_cat.SAVE, "Main_Vessel"));
                 _SAVE_Has_Launched = Convert.ToBoolean(get_save_value(save_cat.SAVE, "Has_Launched"));
                 _SAVE_Launched_At = Convert.ToDouble(get_save_value(save_cat.SAVE, "Launched_At"));
@@ -550,8 +564,8 @@ namespace FMRS
             catch (Exception)
             {
 #if DEBUG
-                Debug_Active = true;
-                Debug_Level_1_Active = true;
+            //    Debug_Active = true;
+            //    Debug_Level_1_Active = true;
 #endif
                 Log.Info("invalid save file, flush save file");
                 bflush_save_file = true;
@@ -601,8 +615,8 @@ namespace FMRS
 
 
 #if DEBUG //**************************
-            set_save_value(save_cat.SETTING,"Debug", true.ToString());
-            set_save_value(save_cat.SETTING, "Debug_Level", "0");
+           // set_save_value(save_cat.SETTING,"Debug", true.ToString());
+           // set_save_value(save_cat.SETTING, "Debug_Level", "0");
 #endif //**************************
 
 #if DEBUG

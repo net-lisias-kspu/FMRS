@@ -88,6 +88,10 @@ Change log
 			RealChuteFAR
 		fixed flickering of windows
 		Removed do-nothing toggle on the debug screen
+		Fixed crash due to transfer to flight too quickly
+		Added Settings page
+		Added configurable timer save delay after staging
+
 
 	x1.1.01.01
 		experimental build for KSP 1.1.0

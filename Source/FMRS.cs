@@ -242,11 +242,21 @@ namespace FMRS
 #if DEBUG
             if (Debug_Active)
                 Log.Info("FMRS_Space_Center On Start");
+
+
+            Debug_Active = HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>().Debug_Active;
+            Debug_Level_1_Active = HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>().Debug_Level_1_Active;
+            Debug_Level_2_Active = HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>().Debug_Level_2_Active;
+
 #endif
+            _SETTING_Messages = HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>()._SETTING_Messages;
+            _SETTING_Auto_Cut_Off = HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>()._SETTING_Auto_Cut_Off;
+            _SETTING_Auto_Recover = HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>()._SETTING_Auto_Recover;
+            _SETTING_Throttle_Log = HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>()._SETTING_Throttle_Log;
         }
 
 
-/*************************************************************************************************************************/
+        /*************************************************************************************************************************/
         void Update()
         {
             //nothing

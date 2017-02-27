@@ -45,13 +45,16 @@ namespace FMRS
         {
             float cost, total_cost = 0, total_rec_fac = 0, rec_fact, science = 0, strat_rec_fact = 1, temp_float;
             string message = "", kerbal_mess = "", contract_mess = "";
-            List<Strategies.Strategy> strat_list;
+            List<Strategies.Strategy> strat_list = null;
             bool recovered = false;
 #if DEBUG
             if (Debug_Active)
                 Log.Info("enter Game recover_vessel(Guid parent_vessel, List<ProtoVessel> recover_vessels, Game recover_save, Game savegame): " + parent_vessel.ToString());
 #endif
-            strat_list = Strategies.StrategySystem.Instance.Strategies.FindAll(str => str.IsActive);
+            if (Strategies.StrategySystem.Instance == null)
+                Log.Info("Strategies.StrategySystem.Instance is null");
+            else
+                strat_list = Strategies.StrategySystem.Instance.Strategies.FindAll(str => str.IsActive);
             if (strat_list != null)
             {
 #if DEBUG

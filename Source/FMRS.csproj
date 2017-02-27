@@ -67,6 +67,7 @@
     <Compile Include="FMRS_Util.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="ToolbarWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
