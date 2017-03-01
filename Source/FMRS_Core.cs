@@ -426,7 +426,7 @@ namespace FMRS
             if (blz_toolbar_available)
                 Toolbar_Button.TexturePath = "FMRS/icons/tb_blz_en";
             // stb_texture.LoadImage(System.IO.File.ReadAllBytes(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "icons/tb_st_en.png")));
-			stb_texture.LoadImage(System.IO.File.ReadAllBytes("FRMS/icons/tb_st_en.png"));
+			stb_texture.LoadImage(System.IO.File.ReadAllBytes(Path.Combine(KSPUtil.ApplicationRootPath, "GameData/FMRS/icons/tb_st_en.png")));
 			
 
             _SETTING_Enabled = true;
@@ -493,7 +493,7 @@ namespace FMRS
             if (blz_toolbar_available)
                 Toolbar_Button.TexturePath = "FMRS/icons/tb_blz_di";
             //stb_texture.LoadImage(System.IO.File.ReadAllBytes(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "icons/tb_st_di.png")));
-			stb_texture.LoadImage(System.IO.File.ReadAllBytes("FRMS/icons/tb_st_di.png"));
+			stb_texture.LoadImage(System.IO.File.ReadAllBytes(Path.Combine(KSPUtil.ApplicationRootPath, "GameData/FMRS/icons/tb_st_di.png")));
 
             if (_SAVE_Has_Launched && _SAVE_Switched_To_Dropped)
                 jump_to_vessel("Main");

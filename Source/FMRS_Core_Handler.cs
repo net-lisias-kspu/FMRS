@@ -470,7 +470,9 @@ namespace FMRS
         {
            // if (Debug_Level_1_Active)
                 Log.PushStackInfo("FMRS_Core.vessel_state_changed", "enter vessel_state_changed(DestructibleBuilding building) " + input.host.ToString());
+#if DEBUG
             if (Debug_Active)
+#endif
                 Log.Info("" + input.host.ToString() + " destroyed");
 
             

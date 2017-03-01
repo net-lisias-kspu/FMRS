@@ -88,7 +88,9 @@ namespace FMRS
         public static void PushStackInfo(string funcName, string msg)
         {
             funcStack.Push(funcName);
+#if DEBUG
             if (FMRS_Util.Debug_Level_1_Active)
+#endif
                 Log.Info(msg);
         }
 
@@ -101,7 +103,9 @@ namespace FMRS
             }
             else
                 Log.Info("Pop failed, no values on stack");
+#if DEBUG
             if (FMRS_Util.Debug_Level_1_Active)
+#endif
                 Log.Info(msg);
         }
         [ConditionalAttribute("DEBUG")]
