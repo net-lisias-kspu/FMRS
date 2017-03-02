@@ -13,3 +13,9 @@
 		Tied debug window to main window, so it won't be there when nothing is there
 		Found bug which was a segfault when entering launch scene, problem with ordering of Start() vs Awake()
 		Added option to make FMRS always be active at a launch optional
+
+1.2.0.4
+		Got internal version & beta number updating properly
+		Found bug which occured when staging, causing following error:
+				ArgumentException: Value does not fall within the expected range.
+	

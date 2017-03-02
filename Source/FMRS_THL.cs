@@ -41,8 +41,12 @@ namespace FMRS_THL
         public bool started = false;
 
 
-/*************************************************************************************************************************/
+        /*************************************************************************************************************************/
+#if DEBUG
         public FMRS_THL_Log(bool Debug_Active = false, bool Debug_Level_1_Active = false)
+#else
+        public FMRS_THL_Log(bool Debug_Active = false, bool Debug_Level_1_Active = false)
+#endif
         {
             FMRS.Log.Info("### FMRS_THL_Log: constructor");
 #if DEBUG
@@ -58,8 +62,7 @@ namespace FMRS_THL
 #if DEBUG
            // if (Debug_Level_1_Active)
                 FMRS.Log.PushStackInfo("FMRS_THL.StartLog", "FMRS_THL_Log: entering StartLog()");
-            if (Debug_Active)
-                FMRS.Log.Info("FMRS_THL_Log: Start Log");
+            if (Debug_Active) FMRS.Log.Info("FMRS_THL_Log: Start Log");
 #endif
 
             if (!init_done)
@@ -79,8 +82,7 @@ namespace FMRS_THL
 #if DEBUG
            // if (Debug_Level_1_Active)
                 FMRS.Log.PushStackInfo("FMRS_THL.EndLog", "FMRS_THL_Log: entering EndLog()");
-            if (Debug_Active)
-                FMRS.Log.Info("FMRS_THL_Log: End Log");
+            if (Debug_Active) FMRS.Log.Info("FMRS_THL_Log: End Log");
 #endif
             if (!started)
                 return;
@@ -94,8 +96,12 @@ namespace FMRS_THL
         }
 
 
-/*************************************************************************************************************************/
+        /*************************************************************************************************************************/
+#if DEBUG
         public void Update(bool Debug_Active = false, bool Debug_Level_1_Active = false)
+#else
+        public void Update()
+#endif
         {
 #if DEBUG
             this.Debug_Active = Debug_Active;
@@ -130,8 +136,7 @@ namespace FMRS_THL
 #if DEBUG
            // if (Debug_Level_1_Active)
                 FMRS.Log.PushStackInfo("FMRS_THL.init", "FMRS_THL_Log: entering linit()");
-            if (Debug_Active)
-                FMRS.Log.Info("FMRS_THL_Log: init");
+            if (Debug_Active)  FMRS.Log.Info("FMRS_THL_Log: init");
 #endif
             if (init_done)
                 return;
@@ -155,8 +160,7 @@ namespace FMRS_THL
 #if DEBUG
            // if (Debug_Level_1_Active)
                 FMRS.Log.PushStackInfo("FMRS_THL.flush_record_file", "FMRS_THL_Log: entering flush_record_file()");
-            if (Debug_Active)
-                FMRS.Log.Info("FMRS_THL_Log: flush record file");
+            if (Debug_Active) FMRS.Log.Info("FMRS_THL_Log: flush record file");
 #endif
 
             TextWriter writer = File.CreateText<FMRS_THL_Log>("record.txt", dummy_vessel);
@@ -178,8 +182,7 @@ namespace FMRS_THL
 #if DEBUG
            // if (Debug_Level_1_Active)
                 FMRS.Log.PushStackInfo("FMRS_THL.write_record_file", "FMRS_THL_Log: entering write_record_file()");
-            if (Debug_Active)
-                FMRS.Log.Info("FMRS_THL_Log: write to record file");
+            if (Debug_Active)  FMRS.Log.Info("FMRS_THL_Log: write to record file");
 #endif
 
             writing = true;
@@ -253,8 +256,7 @@ namespace FMRS_THL
             if (!replay)
                 return;
 #if DEBUG
-            if (Debug_Active)
-                FMRS.Log.Info("FMRS_THL_Rep: End Replay");
+            if (Debug_Active)  FMRS.Log.Info("FMRS_THL_Rep: End Replay");
 #endif
 
             try { reader.Close(); }
@@ -273,7 +275,7 @@ namespace FMRS_THL
         public void flybywire(FlightCtrlState state)
         {
             entry temp_entry;
-
+            FMRS.Log.Info("flybywire, state: " + state.ToString());
             if (!replay && !EOF)
                 start_replay();
 
@@ -301,11 +303,11 @@ namespace FMRS_THL
         {
             entry temp_entry;
             string temp_string;
+            FMRS.Log.Info("start_replay");
 #if DEBUG
            // if (Debug_Level_1_Active)
                 FMRS.Log.PushStackInfo("FMS_THL.start_replay", "FMRS_THL_Rep: entering start_replay()");
-            if (Debug_Active)
-                FMRS.Log.Info("FMRS_THL_Rep: Start Replay");
+            if (Debug_Active)  FMRS.Log.Info("FMRS_THL_Rep: Start Replay");
 #endif
             if (replay || EOF)
                 return;
@@ -320,8 +322,7 @@ namespace FMRS_THL
                 if (temp_string.Contains("EOF"))
                 {
 #if DEBUG
-                    if (Debug_Active)
-                        FMRS.Log.Info("FMRS_THL_Rep: EOF");
+                    if (Debug_Active)  FMRS.Log.Info("FMRS_THL_Rep: EOF");
 #endif
                     EOF = true;
                     break;
@@ -332,8 +333,7 @@ namespace FMRS_THL
                 if (temp_entry.time > Planetarium.GetUniversalTime())
                 {
 #if DEBUG
-                    if (Debug_Active)
-                        FMRS.Log.Info("FMRS_THL_Rep: start time found: " + temp_entry.time.ToString());
+                    if (Debug_Active) FMRS.Log.Info("FMRS_THL_Rep: start time found: " + temp_entry.time.ToString());
 #endif
                     read_throttle_values();
                     replay = true;                
@@ -381,8 +381,7 @@ namespace FMRS_THL
 #if DEBUG
            // if (Debug_Level_1_Active)
                 FMRS.Log.PushStackInfo("FMRS_THL.read_throttle_values", "FMRS_THL_Rep: entering read_throttle_values()");
-            if (Debug_Active)
-                FMRS.Log.Info("FMRS_THL_Rep: read throttle values");
+            if (Debug_Active) FMRS.Log.Info("FMRS_THL_Rep: read throttle values");
 #endif
             for (int i = 0; i < 1000; i++)
             {
@@ -391,8 +390,7 @@ namespace FMRS_THL
                 {
                     EOF = true;
 #if DEBUG
-                    if (Debug_Active)
-                        FMRS.Log.Info("FMRS_THL_Rep: EOF");
+                    if (Debug_Active)  FMRS.Log.Info("FMRS_THL_Rep: EOF");
 #endif
                     break;
                 }
@@ -402,8 +400,7 @@ namespace FMRS_THL
                 Throttle_Replay.Enqueue(new entry(temp_string));
             }
 #if DEBUG
-            if (Debug_Active)
-                FMRS.Log.Info("FMRS_THL_Rep: buffer size = " + Throttle_Replay.Count.ToString());
+            if (Debug_Active) FMRS.Log.Info("FMRS_THL_Rep: buffer size = " + Throttle_Replay.Count.ToString());
 
            // if (Debug_Level_1_Active)
                 FMRS.Log.PopStackInfo("FMRS_THL_Rep: leave read_throttle_values()");

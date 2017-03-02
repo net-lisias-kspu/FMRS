@@ -39,7 +39,7 @@ namespace FMRS
 {
     public partial class FMRS_Core : FMRS_Util, IFMRS
     {
-        private string version_number = "1.0.3";
+        //private string version_number = "1.0.3";
         public bool plugin_active = false;
         public double Time_Trigger_Staging, Time_Trigger_Start_Delay, Time_Trigger_Cuto;
         public bool timer_staging_active = false, timer_start_delay_active = false, timer_cuto_active = false;
@@ -81,7 +81,7 @@ namespace FMRS
 #endif //**************************
 
 #if BETA //**************************
-        string beta_version = " .01";
+        //string beta_version = " .01";
         public Rect beta_windowPos;
 #endif   //**************************
 
@@ -103,10 +103,10 @@ namespace FMRS
             mod_vers = "b";
 #endif //**************************
 
-            mod_vers += version_number;
+            mod_vers += FMRS_Version_Info.version_number;
 
 #if BETA //**************************
-            mod_vers += beta_version;
+            mod_vers += FMRS_Version_Info.beta_version;
 #endif //**************************
             init_Save_File_Content();
             load_save_file();
@@ -134,49 +134,47 @@ namespace FMRS
             if (FlightGlobals.ActiveVessel == null)
                 Log.Info("ActiveVessel is null");
             else
-            if (FlightGlobals.ActiveVessel.situation == Vessel.Situations.PRELAUNCH || n_launchpad_preflight || flight_preflight)
             {
+                if (FlightGlobals.ActiveVessel.situation == Vessel.Situations.PRELAUNCH || n_launchpad_preflight || flight_preflight)
+                {
 #if DEBUG
 //                if (Debug_Active)
                     Log.Info("FMRS Vessel is prelaunch");
 #endif
 
-                delete_dropped_vessels();
-                _SETTING_Enabled = true;
-                _SAVE_Switched_To_Dropped = false;
-                _SAVE_Kick_To_Main = false;
-                _SAVE_Main_Vessel = FlightGlobals.ActiveVessel.id;
-                _SAVE_Launched_At = 0;
-                _SAVE_Has_Launched = false;
+                    delete_dropped_vessels();
+                    _SETTING_Enabled = true;
+                    _SAVE_Switched_To_Dropped = false;
+                    _SAVE_Kick_To_Main = false;
+                    _SAVE_Main_Vessel = FlightGlobals.ActiveVessel.id;
+                    _SAVE_Launched_At = 0;
+                    _SAVE_Has_Launched = false;
 
-                if (flight_preflight)
-                    _SAVE_Flight_Reset = true;
+                    if (flight_preflight)
+                        _SAVE_Flight_Reset = true;
 
-                foreach (Part p in FlightGlobals.ActiveVessel.Parts)
-                {
-                    foreach (PartModule pm in p.Modules)
-                        if (pm.moduleName == "FMRS_PM")
-                            pm.StartCoroutine("resetid");
+                    foreach (Part p in FlightGlobals.ActiveVessel.Parts)
+                    {
+                        foreach (PartModule pm in p.Modules)
+                            if (pm.moduleName == "FMRS_PM")
+                                pm.StartCoroutine("resetid");
+                    }
+
+                    recover_values.Clear();
+                    
+                    //GamePersistence.SaveGame("before_launch", HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
+                    // GamePersistence.SaveGame("FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
+                    FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.flight_scene_start_routine", "before_launch", HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
+                    
+                    FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.flight_scene_start_routine", "FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
                 }
-
-                recover_values.Clear();
-
-                Log.Info("flight_scene_start_routine 1");
-                //GamePersistence.SaveGame("before_launch", HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
-                // GamePersistence.SaveGame("FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
-                FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.flight_scene_start_routine", "before_launch", HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
-
-                Log.Info("flight_scene_start_routine 1.1");
-                FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.flight_scene_start_routine", "FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
             }
-
-            Log.Info("flight_scene_start_routine 1.2");
+            
             can_restart = HighLogic.CurrentGame.Parameters.Flight.CanRestart;
             if (HighLogic.CurrentGame.Parameters.Flight.CanQuickLoad && HighLogic.CurrentGame.Parameters.Flight.CanQuickSave)
                 can_q_save_load = true;
             else
                 can_q_save_load = false;
-            Log.Info("flight_scene_start_routine 1.2");
 
             if (FlightGlobals.ActiveVessel.id == _SAVE_Main_Vessel)
             {
@@ -185,8 +183,7 @@ namespace FMRS
             }
             else
                 _SAVE_Switched_To_Dropped = true;
-
-            Log.Info("flight_scene_start_routine 2");
+            
 
             Time_Trigger_Start_Delay = Planetarium.GetUniversalTime();
             timer_start_delay_active = true;
@@ -211,6 +208,8 @@ namespace FMRS
                 {
 #if DEBUG
                     ThrottleReplay = new FMRS_THL.FMRS_THL_Rep(Debug_Active, Debug_Level_1_Active);
+#else
+                    ThrottleReplay = new FMRS_THL.FMRS_THL_Rep();
 #endif
 
                     foreach (Vessel v in FlightGlobals.Vessels)
@@ -220,7 +219,6 @@ namespace FMRS
                             //if (v.loaded)
                             {
                                 Log.Info("appling flybywire callback to main vessel");
-
                                 v.OnFlyByWire += new FlightInputCallback(ThrottleReplay.flybywire);
                             }
                         }

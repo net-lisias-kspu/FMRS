@@ -171,7 +171,7 @@ namespace FMRS
                 _SETTING_Throttle_Log = GUI.Toggle(new Rect(5, 35 + (30 * 4), 25, 25), _SETTING_Throttle_Log, "Throttle Logger WIP");
                 window_height += 30;
                 Timer_Stage_Delay = GUI.HorizontalSlider(new Rect(45, 35 + (30 * 6) + 15, 205, 25), Timer_Stage_Delay, 0.2f, 5.0f);
-                window_height += 30;
+                window_height += 45;
                 GUI.Label(new Rect(20, 35 + (30 * 7), 225, 25), "Stage Save Delay: " + Timer_Stage_Delay.ToString("F1"));
 
 #if DEBUG

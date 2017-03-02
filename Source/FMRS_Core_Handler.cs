@@ -163,7 +163,7 @@ namespace FMRS
 #if DEBUG
                 ThrottleLogger = new FMRS_THL.FMRS_THL_Log(Debug_Active, Debug_Level_1_Active);
 #else
-                          ThrottleLogger = new FMRS_THL.FMRS_THL_Log();
+                ThrottleLogger = new FMRS_THL.FMRS_THL_Log();
 #endif
                 ThrottleLogger.flush_record_file();
                 ThrottleLogger.StartLog();
@@ -373,7 +373,7 @@ namespace FMRS
             {
 #if DEBUG
                 if (Debug_Active)
-                    Log.Info("not in sience carreer mode, leave science_routine(float amount, ScienceSubject input_science_sub)");
+                    Log.Info("not in science career mode, leave science_routine(float amount, ScienceSubject input_science_sub)");
 #endif
                 return;
             }

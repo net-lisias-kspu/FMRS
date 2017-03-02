@@ -82,7 +82,7 @@ namespace FMRS
         {
             get
             {
-                return version_number;
+                return FMRS_Version_Info.version_number;
             }
         }
 
