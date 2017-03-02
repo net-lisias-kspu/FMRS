@@ -87,17 +87,8 @@
     <Content Include="icons\tb_st_en.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="license.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="readme.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="buildRelease.bat" />
-    <None Include="deploy.bat" />
-    <None Include="FlightManagerforReusableStages.version">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="FMRS_MM.cfg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

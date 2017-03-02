@@ -26,6 +26,10 @@ namespace FMRS
         [GameParameters.CustomParameterUI("FMRS Enabled")]
         public bool enabled = true;
 
+        [GameParameters.CustomParameterUI("Auto-Active at launch")]
+        public bool autoactiveAtLaunch = true;
+
+
         [GameParameters.CustomFloatParameterUI("Stage Delay", minValue = 0.2f, maxValue = 5.0f, asPercentage = false, displayFormat = "0.0",
                    toolTip = "How long after staging before saves are taken")]
         public float Timer_Stage_Delay = 0.2f;

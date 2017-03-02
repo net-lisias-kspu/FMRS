@@ -1,0 +1,15 @@
+1.2.0.1-beta
+		Initial release
+
+1.2.0.2-Debug-Beta
+		bug fixes
+		GUI cleanup
+
+1.2.0.2-rc1
+		fixed blizzy icons
+
+1.2.0.3
+		Added code to hide when F2 is pressed
+		Tied debug window to main window, so it won't be there when nothing is there
+		Found bug which was a segfault when entering launch scene, problem with ordering of Start() vs Awake()
+		Added option to make FMRS always be active at a launch optional

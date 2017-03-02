@@ -46,6 +46,8 @@ namespace FMRS
 
         public void drawGUI()
         {
+            if (F2)
+                return;
             if (!skin_init)
                 init_skin();
             GUI.skin = HighLogic.Skin;
@@ -68,8 +70,9 @@ namespace FMRS
             {
                 debug_windowPos.x = windowPos.x;
                 debug_windowPos.y = windowPos.y + windowPos.height;
+                debug_windowPos = GUILayout.Window(2, debug_windowPos, DebugGUI, "FMRS Debug Info");
             }
-            debug_windowPos = GUILayout.Window(2, debug_windowPos, DebugGUI, "FMRS Debug Info");
+            
 #endif //**************************
         }
 

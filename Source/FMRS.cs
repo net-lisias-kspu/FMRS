@@ -81,12 +81,13 @@ namespace FMRS
             if (!_SAVE_Has_Launched)
                 _SETTING_Enabled = false;
 
-            if (FlightGlobals.ActiveVessel.situation == Vessel.Situations.PRELAUNCH)
+            if (FlightGlobals.ActiveVessel.situation == Vessel.Situations.PRELAUNCH && HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>().autoactiveAtLaunch)
             {
 #if DEBUG
                 if (Debug_Active)
                     Log.Info("ActiveVessel is prelaunch");
 #endif
+                
                 _SETTING_Enabled = true;
                 GameEvents.onLaunch.Add(launch_routine);
             }
@@ -140,10 +141,11 @@ namespace FMRS
             if(ThrottleReplay != null)
  #if DEBUG
 	                  ThrottleReplay.Update(Debug_Active, Debug_Level_1_Active);
- #else
+#else
                  ThrottleReplay.Update();
 #endif
-
+            if (Input.GetKeyDown(KeyCode.F2))
+                F2 = !F2;
 
         }
 

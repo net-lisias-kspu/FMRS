@@ -58,6 +58,11 @@ namespace FMRS
             callback();
         }
 
+         private void Awake()
+        {
+            Instance = this;
+        }
+
         private void Start()
         {
             Instance = this;

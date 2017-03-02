@@ -5,6 +5,16 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FMRS", "FMRS.csproj", "{64746823-6B47-496D-98BE-ADB13653D9DA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFolder", "SolutionFolder", "{FA7ABE92-C2B4-40BE-A3F2-4F72444411E5}"
+	ProjectSection(SolutionItems) = preProject
+		buildRelease.bat = buildRelease.bat
+		..\Changelog.txt = ..\Changelog.txt
+		deploy.bat = deploy.bat
+		FlightManagerforReusableStages.version = FlightManagerforReusableStages.version
+		license.txt = license.txt
+		readme.txt = readme.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Beta|Any CPU = Beta|Any CPU
