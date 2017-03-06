@@ -118,7 +118,13 @@ namespace FMRS
                 GUILayout.Box("Flight", text_main, GUILayout.Width(50));
 
             if (!_SETTING_Minimize)
-                show_setting = GUILayout.Toggle(show_setting, "s", button_small, GUILayout.Width(25));
+            {
+                show_setting = GUILayout.Toggle(show_setting, buttonContent, button_small, GUILayout.Width(25));
+                if (show_setting)
+                    buttonContent = upContent;
+                else
+                    buttonContent = downContent;
+            }
 
             _SETTING_Minimize = GUILayout.Toggle(_SETTING_Minimize, "_", button_small, GUILayout.Width(25));
             if (really_close && _SETTING_Minimize)

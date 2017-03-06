@@ -57,6 +57,12 @@ namespace FMRS
         public bool blz_toolbar_available = false;
         public IButton Toolbar_Button;
         public Texture2D stb_texture;
+        public static Texture2D upArrow;
+        public static Texture2D downArrow;
+        public GUIContent upContent;
+        public GUIContent downContent;
+        public GUIContent buttonContent;
+
         public bool can_restart, can_q_save_load;
         private int nr_save_files = 0;
         public Vector2 scroll_Vector = Vector2.zero;

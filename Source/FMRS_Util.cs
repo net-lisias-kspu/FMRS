@@ -48,6 +48,7 @@ namespace FMRS
 
         public void Wait(float seconds, Action action)
         {
+            Log.Info("Wait, seconds: " + seconds.ToString());
             jumpInProgress = true;
             StartCoroutine(_wait(seconds, action));
         }
@@ -55,6 +56,7 @@ namespace FMRS
         IEnumerator _wait(float time, Action callback)
         {
             yield return new WaitForSeconds(time);
+            jumpInProgress = false;
             callback();
         }
 

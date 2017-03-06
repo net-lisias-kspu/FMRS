@@ -22,5 +22,7 @@
 1.2.0.5
 		New icons courtesy of @EmbersArc
 		Fixed F2 bug
-		Fixed issue with returning to main mission after recovering dropped stage'
+		Fixed issue with returning to main mission after recovering dropped stage
 		
+1.2.0.6
+		Replaced lost line which was causing the greyed out buttons (I shouldn't do dev when tired and having a migraine)

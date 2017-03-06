@@ -58,9 +58,15 @@ namespace FMRS
             //stb_texture.LoadImage(System.IO.File.ReadAllBytes(Path.Combine(KSPUtil.ApplicationRootPath, "GameData/FMRS/icons/tb_st_di.png")));
             
             stb_texture = GameDatabase.Instance.GetTexture("FMRS/icons/tb_st_di", false);
+            upArrow = GameDatabase.Instance.GetTexture("FMRS/Icons/up", false);
+            downArrow = GameDatabase.Instance.GetTexture("FMRS/Icons/down", false);
+            upContent = new GUIContent("", upArrow, "");
+            downContent = new GUIContent("", downArrow, "");
+            buttonContent = downContent;
+
             //if (Stock_Toolbar_Button != null)
             //    Stock_Toolbar_Button.SetTexture(stb_texture);
-            
+
             GameEvents.onGUIApplicationLauncherReady.Add(add_toolbar_button);
             GameEvents.onGUIApplicationLauncherUnreadifying.Add(remove_toolbar_button);
             //if (ApplicationLauncher.Ready == true)
