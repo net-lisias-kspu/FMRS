@@ -19,3 +19,8 @@
 		Found bug which occured when staging, causing following error:
 				ArgumentException: Value does not fall within the expected range.
 	
+1.2.0.5
+		New icons courtesy of @EmbersArc
+		Fixed F2 bug
+		Fixed issue with returning to main mission after recovering dropped stage'
+		

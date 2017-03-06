@@ -38,7 +38,7 @@ namespace FMRS
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     public class FMRS : FMRS_Core
     {
-        public ApplicationLauncherButton Stock_Toolbar_Button = new ApplicationLauncherButton();
+        public static ApplicationLauncherButton Stock_Toolbar_Button = new ApplicationLauncherButton();
 
 /*************************************************************************************************************************/
         public FMRS()
@@ -54,9 +54,13 @@ namespace FMRS
             
             FMRS_core_awake();
 
-            stb_texture = new Texture2D(38, 38);
-            stb_texture.LoadImage(System.IO.File.ReadAllBytes(Path.Combine(KSPUtil.ApplicationRootPath, "GameData/FMRS/icons/tb_st_di.png")));
-
+            //stb_texture = new Texture2D(38, 38);
+            //stb_texture.LoadImage(System.IO.File.ReadAllBytes(Path.Combine(KSPUtil.ApplicationRootPath, "GameData/FMRS/icons/tb_st_di.png")));
+            
+            stb_texture = GameDatabase.Instance.GetTexture("FMRS/icons/tb_st_di", false);
+            //if (Stock_Toolbar_Button != null)
+            //    Stock_Toolbar_Button.SetTexture(stb_texture);
+            
             GameEvents.onGUIApplicationLauncherReady.Add(add_toolbar_button);
             GameEvents.onGUIApplicationLauncherUnreadifying.Add(remove_toolbar_button);
             //if (ApplicationLauncher.Ready == true)
@@ -111,7 +115,7 @@ namespace FMRS
             if (_SETTING_Enabled)
             {
                 flight_scene_start_routine();
-                stb_texture.LoadImage(System.IO.File.ReadAllBytes(Path.Combine(KSPUtil.ApplicationRootPath, "GameData/FMRS/icons/tb_st_en.png")));
+                stb_texture = GameDatabase.Instance.GetTexture("FMRS/icons/tb_st_en", false);                             
             }
 #if DEBUG
            // if (Debug_Level_1_Active)
@@ -146,6 +150,8 @@ namespace FMRS
 #endif
             if (Input.GetKeyDown(KeyCode.F2))
                 F2 = !F2;
+            if (Input.GetKeyDown(KeyCode.F3) && F2)
+                F2 = false;
 
         }
 
@@ -191,7 +197,7 @@ namespace FMRS
                 toolbar_button_clicked,
                 null, null, null, null,
                 ApplicationLauncher.AppScenes.FLIGHT | ApplicationLauncher.AppScenes.MAPVIEW,
-                (Texture)stb_texture);
+                stb_texture);
         }
 
         public void remove_toolbar_button(GameScenes scene)

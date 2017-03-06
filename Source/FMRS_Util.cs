@@ -34,7 +34,7 @@ using KSP.IO;
 namespace FMRS
 {
 
-    [KSPAddon(KSPAddon.Startup.Flight, false)]
+    [KSPAddon(KSPAddon.Startup.Flight, true)]
     public class FMRS_SAVE_Util : MonoBehaviour
     {
         bool saveInProgress = false;
@@ -69,6 +69,7 @@ namespace FMRS
             jumpInProgress = false;
             GameEvents.onGameStateSaved.Add(OnGameStateSaved);
             jumpInProgress = false;
+            DontDestroyOnLoad(this);
         }
 
         private void OnDestroy()
