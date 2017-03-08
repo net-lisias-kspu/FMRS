@@ -80,17 +80,7 @@ Known issues
 
 Change log
 ============
-    x1.2.0.0
-		Initial LinuxGuruGamer release for 1.2.2
-		Added additional parachutes in addition to the RealChutes
-			ModuleParachute
-			ModuleKrKerbalParachute
-			RealChuteFAR
-		fixed flickering of windows
-		Removed do-nothing toggle on the debug screen
-		Fixed crash due to transfer to flight too quickly
-		Added Settings page
-		Added configurable timer save delay after staging
+
 
 
 	x1.1.01.01

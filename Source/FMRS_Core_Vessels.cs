@@ -298,7 +298,7 @@ namespace FMRS
                             List<ProtoPartModuleSnapshot> proto_modules = proto_part.modules;
                             ProtoPartModuleSnapshot module = null;
 
-                            if (proto_modules != null)
+                            if (proto_modules != null && (_SETTING_Parachutes && (!_SETTING_Defer_Parachutes_to_StageRecovery || !stageRecoveryInstalled)))
                             {
                                 //
                                 module = proto_part.modules.Find(p => p.moduleName == "RealChuteModule" ||

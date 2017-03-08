@@ -79,7 +79,7 @@ namespace FMRS
         private List<string> damaged_buildings = new List<string>();
         public FMRS_THL.FMRS_THL_Log ThrottleLogger;
         public FMRS_THL.FMRS_THL_Rep ThrottleReplay;
-        public static bool F2 = false;
+        public static bool HideFMRSUI = false;
 
 #if DEBUG  //**************************
         public string[] debug_message = { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" };
@@ -308,9 +308,10 @@ namespace FMRS
 
                 if (timer_staging_active)
                 {
-                    if (timer_cuto_active)
+                    if (timer_cuto_active && _SETTING_Auto_Cut_Off)
                     {
-                        if ((Time_Trigger_Cuto + 0.1) <= Planetarium.GetUniversalTime())
+                        //if ((Time_Trigger_Cuto + 0.1) <= Planetarium.GetUniversalTime())
+                        //if (_SETTING_Auto_Cut_Off)
                         {
 #if DEBUG
                             if (Debug_Active)
@@ -320,7 +321,7 @@ namespace FMRS
                             {
                                 if (!Vessels.Contains(temp_vessel.id))
                                 {
-                                    if (_SETTING_Auto_Cut_Off)
+                                   
                                         temp_vessel.ctrlState.mainThrottle = 0;
                                 }
                             }

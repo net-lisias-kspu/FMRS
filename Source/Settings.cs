@@ -16,7 +16,7 @@ namespace FMRS
 
     public class FMRS_Settings : GameParameters.CustomParameterNode
     {
-        public override string Title { get { return "General Settings"; } }
+        public override string Title { get { return ""; } } // column heading
         public override GameParameters.GameMode GameMode { get { return GameParameters.GameMode.ANY; } }
         public override string Section { get { return "FMRS"; } }
         public override int SectionOrder { get { return 1; } }
@@ -45,6 +45,14 @@ namespace FMRS
 
         [GameParameters.CustomParameterUI("Throttle Logger WIP")]
         public bool _SETTING_Throttle_Log = true;
+
+        [GameParameters.CustomParameterUI("Parachutes are controllable",
+            toolTip = "If enabled, any stage with a parachute will be treated as controllable by the mod")]
+        public bool _SETTING_Parachutes = true;
+
+        [GameParameters.CustomParameterUI("Defer parachute-only stages to Stage-Recovery (if installed)",
+            toolTip = "If Stage Recovery is installed, do not control stages which only have parachutes")]
+        public bool _SETTING_Defer_Parachutes_to_StageRecovery = true;
 
 
 

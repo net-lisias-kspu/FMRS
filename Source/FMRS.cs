@@ -127,6 +127,17 @@ namespace FMRS
            // if (Debug_Level_1_Active)
                 Log.PopStackInfo("leaving FMRS.Start ()");
 #endif
+            GameEvents.onShowUI.Add(ShowUI);
+            GameEvents.onHideUI.Add(HideUI);
+
+        }
+        private void ShowUI()
+        {
+            HideFMRSUI = false;
+        }
+        void HideUI()
+        {
+            HideFMRSUI = true;
         }
 
         private void OnGUI()
@@ -154,10 +165,6 @@ namespace FMRS
 #else
                  ThrottleReplay.Update();
 #endif
-            if (Input.GetKeyDown(KeyCode.F2))
-                F2 = !F2;
-            if (Input.GetKeyDown(KeyCode.F3) && F2)
-                F2 = false;
 
         }
 
@@ -247,11 +254,18 @@ namespace FMRS
             if (Debug_Active)
                 Log.Info("FMRS_Space_Center On Awake");
 #endif
+
+            ReloadSettings();
         }
 
 
 /*************************************************************************************************************************/
         void Start()
+        {
+            GameEvents.OnGameSettingsApplied.Add(ReloadSettings);
+        }
+
+        void ReloadSettings()
         {
 #if DEBUG
             if (Debug_Active)
@@ -267,8 +281,34 @@ namespace FMRS
             _SETTING_Auto_Cut_Off = HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>()._SETTING_Auto_Cut_Off;
             _SETTING_Auto_Recover = HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>()._SETTING_Auto_Recover;
             _SETTING_Throttle_Log = HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>()._SETTING_Throttle_Log;
+            _SETTING_Parachutes = HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>()._SETTING_Parachutes;
+            _SETTING_Defer_Parachutes_to_StageRecovery = HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>()._SETTING_Defer_Parachutes_to_StageRecovery;
+
+            if (hasMod("StageRecovery"))
+            {
+                stageRecoveryInstalled = true;
+
+            }
         }
 
+        public static List<String> installedMods = new List<String>();
+        public void buildModList()
+        {
+            Log.Info("buildModList");
+            //https://github.com/Xaiier/Kreeper/blob/master/Kreeper/Kreeper.cs#L92-L94 <- Thanks Xaiier!
+            foreach (AssemblyLoader.LoadedAssembly a in AssemblyLoader.loadedAssemblies)
+            {
+                string name = a.name;
+                Log.Info(string.Format("Loading assembly: {0}", name));
+                installedMods.Add(name);
+            }
+        }
+        public bool hasMod(string modIdent)
+        {
+            if (installedMods.Count == 0)
+                buildModList();
+            return installedMods.Contains(modIdent);
+        }
 
         /*************************************************************************************************************************/
         void Update()

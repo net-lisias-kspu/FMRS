@@ -1,6 +1,19 @@
+1.2.0.0
+		Initial LinuxGuruGamer release for 1.2.2
+		Added additional parachutes in addition to the RealChutes
+			ModuleParachute
+			ModuleKrKerbalParachute
+			RealChuteFAR
+		fixed flickering of windows
+		Removed do-nothing toggle on the debug screen
+		Fixed crash due to transfer to flight too quickly
+		Added Settings page
+		Added configurable timer save delay after staging
+		
 1.2.0.1-beta
 		Initial release
 
+		nnn
 1.2.0.2-Debug-Beta
 		bug fixes
 		GUI cleanup
@@ -26,3 +39,15 @@
 		
 1.2.0.6
 		Replaced lost line which was causing the greyed out buttons (I shouldn't do dev when tired and having a migraine)
+
+1.2.1
+		Added code to reload settings properly after they are changed
+		Added new settings:
+			_SETTING_Parachutes
+			_SETTING_Defer_Parachutes_to_StageRecovery
+
+				If _SETTING_Parachutes is false, then parachutes won't be included as a controllable stage
+				if _SETTING_Defer_Parachutes_to_StageRecovery is true AND SR is installed, even if _SETTING_Parachutes is true, then parachutes won't be included as a controllable stage.
+
+		Added code to check for StageRecovery being installed
+		Removed 1/10 second delay before auto-shutting off engines

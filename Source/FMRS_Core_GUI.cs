@@ -38,6 +38,9 @@ namespace FMRS
 {
     public partial class FMRS_Core : FMRS_Util, IFMRS
     {
+        internal static String _AssemblyName { get { return System.Reflection.Assembly.GetExecutingAssembly().GetName().Name; } }
+        int baseWindowID = UnityEngine.Random.Range(1000, 2000000) + _AssemblyName.GetHashCode();
+
         /*************************************************************************************************************************/
         private void Start()
         {
@@ -46,7 +49,7 @@ namespace FMRS
 
         public void drawGUI()
         {
-            if (F2)
+            if (HideFMRSUI)
                 return;
             if (!skin_init)
                 init_skin();
@@ -54,14 +57,14 @@ namespace FMRS
 
             if (main_ui_active)
             {
-                windowPos = GUILayout.Window(1, windowPos, MainGUI, "FMRS " + mod_vers, GUILayout.MinWidth(100));
+                windowPos = GUILayout.Window(baseWindowID + 1, windowPos, MainGUI, "FMRS " + mod_vers, GUILayout.MinWidth(100));
                 windowPos.x = Mathf.Clamp(windowPos.x, 0, Screen.width - windowPos.width);
                 windowPos.y = Mathf.Clamp(windowPos.y, 0, Screen.height - windowPos.height);
 
 #if BETA && !DEBUG //**************************
                 beta_windowPos.x = windowPos.x;
                 beta_windowPos.y = windowPos.y + windowPos.height;
-                beta_windowPos =  GUILayout.Window(3,beta_windowPos, BetaGUI, "FMRS Beta");
+                beta_windowPos =  GUILayout.Window(baseWindowID = 3,beta_windowPos, BetaGUI, "FMRS Beta");
 #endif //**************************
             }
 
@@ -70,7 +73,7 @@ namespace FMRS
             {
                 debug_windowPos.x = windowPos.x;
                 debug_windowPos.y = windowPos.y + windowPos.height;
-                debug_windowPos = GUILayout.Window(2, debug_windowPos, DebugGUI, "FMRS Debug Info");
+                debug_windowPos = GUILayout.Window(baseWindowID + 2, debug_windowPos, DebugGUI, "FMRS Debug Info");
             }
             
 #endif //**************************
