@@ -109,6 +109,7 @@ namespace FMRS
             {
                 gameToLoad = stateToLoad;
                 vesselToFocus = vesselToFocusIdx;
+               // detach_handlers();
                 Wait(1, () => {
                     doStartAndFocusVessel();
                    // Debug.Log("1 second is lost forever");
@@ -124,6 +125,7 @@ namespace FMRS
             FlightDriver.StartAndFocusVessel(gameToLoad, vesselToFocus);
             readyToLoad = false;
             gameToLoad = null;
+            //attach_handlers();
         }
 
         void OnGameStateSaved(Game game)

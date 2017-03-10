@@ -378,7 +378,7 @@ namespace FMRS
 
                         if (GUILayout.Button("YES", button_big, GUILayout.Width(132)))
                         {
-                            _SETTING_Enabled = false;
+                           // _SETTING_Enabled = false;
                             jump_to_vessel(_SAVE_Main_Vessel, "before_launch");
                         }
                         if (GUILayout.Button("NO", button_big, GUILayout.Width(133)))

@@ -13,7 +13,6 @@
 1.2.0.1-beta
 		Initial release
 
-		nnn
 1.2.0.2-Debug-Beta
 		bug fixes
 		GUI cleanup
@@ -51,3 +50,6 @@
 
 		Added code to check for StageRecovery being installed
 		Removed 1/10 second delay before auto-shutting off engines
+
+1.2.2
+		Fixed issue where contracts and strategies got canceled if Revert to Launch was done from inside FMRS
