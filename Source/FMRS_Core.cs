@@ -34,6 +34,7 @@ using KSP.IO;
 using Contracts;
 using KSP.UI;
 using KSP.UI.Screens;
+using System.Collections;
 
 namespace FMRS
 {
@@ -167,12 +168,8 @@ namespace FMRS
                     }
 
                     recover_values.Clear();
-                    
-                    //GamePersistence.SaveGame("before_launch", HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
-                    // GamePersistence.SaveGame("FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
-                    FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.flight_scene_start_routine", "before_launch", HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
-                    
-                    FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.flight_scene_start_routine", "FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
+
+                    StartCoroutine(save_game_pre_flight());
                 }
             }
             
@@ -387,6 +384,17 @@ namespace FMRS
 #if DEBUG
             Log.PopStackInfo("leaving flight_scene_update_routine");
 #endif
+        }
+
+
+        /*************************************************************************************************************************/
+        private IEnumerator save_game_pre_flight()
+        {
+            while (!FlightGlobals.ActiveVessel.protoVessel.wasControllable)
+                yield return 0;
+
+            FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.save_game_pre_flight", "before_launch", HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
+            FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.save_game_pre_flight", "FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
         }
 
 
