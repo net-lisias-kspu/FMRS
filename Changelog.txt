@@ -55,3 +55,6 @@
 		Fixed issue where contracts and strategies got canceled if Revert to Launch was done from inside FMRS
 1.2.2.1
 		Fixed .version file to use correct record on ksp-avc site
+
+1.2.3
+		Thanks to @https://github.com/joaofarias, this fixes the issue of clearing contracts and strategies
