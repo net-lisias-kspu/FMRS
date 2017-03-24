@@ -58,3 +58,6 @@
 
 1.2.3
 		Thanks to @https://github.com/joaofarias, this fixes the issue of clearing contracts and strategies
+
+1.2.3.1
+		Thanks to @EmbersArc, icons are updated
