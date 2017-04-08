@@ -54,7 +54,11 @@ namespace FMRS
             toolTip = "If Stage Recovery is installed, do not control stages which only have parachutes")]
         public bool _SETTING_Defer_Parachutes_to_StageRecovery = true;
 
-
+#if false
+        [GameParameters.CustomParameterUI("Default all stages to Stage-Recovery (if installed)",
+           toolTip = "If Stage Recovery is installed, it will control the recovery unless changed in the Decoupler")]
+        public bool _SETTING_Default_to_StageRecovery = true;
+#endif
 
 #if DEBUG
         [GameParameters.CustomParameterUI("Debug mode (spams the log file")]

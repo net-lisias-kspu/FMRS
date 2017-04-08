@@ -1,11 +1,10 @@
 {
-  "NAME": "FMRS (Flight Manager For Reusable Stages)",
-  "URL": "http://ksp-avc.cybutek.net/version.php?id=449",
+  "NAME": "Recovery Controller",
   "VERSION": {
-    "MAJOR": 1,
-    "MINOR": 2,
-    "PATCH": 3,
-    "BUILD": 2
+    "MAJOR": 0,
+    "MINOR": 0,
+    "PATCH": 1,
+    "BUILD": 0
   },
   "KSP_VERSION": {
     "MAJOR": 1,

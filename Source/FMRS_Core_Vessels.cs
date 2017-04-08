@@ -280,82 +280,91 @@ namespace FMRS
             foreach (Vessel temp_vessel in FlightGlobals.Vessels)
             {
                 controllable = false;
+                //Check if the stage was claimed by another mod
+                string controllingMod = RecoveryControllerWrapper.ControllingMod(temp_vessel);
+               if (controllingMod != null)
+                    Log.Info("RecoveryControllerWrapper.ControllingMod for vessel: " + temp_vessel.name + " :  " + controllingMod);
 
-                if (!Vessels.Contains(temp_vessel.id))
+                if (controllingMod == null || 
+                    string.Equals(controllingMod, "auto", StringComparison.OrdinalIgnoreCase) || 
+                    string.Equals(controllingMod, "FMRS", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (temp_vessel.isCommandable &&
-                        temp_vessel.IsControllable &&
-                        temp_vessel.vesselType != VesselType.EVA &&
-                        temp_vessel.vesselType != VesselType.Flag &&
-                        temp_vessel.vesselType != VesselType.SpaceObject &&
-                        temp_vessel.vesselType != VesselType.Unknown)
-
-                        controllable = true;
-                    else
+                    if (!Vessels.Contains(temp_vessel.id))
                     {
-                        foreach (ProtoPartSnapshot proto_part in temp_vessel.protoVessel.protoPartSnapshots)
-                        {
-                            List<ProtoPartModuleSnapshot> proto_modules = proto_part.modules;
-                            ProtoPartModuleSnapshot module = null;
+                        if (temp_vessel.isCommandable &&
+                            temp_vessel.IsControllable &&
+                            temp_vessel.vesselType != VesselType.EVA &&
+                            temp_vessel.vesselType != VesselType.Flag &&
+                            temp_vessel.vesselType != VesselType.SpaceObject &&
+                            temp_vessel.vesselType != VesselType.Unknown)
 
-                            if (proto_modules != null && (_SETTING_Parachutes && (!_SETTING_Defer_Parachutes_to_StageRecovery || !stageRecoveryInstalled)))
+                            controllable = true;
+                        else
+                        {
+                            foreach (ProtoPartSnapshot proto_part in temp_vessel.protoVessel.protoPartSnapshots)
                             {
-                                //
-                                module = proto_part.modules.Find(p => p.moduleName == "RealChuteModule" ||
-                                    p.moduleName == "ModuleParachute" ||
-                                    p.moduleName == "ModuleKrKerbalParachute" ||
-                                    p.moduleName == "RealChuteFAR");
-                                if (module != null)
+                                List<ProtoPartModuleSnapshot> proto_modules = proto_part.modules;
+                                ProtoPartModuleSnapshot module = null;
+
+                                if (proto_modules != null && (_SETTING_Parachutes && (!_SETTING_Defer_Parachutes_to_StageRecovery || !stageRecoveryInstalled)))
+                                {
+                                    //
+                                    module = proto_part.modules.Find(p => p.moduleName == "RealChuteModule" ||
+                                                                            p.moduleName == "ModuleParachute" ||
+                                                                            p.moduleName == "ModuleKrKerbalParachute" ||
+                                                                            p.moduleName == "RealChuteFAR");
+                                    if (module != null)
+                                        controllable = true;
+                                }
+
+                                if (proto_part.protoCrewNames.Count > 0)
                                     controllable = true;
                             }
-
-                            if (proto_part.protoCrewNames.Count > 0)
-                                controllable = true;
                         }
-                    }
-                    foreach (Part p in temp_vessel.Parts)
-                    {
-                        foreach (PartModule pm in p.Modules)
-                        {
-                            if (pm.moduleName == "FMRS_PM")
-                            {
-                                if ((pm as FMRS_PM).parent_vessel != "00000000-0000-0000-0000-000000000000")
-                                {
-                                    controllable = false;
-                                    break;
-                                }
-                            }
-                        }
-                        break;
-                    }
-
-                    if (controllable)
-                    {
-#if DEBUG
-                        if (Debug_Active) Log.Info("" + temp_vessel.vesselName + " Found and will be added to the dicts");
-#endif
-
-                        Vessels_dropped.Add(temp_vessel.id, save_file_name);
-                        Vessels_dropped_names.Add(temp_vessel.id, temp_vessel.vesselName);
-                        Vessel_State.Add(temp_vessel.id, vesselstate.FLY);
                         foreach (Part p in temp_vessel.Parts)
                         {
                             foreach (PartModule pm in p.Modules)
+                            {
                                 if (pm.moduleName == "FMRS_PM")
-                                    pm.StartCoroutine("setid");
+                                {
+                                    if ((pm as FMRS_PM).parent_vessel != "00000000-0000-0000-0000-000000000000")
+                                    {
+                                        controllable = false;
+                                        break;
+                                    }
+                                }
+                            }
+                            break;
                         }
 
-                        foreach (ProtoPartSnapshot part_snapshot in temp_vessel.protoVessel.protoPartSnapshots)
+                        if (controllable)
                         {
-                            foreach (ProtoCrewMember member in part_snapshot.protoModuleCrew)
+#if DEBUG
+                            if (Debug_Active) Log.Info("" + temp_vessel.vesselName + " Found and will be added to the dicts");
+#endif
+
+                            Vessels_dropped.Add(temp_vessel.id, save_file_name);
+                            Vessels_dropped_names.Add(temp_vessel.id, temp_vessel.vesselName);
+                            Vessel_State.Add(temp_vessel.id, vesselstate.FLY);
+                            foreach (Part p in temp_vessel.Parts)
                             {
-                                if (!Kerbal_dropped.ContainsKey(member.name))
-                                    Kerbal_dropped.Add(member.name, temp_vessel.id);
+                                foreach (PartModule pm in p.Modules)
+                                    if (pm.moduleName == "FMRS_PM")
+                                        pm.StartCoroutine("setid");
                             }
+
+                            foreach (ProtoPartSnapshot part_snapshot in temp_vessel.protoVessel.protoPartSnapshots)
+                            {
+                                foreach (ProtoCrewMember member in part_snapshot.protoModuleCrew)
+                                {
+                                    if (!Kerbal_dropped.ContainsKey(member.name))
+                                        Kerbal_dropped.Add(member.name, temp_vessel.id);
+                                }
+                            }
+                            new_vessel_found = true;
                         }
-                        new_vessel_found = true;
+                        Vessels.Add(temp_vessel.id);
                     }
-                    Vessels.Add(temp_vessel.id);
                 }
             }
 #if DEBUG
