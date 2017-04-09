@@ -91,7 +91,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="deploy.bat" />
     <None Include="FMRS_MM.cfg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

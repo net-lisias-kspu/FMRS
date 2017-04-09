@@ -4,9 +4,9 @@
 set H=R:\KSP_1.2.2_dev
 echo %H%
 
-copy bin\%1\FMRS.dll ..\GameData\FMRS\Plugins
-copy ..\license.txt ..\GameData\FMRS
-xcopy /E /Y ..\GameData\FMRS %H%\GameData\FMRS
+copy bin\%1\RecoveryController.dll ..\GameData\RecoveryController\Plugins
+copy ..\license.txt ..\GameData\RecoveryController
+xcopy /E /Y ..\GameData\RecoveryController %H%\GameData\RecoveryController
 
 
 set DEFHOMEDRIVE=d:
@@ -30,7 +30,7 @@ if "%_test%" == ":" (
 set HOMEDRIVE=%HOMEDIR:~0,2%
 )
 
-copy FlightManagerforReusableStages.version a.version
+copy RecoveryController.version a.version
 set VERSIONFILE=a.version
 rem The following requires the JQ program, available here: https://stedolan.github.io/jq/download/
 c:\local\jq-win64  ".VERSION.MAJOR" %VERSIONFILE% >tmpfile
@@ -50,9 +50,9 @@ if "%build%" NEQ "0"  set VERSION=%VERSION%.%build%
 
 echo %VERSION%
 del a.version
-copy FlightManagerforReusableStages.version ..\GameData\FMRS
+copy RecoveryController.version ..\GameData\RecoveryController
 
-set FILE="%RELEASEDIR%\FMRS-%VERSION%-%1.zip"
+set FILE="%RELEASEDIR%\RecoveryController-%VERSION%-%1.zip"
 IF EXIST %FILE% del /F %FILE%
 cd ..
-%ZIP% a -tzip %FILE% GameData\FMRS  GameData\RecoveryController
+%ZIP% a -tzip %FILE% GameData\RecoveryController 

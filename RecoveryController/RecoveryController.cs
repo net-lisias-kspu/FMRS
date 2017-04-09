@@ -5,11 +5,6 @@ using System.Text;
 using UnityEngine;
 using KSP.UI.Screens;
 
-using KSP.IO;
-using System.Text.RegularExpressions;
-using KSP.UI;
-using KSP.UI.Screens.Flight;
-
 
 namespace RecoveryController
 {
