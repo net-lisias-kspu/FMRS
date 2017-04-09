@@ -293,6 +293,9 @@ namespace RecoveryController
 
         public string ControllingMod(Vessel v)
         {
+            if (v.name.Contains("(unloaded)"))
+                return null;
+            Log.Info("ControllingMod, vessel: " + v.name);
             foreach (Part p in v.Parts)
             {
                 if (p.inverseStage >= v.currentStage - 1)
@@ -302,9 +305,20 @@ namespace RecoveryController
                         RecoveryIDModule m = p.FindModuleImplementing<RecoveryIDModule>();
                         if (m != null)
                         {
+                            Log.Info("Part: " + p.partInfo.name + ", Returning: " + m.RecoveryOwner);
                             return m.RecoveryOwner;
                         }
                     }
+                    else
+                    {
+                        ControllingRecoveryModule m = p.FindModuleImplementing<ControllingRecoveryModule>();
+                        if (m != null)
+                        {
+                            Log.Info("Part: " + p.partInfo.name + ", Returning: " + m.RecoveryOwner);
+                            return m.RecoveryOwner;
+                        }
+                    }
+
                 }
             }
             return null;
@@ -326,26 +340,38 @@ namespace RecoveryController
             // if (loadType == CraftBrowserDialog.LoadType.Normal)
             {
                 Part root = ct.Parts[0];
-                idUtil.UpdateChildren(root, AUTO, true);               
+                if (!idUtil.IsDecoupler(root))
+                    idUtil.UpdateChildren(root, root.FindModuleImplementing<ControllingRecoveryModule>().RecoveryOwner, true);
+                else
+                    idUtil.UpdateChildren(root, root.FindModuleImplementing<RecoveryIDModule>().RecoveryOwner, true);
             }
         }
 
         void onVesselLoaded(Vessel v)
         {
             Log.Info("onVesselLoaded");
-            idUtil.UpdateChildren(v.rootPart, AUTO, true);
+            if (!idUtil.IsDecoupler(v.rootPart))
+                idUtil.UpdateChildren(v.rootPart, v.rootPart.FindModuleImplementing<ControllingRecoveryModule>().RecoveryOwner, true);
+            else
+                idUtil.UpdateChildren(v.rootPart, v.rootPart.FindModuleImplementing<RecoveryIDModule>().RecoveryOwner, true);
         }
 
         void onVesselCreate(Vessel v)
         {
             Log.Info("onVesselCreate");
             if (v.rootPart != null)
-                idUtil.UpdateChildren(v.rootPart, AUTO, true);
+                if (!idUtil.IsDecoupler(v.rootPart))
+                    idUtil.UpdateChildren(v.rootPart, v.rootPart.FindModuleImplementing<ControllingRecoveryModule>().RecoveryOwner, true);
+                else
+                    idUtil.UpdateChildren(v.rootPart, v.rootPart.FindModuleImplementing<RecoveryIDModule>().RecoveryOwner, true);
         }
         void onVesselWasModified(Vessel v)
         {
             Log.Info("onVesselWasModified");
-            idUtil.UpdateChildren(v.rootPart, AUTO, true);
+            if (!idUtil.IsDecoupler(v.rootPart))
+                idUtil.UpdateChildren(v.rootPart, v.rootPart.FindModuleImplementing<ControllingRecoveryModule>().RecoveryOwner, true);
+            else
+                idUtil.UpdateChildren(v.rootPart, v.rootPart.FindModuleImplementing<RecoveryIDModule>().RecoveryOwner, true);
         }
 
         void onEditorPartPlaced(Part p)
@@ -357,7 +383,16 @@ namespace RecoveryController
             }
             Log.Info("RecoveryController.onEditorPartPlaced, part: " + p.partInfo.name);
             if (p.parent == null)
+            {
+                // First part placed, set to auto
+                Log.Info("Initial part placement");
+                if (!idUtil.IsDecoupler(p))
+                    p.FindModuleImplementing<ControllingRecoveryModule>().RecoveryOwner = AUTO;
+                else
+                    p.FindModuleImplementing<RecoveryIDModule>().RecoveryOwner = AUTO;
+                
                 return;
+            }
             if (!idUtil.IsDecoupler(p))
             {
                 string roParent;
@@ -369,6 +404,12 @@ namespace RecoveryController
                     roParent = p.parent.FindModuleImplementing<RecoveryIDModule>().RecoveryOwner;
 
                 m.RecoveryOwner = roParent;
+            }
+            else
+            {
+                Log.Info("Decoupler placed");
+                // Always set decoupler to auto when placed
+                p.FindModuleImplementing<RecoveryIDModule>().RecoveryOwner = AUTO;
             }
         }
     }
