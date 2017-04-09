@@ -13,14 +13,19 @@ using KSP.UI.Screens.Flight;
 
 namespace RecoveryController
 {
+
     /// <summary>
     /// Part module to hold the identity of the mod which can/will control the stage when detached from main vessel
-    /// The module will be added to all decouplers/seperators by a MM script
+    /// The module will be added to all parts other than decouplers/seperators by a MM script
     /// </summary>
     public class ControllingRecoveryModule : PartModule
     {
+#if DEBUG
         [KSPField(isPersistant = true, guiActiveEditor = true, guiActive = true, guiName = "Recovery-Owner")]
-        string recoveryOwner = "";
+#else
+          [KSPField(isPersistant = true, guiActiveEditor = false, guiActive = false, guiName = "Recovery-Owner")]
+#endif
+        string recoveryOwner = "x";
 
         public string RecoveryOwner
         {
@@ -30,8 +35,8 @@ namespace RecoveryController
 
         private void Start()
         {
-            if (RecoveryController.registeredMods != null && RecoveryController.registeredMods.Count > 0)
-                RecoveryOwner = RecoveryController.registeredMods.FirstOrDefault();
+          //  if (RecoveryController.registeredMods != null && RecoveryController.registeredMods.Count > 0)
+          //      RecoveryOwner = RecoveryController.registeredMods.FirstOrDefault();
         }
     }
 
@@ -44,6 +49,7 @@ namespace RecoveryController
         [KSPField(isPersistant = true, guiActiveEditor = false, guiActive = false, guiName = "Recovery-Owner")]
         string recoveryOwner = "";
 
+        [KSPField(isPersistant = true, guiActiveEditor = false, guiActive = false)]
         int recoveryOwnerIdx = -1;
 
         [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "RecoveryOwner: n/a")]
@@ -168,7 +174,7 @@ namespace RecoveryController
                 return true;
             return false;
         }
-
+        
         static public void UpdateChildren(Part p, string recoveryOwner, bool entireVessel = false)
         {
             foreach (Part child in p.children)
@@ -179,7 +185,6 @@ namespace RecoveryController
                     if (crm == null)
                         Log.Info("Missing module ControllingRecoveryModule");
                     crm.RecoveryOwner = recoveryOwner;
-
                     UpdateChildren(child, recoveryOwner, entireVessel);
                 }
                 else
@@ -249,16 +254,20 @@ namespace RecoveryController
     [KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
     public class RecoveryController : MonoBehaviour
     {
-        
+        const string AUTO = "auto";
+
         public static List<string> registeredMods = new List<string>();
 
         private void Awake()
         {
-            Log.Info("Awake");
             GameEvents.onEditorPartPlaced.Add(onEditorPartPlaced);
             GameEvents.onEditorLoad.Add(onEditorLoad);
+            GameEvents.onVesselLoaded.Add(onVesselLoaded);
+            GameEvents.onVesselCreate.Add(onVesselCreate);
+            GameEvents.onVesselWasModified.Add(onVesselWasModified);
+
             DontDestroyOnLoad(this);
-            RegisterMod("auto");
+            RegisterMod(AUTO);
             RegisterMod("none");
             DontDestroyOnLoad(this);
         }
@@ -283,8 +292,7 @@ namespace RecoveryController
         }
 
         public string ControllingMod(Vessel v)
-        {         
-            Log.Info("ControllingMod, vessel: " + v.name + "   currentStage: " + v.currentStage.ToString() + "   last stage: " + v.currentStage.ToString());
+        {
             foreach (Part p in v.Parts)
             {
                 if (p.inverseStage >= v.currentStage - 1)
@@ -307,20 +315,37 @@ namespace RecoveryController
             Log.Info("RecoveryController.OnDestroy");
             GameEvents.onEditorPartPlaced.Remove(onEditorPartPlaced);
             GameEvents.onEditorLoad.Remove(onEditorLoad);
+            GameEvents.onVesselLoaded.Remove(onVesselLoaded);
+            GameEvents.onVesselCreate.Remove(onVesselCreate);
+            GameEvents.onVesselWasModified.Remove(onVesselWasModified);
         }
-
+        
         void onEditorLoad(ShipConstruct ct, CraftBrowserDialog.LoadType loadType)
         {
             Log.Info("onEditorLoad");
             // if (loadType == CraftBrowserDialog.LoadType.Normal)
             {
-                Part root = EditorLogic.RootPart;
-                // idUtil.UpdateChildren(root, RecoveryOwner.auto, true);
-
-                // foreach (Part p in EditorLogic.fetch.ship.parts)
-                // {
-                // }
+                Part root = ct.Parts[0];
+                idUtil.UpdateChildren(root, AUTO, true);               
             }
+        }
+
+        void onVesselLoaded(Vessel v)
+        {
+            Log.Info("onVesselLoaded");
+            idUtil.UpdateChildren(v.rootPart, AUTO, true);
+        }
+
+        void onVesselCreate(Vessel v)
+        {
+            Log.Info("onVesselCreate");
+            if (v.rootPart != null)
+                idUtil.UpdateChildren(v.rootPart, AUTO, true);
+        }
+        void onVesselWasModified(Vessel v)
+        {
+            Log.Info("onVesselWasModified");
+            idUtil.UpdateChildren(v.rootPart, AUTO, true);
         }
 
         void onEditorPartPlaced(Part p)
