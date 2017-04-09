@@ -184,11 +184,20 @@ namespace RecoveryController
                 ProtoPartModuleSnapshot md = part.modules.FirstOrDefault(mod => mod.moduleName == "ModuleDecouple");
                 ProtoPartModuleSnapshot mad = part.modules.FirstOrDefault(mod => mod.moduleName == "ModuleAnchoredDecoupler");
 
-                if (mad != null && mad.moduleRef != null && !((ModuleAnchoredDecoupler)mad.moduleRef).isDecoupled)
-                    return true;
+                if (mad != null && mad.moduleRef != null)
+                {
+//                                        && !((ModuleAnchoredDecoupler)mad.moduleRef).isDecoupled)
 
-                if (md != null && md.moduleRef != null && !((ModuleAnchoredDecoupler)md.moduleRef).isDecoupled)
+                   if (mad.moduleValues.GetValue("isDecoupled") == "false")
                     return true;
+                }
+
+                if (md != null && md.moduleRef != null)
+                {
+                    // && !((ModuleAnchoredDecoupler)md.moduleRef).isDecoupled)
+                    if (md.moduleValues.GetValue("isDecoupled") == "false")
+                        return true;
+                }
             }
             return false;
         }
@@ -312,11 +321,15 @@ namespace RecoveryController
         public string ControllingMod(Vessel v)
         {
             if (v.name.StartsWith("Ast."))
+            {
+                Log.Info("Vessel: Asteroid");
                 return "";
+            }
 
             Log.Info("ControllingMod, vessel: " + v.name);
             if (!v.loaded)
             {
+                Log.Info("Vessel is unloaded");
                 foreach (ProtoPartSnapshot p in v.protoVessel.protoPartSnapshots)
                 {
                     Log.Info("ProtoPartsnapshot, currentStage: " + v.currentStage.ToString() + "  stageIndex: " + p.stageIndex.ToString() + "  inverseStageIndex: " + p.inverseStageIndex.ToString());
@@ -327,10 +340,11 @@ namespace RecoveryController
                             ProtoPartModuleSnapshot m = p.modules.FirstOrDefault(mod => mod.moduleName == "RecoveryIDModule");
 
                             // FindModuleImplementing<RecoveryIDModule>();
-                            if (m != null && m.moduleRef != null)
+                            if (m != null /*&& m.moduleRef != null */)
                             {
-                                Log.Info("Part: " + p.partInfo.name + ", Returning: " + ((RecoveryIDModule)m.moduleRef).RecoveryOwner);
-                                return ((RecoveryIDModule)m.moduleRef).RecoveryOwner;
+                                Log.Info("Part: " + p.partInfo.name + ", decoupler, Returning: " + m.moduleValues.GetValue("recoveryOwner"));
+                                return m.moduleValues.GetValue("recoveryOwner");
+                                //return ((RecoveryIDModule)m.moduleRef).RecoveryOwner;
                             }
                         }
                         else
@@ -339,10 +353,11 @@ namespace RecoveryController
                             {
                                 {
                                     ProtoPartModuleSnapshot m = p.modules.FirstOrDefault(mod => mod.moduleName == "ControllingRecoveryModule");
-                                    if (m != null && m.moduleRef != null)
+                                    if (m != null /* && m.moduleRef != null */ )
                                     {
-                                        Log.Info("Part: " + p.partInfo.name + ", Returning: " + ((RecoveryIDModule)m.moduleRef).RecoveryOwner);
-                                        return ((RecoveryIDModule)m.moduleRef).RecoveryOwner;
+                                        Log.Info("Part: " + p.partInfo.name + ", part,  Returning: " + m.moduleValues.GetValue("recoveryOwner"));
+                                        return m.moduleValues.GetValue("recoveryOwner");
+                                        //return ((RecoveryIDModule)m.moduleRef).RecoveryOwner;
                                     }
                                 }
                             }
@@ -385,6 +400,7 @@ namespace RecoveryController
                     }
                 }
             }
+            Log.Info("returning null");
             return null;
         }
 

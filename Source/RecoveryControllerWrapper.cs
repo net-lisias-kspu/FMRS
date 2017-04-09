@@ -138,6 +138,8 @@ namespace FMRS
             {
                 return null;
             }
+            if (v.name.StartsWith("Ast."))
+                return "";
             var s = CallRecoveryController("ControllingMod", v);
             if (s != null)
                 return (string)s;
