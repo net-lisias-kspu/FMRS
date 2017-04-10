@@ -4,21 +4,20 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{64746823-6B47-496D-98BE-ADB13653D9DA}</ProjectGuid>
+    <ProjectGuid>{7D230819-06D5-44FD-A528-EAA181EF7D8B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FMRS</RootNamespace>
-    <AssemblyName>FMRS</AssemblyName>
+    <RootNamespace>RecoveryController</RootNamespace>
+    <AssemblyName>RecoveryController</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;BETA</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;RECOVERY_CONTROLLER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -26,74 +25,20 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;RECOVERY_CONTROLLER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Beta|AnyCPU'">
-    <OutputPath>bin\Beta\</OutputPath>
-    <DefineConstants>TRACE;BETA</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug-Beta|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Debug-Beta\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;BETA</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssemblyVersion.cs">
+      <DependentUpon>AssemblyVersion.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>AssemblyVersion.tt</DependentUpon>
     </Compile>
-    <Compile Include="Essentials.cs" />
-    <Compile Include="FMRS.cs" />
-    <Compile Include="FMRS_Core.cs" />
-    <Compile Include="FMRS_Core_API.cs" />
-    <Compile Include="FMRS_Core_GUI.cs" />
-    <Compile Include="FMRS_Core_Handler.cs" />
-    <Compile Include="FMRS_Core_Recovery.cs" />
-    <Compile Include="FMRS_Core_Vessels.cs" />
-    <Compile Include="FMRS_PM.cs" />
-    <Compile Include="FMRS_Register.cs" />
-    <Compile Include="FMRS_THL.cs" />
-    <Compile Include="FMRS_Util.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecoveryController.cs" />
     <Compile Include="RecoveryControllerWrapper.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="ToolbarWrapper.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="AssemblyVersion.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>AssemblyVersion.cs</LastGenOutput>
-    </Content>
-    <Content Include="icons\tb_blz_di.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="icons\tb_blz_en.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="icons\tb_st_di.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="icons\tb_st_en.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="FMRS_MM.cfg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
@@ -113,23 +58,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AssemblyVersion.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AssemblyVersion.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="buildRelease.bat" />
+    <None Include="deploy.bat" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>start /D D:\Users\jbb\github\FMRS\Source /WAIT deploy.bat $(ConfigurationName)
+    <PostBuildEvent>start /D D:\Users\jbb\github\FMRS\RecoveryController /WAIT deploy.bat $(ConfigurationName)
 
-if $(ConfigurationName) == Release (
-start /D  D:\Users\jbb\github\FMRS\Source /WAIT buildRelease.bat $(ConfigurationName)
-)
-
-if $(ConfigurationName) == Beta (
-start /D  D:\Users\jbb\github\FMRS\Source /WAIT buildRelease.bat $(ConfigurationName)
-)
-
-if $(ConfigurationName) == Debug-Beta (
-start /D  D:\Users\jbb\github\FMRS\Source /WAIT buildRelease.bat $(ConfigurationName)
-)</PostBuildEvent>
+start /D D:\Users\jbb\github\FMRS\RecoveryController  /WAIT buildRelease.bat $(ConfigurationName)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>set textTemplatingPath="%25CommonProgramFiles(x86)%25\Microsoft Shared\TextTemplating\$(VisualStudioVersion)\texttransform.exe"

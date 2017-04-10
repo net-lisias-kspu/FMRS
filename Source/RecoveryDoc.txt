@@ -1,0 +1,27 @@
+On my drive in, I was thinking about this.  This is what I came up with:
+
+done, tested 1. Decouplers placed in Symmetry will default to symmetry for the controlling mod
+done 2. There will be a tiny module called "ControllingRecoveryModule" added to every part except decouplers which will be used to store an enum identifying the controlling mod for the stage the part is in.
+done 3. Decouples have a different module added, which in addition  to identifying the controlling mod, also has the UI code to allow the user to change the controlling mod.  
+done 4. Right now, the UI is a button which cycles between Stage Recovery, FMRS or auto
+(TODO later): 5. If a decoupler was placed in symmetry, there will be another button which will be used to remove the symmetry for this purpose only
+6. The VesselModule will be used mainly to return the controlling mod for the current stage, it will look at one of the parts in the stage to get that iinfo
+ 
+
+Behind the scenes, the following will be happening:
+
+* When a decoupler has the controlling mod changed, it will recursively descend all the attached parts setting the value in the ControllingRecoveryModule.  It will stop when it hits a decoupler
+* When a part is added, there will be a callback which will read the value from the parent part for the ControllingRecoveryModule and set it in the current part.
+* The VesselModule will now, instead of storing the controlling mod, will return the value of the controlling mod from the lowest part (looking at the stages)
+ 
+
+Comments are welcome, along with the following questions:
+
+* It's set up right now to allow the player to change the controlling mod while in flight.  What's your feeling about that?
+* I'll provide a file which will give you access to the vesselmodule, similar to what the Blizzy toolbar does, but will be a lot simpler.  I'm doing it this way in case it needs to change in the future, it will avoid the need to have you change anything in your code.  While I haven't done anything with this yet, I'm hoping to be able to have it do the following:
+* Return controlling mod for current stage
+* Return controlling mod for specified part
+* Set controlling mod for specified stage (all decouplers)
+* Set controlling mod for specified decoupler
+
+Once this is done, I'm going to be updating PartWizard, to have a nice UI to be able to set all the decouplers on a vessel in a more intuitive method.  PartWizard will also be using this file

@@ -77,6 +77,7 @@ namespace FMRS
             Log.Info("Version: " + mod_vers);
             
             _SAVE_SaveFolder = HighLogic.SaveFolder;
+           
         }
 
         
