@@ -280,23 +280,33 @@ namespace FMRS
             foreach (Vessel temp_vessel in FlightGlobals.Vessels)
             {
                 controllable = false;
-                //Check if the stage was claimed by another mod
-                string controllingMod = RecoveryControllerWrapper.ControllingMod(temp_vessel);
-               if (controllingMod != null)
+
+                //Check if the stage was claimed by another mod or by this mod
+                string controllingMod = RecoveryControllerWrapper.ControllingMod(temp_vessel);                
+                   
+                bool FMRSIsControllingMod = false;
+                if (controllingMod != null)
+                {
                     Log.Info("RecoveryControllerWrapper.ControllingMod for vessel: " + temp_vessel.name + " :  " + controllingMod);
 
+                    FMRSIsControllingMod = string.Equals(controllingMod, "FMRS", StringComparison.OrdinalIgnoreCase);
+                }
+
                 if (controllingMod == null || 
-                    string.Equals(controllingMod, "auto", StringComparison.OrdinalIgnoreCase) || 
-                    string.Equals(controllingMod, "FMRS", StringComparison.OrdinalIgnoreCase))
+                    string.Equals(controllingMod, "auto", StringComparison.OrdinalIgnoreCase) ||
+                   FMRSIsControllingMod)
                 {
                     if (!Vessels.Contains(temp_vessel.id))
-                    {
-                        if (temp_vessel.isCommandable &&
-                            temp_vessel.IsControllable &&
-                            temp_vessel.vesselType != VesselType.EVA &&
-                            temp_vessel.vesselType != VesselType.Flag &&
-                            temp_vessel.vesselType != VesselType.SpaceObject &&
-                            temp_vessel.vesselType != VesselType.Unknown)
+                    { 
+                        if (FMRSIsControllingMod ||
+                             (
+                                ((temp_vessel.isCommandable && temp_vessel.IsControllable) || (_SETTING_Control_Uncontrollable && controllingMod == null)) &&
+                                temp_vessel.vesselType != VesselType.EVA &&
+                                temp_vessel.vesselType != VesselType.Flag &&
+                                temp_vessel.vesselType != VesselType.SpaceObject &&
+                                temp_vessel.vesselType != VesselType.Unknown
+                              )
+                           )
 
                             controllable = true;
                         else
@@ -306,7 +316,13 @@ namespace FMRS
                                 List<ProtoPartModuleSnapshot> proto_modules = proto_part.modules;
                                 ProtoPartModuleSnapshot module = null;
 
-                                if (proto_modules != null && (_SETTING_Parachutes && (!_SETTING_Defer_Parachutes_to_StageRecovery || !stageRecoveryInstalled)))
+                                if (proto_modules != null && 
+                                    (_SETTING_Parachutes && 
+                                        ( (controllingMod != null && string.Equals(controllingMod, "FMRS", StringComparison.OrdinalIgnoreCase)) || 
+                                        !_SETTING_Defer_Parachutes_to_StageRecovery || 
+                                        !stageRecoveryInstalled)
+                                        )
+                                    )
                                 {
                                     //
                                     module = proto_part.modules.Find(p => p.moduleName == "RealChuteModule" ||

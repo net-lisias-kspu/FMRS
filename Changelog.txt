@@ -64,3 +64,21 @@
 
 1.2.3.2
 		Added integration with RecoveryController
+
+1.2.3.3
+		Fixed bug where settings weren't being saved for individual parts
+
+1.2.3.4
+		Fixed ControllingMod
+
+1.2.3.6
+		Added code for unloaded vessels
+1.2.3.7
+		Got unloaded parts working
+
+1.2.3.8
+		Reorganized RecoveryController into it's own directory
+
+1.2.4
+		Added option to allow uncontrollable stages to be controlled (ie: watched) by FMRS;  ignored if RecoveryController is active
+		Some fine-tuning of interactions between FMRS, StageRecovery and RecoveryController

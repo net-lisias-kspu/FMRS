@@ -119,17 +119,28 @@
   <PropertyGroup>
     <PostBuildEvent>start /D D:\Users\jbb\github\FMRS\Source /WAIT deploy.bat $(ConfigurationName)
 
+
+
 if $(ConfigurationName) == Release (
+
+start /D  D:\Users\jbb\github\FMRS\Source /WAIT buildRelease.bat $(ConfigurationName)
+
+)
+
+
+
+if $(ConfigurationName) == Beta (
+
 start /D  D:\Users\jbb\github\FMRS\Source /WAIT buildRelease.bat $(ConfigurationName)
 )
 
-if $(ConfigurationName) == Beta (
-start /D  D:\Users\jbb\github\FMRS\Source /WAIT buildRelease.bat $(ConfigurationName)
-)
+
 
 if $(ConfigurationName) == Debug-Beta (
 start /D  D:\Users\jbb\github\FMRS\Source /WAIT buildRelease.bat $(ConfigurationName)
-)</PostBuildEvent>
+
+)
+exit 0</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>set textTemplatingPath="%25CommonProgramFiles(x86)%25\Microsoft Shared\TextTemplating\$(VisualStudioVersion)\texttransform.exe"

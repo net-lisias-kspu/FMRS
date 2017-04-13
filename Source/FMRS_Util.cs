@@ -188,7 +188,8 @@ namespace FMRS
         public Guid _SAVE_Main_Vessel;
         public string _SAVE_Switched_To_Savefile, _SAVE_SaveFolder;
         public bool _SETTING_Enabled, _SETTING_Armed, _SETTING_Minimize, _SAVE_Has_Launched, _SAVE_Flight_Reset, _SAVE_Kick_To_Main, _SAVE_Switched_To_Dropped;
-        public static bool _SETTING_Messages, _SETTING_Auto_Cut_Off, _SETTING_Auto_Recover, _SETTING_Throttle_Log, _SETTING_Parachutes, _SETTING_Defer_Parachutes_to_StageRecovery;
+        public static bool _SETTING_Messages, _SETTING_Auto_Cut_Off, _SETTING_Auto_Recover, _SETTING_Throttle_Log, _SETTING_Parachutes, _SETTING_Defer_Parachutes_to_StageRecovery,
+            _SETTING_Control_Uncontrollable;
         public static bool stageRecoveryInstalled = false;
 
         public double _SAVE_Launched_At;

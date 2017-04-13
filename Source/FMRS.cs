@@ -284,6 +284,7 @@ namespace FMRS
             _SETTING_Throttle_Log = HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>()._SETTING_Throttle_Log;
             _SETTING_Parachutes = HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>()._SETTING_Parachutes;
             _SETTING_Defer_Parachutes_to_StageRecovery = HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>()._SETTING_Defer_Parachutes_to_StageRecovery;
+            _SETTING_Control_Uncontrollable = HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>()._SETTING_Control_Uncontrollable;
 
             if (hasMod("StageRecovery"))
             {

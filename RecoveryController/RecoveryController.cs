@@ -425,10 +425,22 @@ namespace RecoveryController
         void onVesselLoaded(Vessel v)
         {
             Log.Info("onVesselLoaded");
+            if (v == null || v.rootPart == null)
+                return;
             if (!idUtil.IsDecoupler(v.rootPart))
-                idUtil.UpdateChildren(v.rootPart, v.rootPart.FindModuleImplementing<ControllingRecoveryModule>().RecoveryOwner, true);
+            {
+                var m = v.rootPart.FindModuleImplementing<ControllingRecoveryModule>();
+                if (m != null)
+                {
+                    idUtil.UpdateChildren(v.rootPart, m.RecoveryOwner, true);
+                }
+            }
             else
-                idUtil.UpdateChildren(v.rootPart, v.rootPart.FindModuleImplementing<RecoveryIDModule>().RecoveryOwner, true);
+            {
+                var m = v.rootPart.FindModuleImplementing<RecoveryIDModule>();
+                if (m != null)
+                    idUtil.UpdateChildren(v.rootPart, m.RecoveryOwner, true);
+            }
         }
 
         void onVesselCreate(Vessel v)
@@ -440,16 +452,25 @@ namespace RecoveryController
                 else
                     idUtil.UpdateChildren(v.rootPart, v.rootPart.FindModuleImplementing<RecoveryIDModule>().RecoveryOwner, true);
         }
+
         void onVesselWasModified(Vessel v)
         {
             Log.Info("onVesselWasModified");
             if (!idUtil.IsDecoupler(v.rootPart))
-                idUtil.UpdateChildren(v.rootPart, v.rootPart.FindModuleImplementing<ControllingRecoveryModule>().RecoveryOwner, true);
+            {
+
+                var m = v.rootPart.FindModuleImplementing<ControllingRecoveryModule>();
+                if (m != null)
+                    idUtil.UpdateChildren(v.rootPart, m.RecoveryOwner, true);
+            }
             else
+            {
+                var m = v.rootPart.FindModuleImplementing<RecoveryIDModule>();
                 idUtil.UpdateChildren(v.rootPart, v.rootPart.FindModuleImplementing<RecoveryIDModule>().RecoveryOwner, true);
+            }
         }
 
-        void onEditorPartPlaced(Part p)
+        void onEditorPartPlaced(Part p) 
         {
             if (p == null)
             {

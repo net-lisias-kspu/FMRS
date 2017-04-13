@@ -51,8 +51,13 @@ namespace FMRS
         public bool _SETTING_Parachutes = true;
 
         [GameParameters.CustomParameterUI("Defer parachute-only stages to Stage-Recovery (if installed)",
-            toolTip = "If Stage Recovery is installed, do not control stages which only have parachutes")]
+            toolTip = "If Stage Recovery is installed, do not control stages which only have parachutes.  Note that using RecoveryController to specify a mod to control the stage will override this.")]
         public bool _SETTING_Defer_Parachutes_to_StageRecovery = true;
+
+        [GameParameters.CustomParameterUI("Uncontrolled stages are controllable",
+           toolTip = "Ignored if RecoveryController is active.  If enabled, any stage will be treated as controllable by the mod, even if you have no control over it.")]
+        public bool _SETTING_Control_Uncontrollable = false;
+
 
 #if false
         [GameParameters.CustomParameterUI("Default all stages to Stage-Recovery (if installed)",
