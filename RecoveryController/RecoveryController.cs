@@ -282,16 +282,19 @@ namespace RecoveryController
 
         private void Awake()
         {
-            GameEvents.onEditorPartPlaced.Add(onEditorPartPlaced);
-            GameEvents.onEditorLoad.Add(onEditorLoad);
-            GameEvents.onVesselLoaded.Add(onVesselLoaded);
-            GameEvents.onVesselCreate.Add(onVesselCreate);
-            GameEvents.onVesselWasModified.Add(onVesselWasModified);
+            if (registeredMods.Contains("StageRecovery"))
+            {
+                GameEvents.onEditorPartPlaced.Add(onEditorPartPlaced);
+                GameEvents.onEditorLoad.Add(onEditorLoad);
+                GameEvents.onVesselLoaded.Add(onVesselLoaded);
+                GameEvents.onVesselCreate.Add(onVesselCreate);
+                GameEvents.onVesselWasModified.Add(onVesselWasModified);
 
-            DontDestroyOnLoad(this);
-            RegisterMod(AUTO);
-            RegisterMod("none");
-            DontDestroyOnLoad(this);
+                DontDestroyOnLoad(this);
+                RegisterMod(AUTO);
+                RegisterMod("none");
+                DontDestroyOnLoad(this);
+            }
         }
 
         public bool RegisterMod(string modName)
@@ -411,14 +414,26 @@ namespace RecoveryController
         
         void onEditorLoad(ShipConstruct ct, CraftBrowserDialog.LoadType loadType)
         {
-            Log.Info("onEditorLoad");
+            Log.Info("onEditorLoad 1");
+            if (!registeredMods.Contains("StageRecovery"))                
+                return;
             // if (loadType == CraftBrowserDialog.LoadType.Normal)
+            if (ct != null && ct.Parts.Count() > 0)
             {
+                Log.Info("onEditorLoad 2");
                 Part root = ct.Parts[0];
+                Log.Info("onEditorLoad 3");
+
                 if (!idUtil.IsDecoupler(root))
+                {
+                    Log.Info("onEditorLoad 4");
                     idUtil.UpdateChildren(root, root.FindModuleImplementing<ControllingRecoveryModule>().RecoveryOwner, true);
+                }
                 else
+                {
+                    Log.Info("onEditorLoad 5");
                     idUtil.UpdateChildren(root, root.FindModuleImplementing<RecoveryIDModule>().RecoveryOwner, true);
+                }
             }
         }
 
@@ -426,6 +441,8 @@ namespace RecoveryController
         {
             Log.Info("onVesselLoaded");
             if (v == null || v.rootPart == null)
+                return;
+            if (!registeredMods.Contains("StageRecovery"))                
                 return;
             if (!idUtil.IsDecoupler(v.rootPart))
             {

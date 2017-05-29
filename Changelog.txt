@@ -82,3 +82,7 @@
 1.2.4
 		Added option to allow uncontrollable stages to be controlled (ie: watched) by FMRS;  ignored if RecoveryController is active
 		Some fine-tuning of interactions between FMRS, StageRecovery and RecoveryController
+
+1.2.5
+		Fixed bug in RecoveryController which caused harmless nullrefs when StageRecovery wasn't installed
+		Updated to 1.3
