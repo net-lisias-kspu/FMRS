@@ -1,12 +1,9 @@
 ﻿
 
 @echo off
-set H=R:\KSP_1.3.0_dev
-echo %H%
 
 copy bin\%1\RecoveryController.dll ..\GameData\RecoveryController\Plugins
 copy ..\license.txt ..\GameData\RecoveryController
-xcopy /E /Y ..\GameData\RecoveryController %H%\GameData\RecoveryController
 
 set RELEASEDIR=d:\Users\jbb\release
 set ZIP="c:\Program Files\7-zip\7z.exe"

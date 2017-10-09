@@ -1,6 +1,16 @@
 ﻿
-set H=R:\KSP_1.3.0_dev
+@echo off
+
+set H=R:\KSP_1.3.1_dev
+set GAMEDIR=FMRS
+
 echo %H%
 
-copy bin\%1\FMRS.dll ..\GameData\FMRS\Plugins
-xcopy /E /Y ..\GameData\FMRS %H%\GameData\FMRS
+copy /Y "%2%3" "..\GameData\%GAMEDIR%\Plugins"
+copy /Y FlightManagerforReusableStages.version ..\GameData\%GAMEDIR%
+
+cd ..
+cd
+xcopy /y /s /I  GameData\%GAMEDIR% "%H%\GameData\%GAMEDIR%"
+
+pause
