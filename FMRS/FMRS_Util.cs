@@ -194,12 +194,13 @@ namespace FMRS
 
         public double _SAVE_Launched_At;
 
+#if DEBUG
         public string mod_vers
         {
             get { return mod_version; }
             set { mod_version = value; }
         }
-
+#endif
         /*************************************************************************************************************************/
         private void Start()
         {
@@ -592,7 +593,9 @@ namespace FMRS
             foreach (KeyValuePair<save_cat, Dictionary<string, string>> content in Save_File_Content)
                 Save_File_Content[content.Key].Clear();
 
+#if DEBUG
             set_save_value(save_cat.SETTING,"Version", mod_version);
+#endif
             set_save_value(save_cat.SETTING, "Window_X", Convert.ToInt32(windowPos.x).ToString());
             set_save_value(save_cat.SETTING, "Window_Y", Convert.ToInt32(windowPos.y).ToString());
             set_save_value(save_cat.SETTING, "Enabled", true.ToString());
@@ -646,12 +649,14 @@ namespace FMRS
                 init_save_file();
             read_save_file();
 
+#if false
             if (!bflush_save_file)
                 if (get_save_value(save_cat.SETTING, "Version") != mod_version)
                 {
                     Log.Info("diferent version, flush save file");
                     bflush_save_file = true;
                 }
+#endif
             if (bflush_save_file)
                 flush_save_file();
 

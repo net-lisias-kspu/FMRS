@@ -90,8 +90,9 @@ namespace FMRS
             //    add_toolbar_button();
             //}
 
+#if DEBUG
             Log.Info("Version: " + mod_vers);
-            
+#endif
             _SAVE_SaveFolder = HighLogic.SaveFolder;
            
         }

@@ -104,9 +104,9 @@ namespace FMRS
 #if DEBUG
             //if (Debug_Level_1_Active)
             Log.PushStackInfo("FMRS_Core.FMRS_core_awake", "entering FMRS_core_awake()");
-#endif
-            mod_vers = "v";
 
+            mod_vers = "v";
+#endif
 #if DEBUG //**************************
             mod_vers = "x";
 #endif //**************************
@@ -115,7 +115,9 @@ namespace FMRS
             mod_vers = "b";
 #endif //**************************
 
+#if DEBUG
             mod_vers += FMRS_Version_Info.version_number;
+#endif
 
 #if BETA //**************************
             mod_vers += FMRS_Version_Info.beta_version;
@@ -528,7 +530,7 @@ namespace FMRS
             stb_texture = GameDatabase.Instance.GetTexture("FMRS/icons/tb_st_di", false);
             if (FMRS.Stock_Toolbar_Button != null)
                 FMRS.Stock_Toolbar_Button.SetTexture(stb_texture);
-#endif   
+#endif
             if (_SAVE_Has_Launched && _SAVE_Switched_To_Dropped)
                 jump_to_vessel("Main");
 

@@ -58,7 +58,7 @@ namespace FMRS
 
             if (main_ui_active)
             {
-                windowPos = ClickThruBlocker.GUILayoutWindow(baseWindowID + 1, windowPos, MainGUI, "FMRS " + mod_vers, GUILayout.MinWidth(100));
+                windowPos = ClickThruBlocker.GUILayoutWindow(baseWindowID + 1, windowPos, MainGUI, "FMRS " /* + mod_vers */, GUILayout.MinWidth(100));
                 windowPos.x = Mathf.Clamp(windowPos.x, 0, Screen.width - windowPos.width);
                 windowPos.y = Mathf.Clamp(windowPos.y, 0, Screen.height - windowPos.height);
 
