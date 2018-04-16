@@ -30,7 +30,7 @@ echo %VERSION%
 del a.version
 copy RecoveryController.version ..\GameData\RecoveryController
 
-set FILE="%RELEASEDIR%\RecoveryController-%VERSION%-%1.zip"
+set FILE="%RELEASEDIR%\RecoveryController-%VERSION%-%3.zip"
 IF EXIST %FILE% del /F %FILE%
 cd ..
 %ZIP% a -tzip %FILE% GameData\RecoveryController 

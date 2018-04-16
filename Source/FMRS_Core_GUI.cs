@@ -33,6 +33,7 @@ using UnityEngine;
 using KSP.IO;
 using Contracts;
 
+using ClickThroughFix;
 
 namespace FMRS
 {
@@ -57,14 +58,14 @@ namespace FMRS
 
             if (main_ui_active)
             {
-                windowPos = GUILayout.Window(baseWindowID + 1, windowPos, MainGUI, "FMRS " + mod_vers, GUILayout.MinWidth(100));
+                windowPos = ClickThruBlocker.GUILayoutWindow(baseWindowID + 1, windowPos, MainGUI, "FMRS " + mod_vers, GUILayout.MinWidth(100));
                 windowPos.x = Mathf.Clamp(windowPos.x, 0, Screen.width - windowPos.width);
                 windowPos.y = Mathf.Clamp(windowPos.y, 0, Screen.height - windowPos.height);
 
 #if BETA && !DEBUG //**************************
                 beta_windowPos.x = windowPos.x;
                 beta_windowPos.y = windowPos.y + windowPos.height;
-                beta_windowPos =  GUILayout.Window(baseWindowID = 3,beta_windowPos, BetaGUI, "FMRS Beta");
+                beta_windowPos =  ClickThruBlocker.GUILayoutWindow(baseWindowID = 3,beta_windowPos, BetaGUI, "FMRS Beta");
 #endif //**************************
             }
 
@@ -73,7 +74,7 @@ namespace FMRS
             {
                 debug_windowPos.x = windowPos.x;
                 debug_windowPos.y = windowPos.y + windowPos.height;
-                debug_windowPos = GUILayout.Window(baseWindowID + 2, debug_windowPos, DebugGUI, "FMRS Debug Info");
+                debug_windowPos = ClickThruBlocker.GUILayoutWindow(baseWindowID + 2, debug_windowPos, DebugGUI, "FMRS Debug Info");
             }
             
 #endif //**************************

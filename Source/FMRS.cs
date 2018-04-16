@@ -33,14 +33,19 @@ using UnityEngine;
 using KSP.IO;
 using KSP.UI.Screens;
 
+using ToolbarControl_NS;
+
 namespace FMRS
 {
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     public class FMRS : FMRS_Core
     {
-        public static ApplicationLauncherButton Stock_Toolbar_Button = new ApplicationLauncherButton();
+        //public static ApplicationLauncherButton Stock_Toolbar_Button = new ApplicationLauncherButton();
+        public static ToolbarControl toolbarControl;
+        internal const string MODID = "FMRS_NS";
+        internal const string MODNAME = "Flight Manager for Reusable Stages";
 
-/*************************************************************************************************************************/
+        /*************************************************************************************************************************/
         public FMRS()
         {
             //nothing
@@ -56,19 +61,30 @@ namespace FMRS
 
             //stb_texture = new Texture2D(38, 38);
             //stb_texture.LoadImage(System.IO.File.ReadAllBytes(Path.Combine(KSPUtil.ApplicationRootPath, "GameData/FMRS/icons/tb_st_di.png")));
-            
-            stb_texture = GameDatabase.Instance.GetTexture("FMRS/icons/tb_st_di", false);
-            upArrow = GameDatabase.Instance.GetTexture("FMRS/Icons/up", false);
-            downArrow = GameDatabase.Instance.GetTexture("FMRS/Icons/down", false);
+
+            //stb_texture = GameDatabase.Instance.GetTexture("FMRS/icons/tb_st_di", false);
+            stockTexture = "FMRS/icons/tb_st_di";
+            blizzyTexture = "FMRS/icons/tb_blz_di";
+
+            upArrow = new Texture2D(2,2, TextureFormat.ARGB32, false);
+            ToolbarControl.LoadImageFromFile(ref upArrow, "FMRS/Icons/up"); //   GameDatabase.Instance.GetTexture("FMRS/Icons/up", false);
+
+            downArrow = new Texture2D(2, 2, TextureFormat.ARGB32, false);
+            ToolbarControl.LoadImageFromFile(ref upArrow, "FMRS/Icons/down");
+            //downArrow = GameDatabase.Instance.GetTexture("FMRS/Icons/down", false);
+
             upContent = new GUIContent("", upArrow, "");
             downContent = new GUIContent("", downArrow, "");
             buttonContent = downContent;
-
+#if false
             //if (Stock_Toolbar_Button != null)
             //    Stock_Toolbar_Button.SetTexture(stb_texture);
 
+
             GameEvents.onGUIApplicationLauncherReady.Add(add_toolbar_button);
             GameEvents.onGUIApplicationLauncherUnreadifying.Add(remove_toolbar_button);
+#endif
+            add_toolbar_button();
             //if (ApplicationLauncher.Ready == true)
             //{
             //    add_toolbar_button();
@@ -102,7 +118,7 @@ namespace FMRS
                 _SETTING_Enabled = true;
                 GameEvents.onLaunch.Add(launch_routine);
             }
-
+#if false
             if (ToolbarManager.ToolbarAvailable)
             {
                 Toolbar_Button = ToolbarManager.Instance.add("FMRS", "FMRSbutton");
@@ -118,12 +134,22 @@ namespace FMRS
                 Toolbar_Button.Visibility = new GameScenesVisibility(GameScenes.FLIGHT);
                 Toolbar_Button.OnClick += (e) => toolbar_button_clicked();
             }
-
+#endif
             if (_SETTING_Enabled)
             {
                 flight_scene_start_routine();
-                stb_texture = GameDatabase.Instance.GetTexture("FMRS/icons/tb_st_en", false);                             
+                //stb_texture = GameDatabase.Instance.GetTexture("FMRS/icons/tb_st_en", false);                             
+                stockTexture = "FMRS/icons/tb_st_en";
+                blizzyTexture = "FMRS/icons/tb_blz_en";
             }
+            else
+            {
+                stockTexture = "FMRS/icons/tb_st_di";
+                blizzyTexture = "FMRS/icons/tb_blz_di";
+            }
+            Log.Info("SetTexture 1, stockTexture: " + stockTexture + ",   blizzyTexture:" + blizzyTexture);
+             if (toolbarControl != null)
+                toolbarControl.SetTexture(stockTexture, blizzyTexture);
 #if DEBUG
            // if (Debug_Level_1_Active)
                 Log.PopStackInfo("leaving FMRS.Start ()");
@@ -156,12 +182,12 @@ namespace FMRS
             if (ThrottleLogger != null)
 #if DEBUG
                 ThrottleLogger.Update(Debug_Active, Debug_Level_1_Active);
- #else
+#else
                  ThrottleLogger.Update();
- #endif
+#endif
   		  
             if(ThrottleReplay != null)
- #if DEBUG
+#if DEBUG
 	                  ThrottleReplay.Update(Debug_Active, Debug_Level_1_Active);
 #else
                  ThrottleReplay.Update();
@@ -188,12 +214,14 @@ namespace FMRS
                 Log.PushStackInfo("FMRS.OnDestroy", "enter OnDestroy()");
 #endif
             destroy_FMRS();
-
+#if false
             if (ToolbarManager.ToolbarAvailable)
                 Toolbar_Button.Destroy();
 
             GameEvents.onGUIApplicationLauncherReady.Remove(add_toolbar_button);
             GameEvents.onGUIApplicationLauncherUnreadifying.Remove(remove_toolbar_button);
+#endif
+            remove_toolbar_button();
 
             //RenderingManager.RemoveFromPostDrawQueue(3, new Callback(drawGUI));
 #if DEBUG
@@ -202,21 +230,37 @@ namespace FMRS
 #endif
         }
 
-
-/*************************************************************************************************************************/
+    
+        /*************************************************************************************************************************/
         public void add_toolbar_button()
         {
+#if false
             Stock_Toolbar_Button = ApplicationLauncher.Instance.AddModApplication(
                 toolbar_button_clicked,
                 toolbar_button_clicked,
                 null, null, null, null,
                 ApplicationLauncher.AppScenes.FLIGHT | ApplicationLauncher.AppScenes.MAPVIEW,
                 stb_texture);
+#endif
+            toolbarControl = gameObject.AddComponent<ToolbarControl>();
+            toolbarControl.AddToAllToolbars(toolbar_button_clicked, toolbar_button_clicked,
+                ApplicationLauncher.AppScenes.FLIGHT | ApplicationLauncher.AppScenes.MAPVIEW,
+                MODID,
+                "fmrsButton",
+                "FMRS/icons/tb_st_di",
+                "FMRS/icons/tb_blz_di",
+                MODNAME
+            );
+
         }
 
-        public void remove_toolbar_button(GameScenes scene)
+        public void remove_toolbar_button()
         {
+#if false
             ApplicationLauncher.Instance.RemoveModApplication(Stock_Toolbar_Button);
+#endif
+            toolbarControl.OnDestroy();
+            Destroy(toolbarControl);
         }
     }
 
