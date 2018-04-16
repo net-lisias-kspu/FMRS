@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2005
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FMRS", "FMRS\FMRS.csproj", "{64746823-6B47-496D-98BE-ADB13653D9DA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FMRSSolutionFolder", "FMRSSolutionFolder", "{FA7ABE92-C2B4-40BE-A3F2-4F72444411E5}"
+	ProjectSection(SolutionItems) = preProject
+		buildRelease.bat = buildRelease.bat
+		Changelog.txt = Changelog.txt
+		deploy.bat = deploy.bat
+		FMRS.version = FMRS.version
+		jenkins.txt = jenkins.txt
+		License.txt = License.txt
+		ReadMe.md = ReadMe.md
+		RecoveryDoc.txt = RecoveryDoc.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Beta|Any CPU = Beta|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Debug-Beta|Any CPU = Debug-Beta|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{64746823-6B47-496D-98BE-ADB13653D9DA}.Beta|Any CPU.ActiveCfg = Beta|Any CPU
+		{64746823-6B47-496D-98BE-ADB13653D9DA}.Beta|Any CPU.Build.0 = Beta|Any CPU
+		{64746823-6B47-496D-98BE-ADB13653D9DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64746823-6B47-496D-98BE-ADB13653D9DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64746823-6B47-496D-98BE-ADB13653D9DA}.Debug-Beta|Any CPU.ActiveCfg = Debug-Beta|Any CPU
+		{64746823-6B47-496D-98BE-ADB13653D9DA}.Debug-Beta|Any CPU.Build.0 = Debug-Beta|Any CPU
+		{64746823-6B47-496D-98BE-ADB13653D9DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64746823-6B47-496D-98BE-ADB13653D9DA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E9F09A62-2393-4F22-8A66-F6F7563C4647}
+	EndGlobalSection
+EndGlobal

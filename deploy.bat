@@ -12,8 +12,9 @@ set GAMEDIR=FMRS
 set GAMEDATA="GameData\"
 set VERSIONFILE=%GAMEDIR%.version
 
-copy /Y "%1%2" "..\%GAMEDATA%\%GAMEDIR%\Plugins"
-copy /Y %VERSIONFILE% ..\%GAMEDATA%\%GAMEDIR%
+copy /Y "%1%2" "%GAMEDATA%\%GAMEDIR%\Plugins"
+copy /Y %VERSIONFILE% %GAMEDATA%\%GAMEDIR%
 
-cd ..
 xcopy /y /s /I %GAMEDATA%\%GAMEDIR% "%H%\GameData\%GAMEDIR%"
+
+pause

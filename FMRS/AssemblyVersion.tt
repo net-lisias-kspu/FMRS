@@ -28,7 +28,7 @@
 	string s;
 
 
-	string versionfile =   @"D:\Users\jbb\github\FMRS\RecoveryController.version";
+	string versionfile =   @"D:\Users\jbb\github\FMRS-RecoveryController\FMRS\FMRS.version";
 
 	if (!File.Exists(versionfile))
 	{

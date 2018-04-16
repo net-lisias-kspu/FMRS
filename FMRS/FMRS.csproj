@@ -123,10 +123,10 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
-start /D D:\Users\jbb\github\FMRS\Source /WAIT deploy.bat  $(TargetDir) $(TargetFileName)
+start /D D:\Users\jbb\github\FMRS-RecoveryController\FMRS  /WAIT deploy.bat  $(TargetDir) $(TargetFileName)
 
 if $(ConfigurationName) == Release (
-	start /D D:\Users\jbb\github\FMRS\Source /WAIT buildRelease.bat $(TargetDir) $(TargetFileName)
+	start /D D:\Users\jbb\github\FMRS-RecoveryController\FMRS  /WAIT buildRelease.bat $(TargetDir) $(TargetFileName)
 )</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>

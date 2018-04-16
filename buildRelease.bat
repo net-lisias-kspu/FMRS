@@ -26,8 +26,8 @@ rem README is the readme file
 set GAMEDIR=FMRS
 set GAMEDATA="GameData\"
 set VERSIONFILE=%GAMEDIR%.version
-set LICENSE=..\license.txt
-set README=..\readme.txt
+set LICENSE=License.txt
+set README=ReadMe.md
 
 set RELEASEDIR=d:\Users\jbb\release
 set ZIP="c:\Program Files\7-zip\7z.exe"
@@ -66,8 +66,6 @@ echo Version:  %VERSION%
 
 
 rem Build the zip FILE
-cd ..
-
 cd %GAMEDATA%\..
 
 set FILE="%RELEASEDIR%\%GAMEDIR%-%VERSION%.zip"
