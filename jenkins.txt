@@ -24,11 +24,10 @@
 # 0:1.3
 
 # 1:GAMEDIR, VERSIONFILE [, GITHUBREPO ]
-1:FMRS, FMRS.version, FMRS
+1:FMRS, FMRS.version
 
 # 2:PROJNAME, PROJFILE, VERSIONFILE, PLUGINSFOLDER
-2:FMRS,Source/FMRS.csproj,FMRS.version,GameData/FMRS/Plugins
-2:RecoveryController,RecoveryController/RecoveryController.csproj,RecoveryController.version,GameData/RecoveryController/Plugins
+2:FMRS,FMRS/FMRS.csproj,FMRS.version,GameData/FMRS/Plugins
 
 # 3:SOURCEFILE, DESTDIR
 3:FMRS.version,GameData/FMRS
