@@ -30,6 +30,10 @@ namespace FMRS
         [GameParameters.CustomParameterUI("Auto-Active at launch")]
         public bool autoactiveAtLaunch = true;
 
+        [GameParameters.CustomParameterUI("Include Undocking events as staging events",
+            toolTip = "useful when staging isn't available (ie: after docking two ships, can't make the ports a stage)")]
+        public bool _SETTING_Include_Undock = false;
+
 
         [GameParameters.CustomFloatParameterUI("Stage Delay", minValue = 0.2f, maxValue = 5.0f, asPercentage = false, displayFormat = "0.0",
                    toolTip = "How long after staging before saves are taken")]

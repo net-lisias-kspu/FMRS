@@ -72,7 +72,8 @@ namespace FMRS
                 if (_SAVE_Has_Launched)
                 {
                     GameEvents.onStageSeparation.Add(staging_routine);
-                    GameEvents.onUndock.Add (staging_routine);
+                    if (HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>()._SETTING_Include_Undock)
+                        GameEvents.onUndock.Add (staging_routine);
                     GameEvents.onVesselCreate.Add(vessel_create_routine);
                 }
             }
@@ -87,7 +88,8 @@ namespace FMRS
         public void detach_handlers()
         {
             GameEvents.onStageSeparation.Remove(staging_routine);
-            GameEvents.onUndock.Remove(staging_routine);
+            if (HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>()._SETTING_Include_Undock)
+               GameEvents.onUndock.Remove(staging_routine);
             GameEvents.onLaunch.Remove(launch_routine);
             GameEvents.onCollision.Remove(crash_handler);
             GameEvents.onCrash.Remove(crash_handler);
@@ -151,7 +153,8 @@ namespace FMRS
                 _SAVE_Launched_At = Planetarium.GetUniversalTime();
                 fill_Vessels_list();
                 GameEvents.onStageSeparation.Add(staging_routine);
-                GameEvents.onUndock.Add(staging_routine);
+                if (HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>()._SETTING_Include_Undock)
+                   GameEvents.onUndock.Add(staging_routine);
                 GameEvents.onVesselCreate.Add(vessel_create_routine);
             }
 
