@@ -1,5 +1,8 @@
 # FMRS :: Change Log
 
+* 2017-0410: 1.2.3.8 (linuxgurugamer) for KSP 1.2.2
+	+ Added integration with RecoveryController
+	+ Added RecoveryController directory 
 * 2017-0324: 1.2.3.1 (linuxgurugamer) for KSP 1.2.2
 	+ Updated icons 
 * 2017-0321: 1.2.3 (linuxgurugamer) for KSP 1.2.2
