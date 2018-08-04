@@ -1,5 +1,7 @@
 # FMRS :: Change Log
 
+* 2017-0310: 1.2.2.1 (linuxgurugamer) for KSP 1.2.2
+	+ Fixed .version file to use correct record on ksp-avc site
 * 2017-0310: 1.2.2 (linuxgurugamer) for KSP 1.2.2
 	+ Fixed issue where contracts and strategies got canceled if Revert to Launch was done from inside FMRS 
 * 2017-0226: 1.2.1 (linuxgurugamer) for KSP 1.2.2
