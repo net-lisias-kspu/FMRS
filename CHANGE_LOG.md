@@ -1,5 +1,7 @@
 # FMRS :: Change Log
 
+* 2017-0310: 1.2.3 (linuxgurugamer) for KSP 1.2.2
+	+ Thanks to @https://github.com/joaofarias, this fixes the issue of clearing contracts and strategies 
 * 2017-0310: 1.2.2.1 (linuxgurugamer) for KSP 1.2.2
 	+ Fixed .version file to use correct record on ksp-avc site
 * 2017-0310: 1.2.2 (linuxgurugamer) for KSP 1.2.2
