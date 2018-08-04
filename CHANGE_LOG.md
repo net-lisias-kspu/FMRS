@@ -1,5 +1,7 @@
 # FMRS :: Change Log
 
+* 2017-0529: 1.2.5 (linuxgurugamer) for KSP 1.3.0
+	+ Fixed bug in RecoveryController which caused harmless nullrefs when StageRecovery wasn't installed Updated to 1.3
 * 2017-0413: 1.2.4 (linuxgurugamer) for KSP 1.2.2
 	+ Added option to allow uncontrollable stages to be controlled (ie: watched) by FMRS;
 		- ignored if RecoveryController is active Some fine-tuning of interactions between FMRS, StageRecovery and RecoveryController 
