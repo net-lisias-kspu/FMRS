@@ -1,5 +1,7 @@
 # FMRS :: Change Log
 
+* 2018-0804: 1.2.7.3 (lisias) for KSP 1.4.x
+	+ Moving settings files to <KSP_ROOT>/PluginData
 * 2018-0417: 1.2.7.2 (linuxgurugamer) for KSP 1.4.2
 	+ Thanks to @whale2 for this:
 		- Added onUndock to the list of separation events
