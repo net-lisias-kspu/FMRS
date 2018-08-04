@@ -1,5 +1,8 @@
 # FMRS :: Change Log
 
+* 2017-0226: 1.2.1 (linuxgurugamer) for KSP 1.2.2
+	+ No changelog provided 
+
 *No binaries found for the following releases*
 
 * 1.0.01
