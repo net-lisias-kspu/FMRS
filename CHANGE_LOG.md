@@ -1,5 +1,9 @@
 # FMRS :: Change Log
 
+* 2018-0416: 1.2.7 (linuxgurugamer) for KSP 1.4.2
+	+ Added support for the ToolbarController
+	+ Added support for the ClickThrough Blocker
+	+ Updated for 1.4.1+ 
 * 2017-1009: 1.2.6 (linuxgurugamer) for KSP 1.3.1
 	+ KSP 1.3.1 update 
 * 2017-0529: 1.2.5 (linuxgurugamer) for KSP 1.3.0
