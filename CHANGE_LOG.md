@@ -1,5 +1,8 @@
 # FMRS :: Change Log
 
+* 2017-0413: 1.2.4 (linuxgurugamer) for KSP 1.2.2
+	+ Added option to allow uncontrollable stages to be controlled (ie: watched) by FMRS;
+		- ignored if RecoveryController is active Some fine-tuning of interactions between FMRS, StageRecovery and RecoveryController 
 * 2017-0410: 1.2.3.8 (linuxgurugamer) for KSP 1.2.2
 	+ Added integration with RecoveryController
 	+ Added RecoveryController directory 
