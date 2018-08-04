@@ -28,8 +28,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using KSP.IO;
-
+using IO = System.IO;
 
 namespace FMRS_THL
 {
@@ -141,9 +140,9 @@ namespace FMRS_THL
             if (init_done)
                 return;
 
-            if (!File.Exists<FMRS_THL_Log>("record.txt", dummy_vessel))
+            if (!IO.File.Exists(FMRS.FILES.RECORD_TXT))
             {
-                TextWriter file = File.CreateText<FMRS_THL_Log>("record.txt", dummy_vessel);
+                IO.TextWriter file = IO.File.CreateText(FMRS.FILES.RECORD_TXT);
                 file.Close();
             }
             init_done = true;
@@ -163,7 +162,7 @@ namespace FMRS_THL
             if (Debug_Active) FMRS.Log.Info("FMRS_THL_Log: flush record file");
 #endif
 
-            TextWriter writer = File.CreateText<FMRS_THL_Log>("record.txt", dummy_vessel);
+            IO.TextWriter writer = IO.File.CreateText(FMRS.FILES.RECORD_TXT);
             writer.Flush();
             writer.Close();
 
@@ -195,15 +194,21 @@ namespace FMRS_THL
                     return -1;
             });
 
-            TextWriter writer = File.AppendText <FMRS_THL_Log>("record.txt", dummy_vessel);
-            writer.WriteLine("##########################################");
-            foreach (entry temp in Throttle_Log_Buffer)
-                writer.WriteLine(temp.ToString());
+			IO.TextWriter writer = null;
+			try
+			{
+				writer = IO.File.AppendText(FMRS.FILES.RECORD_TXT);
+				writer.WriteLine("##########################################");
+				foreach (entry temp in Throttle_Log_Buffer)
+					writer.WriteLine(temp.ToString());
 
-            if (!started)
-                writer.WriteLine("####EOF####");
-
-            writer.Close();
+				if (!started)
+					writer.WriteLine("####EOF####");
+			}
+			finally
+			{
+				writer?.Close();
+			}
 
             Throttle_Log_Buffer.Clear();
             writing = false;
@@ -229,7 +234,7 @@ namespace FMRS_THL
     {
         public Queue<entry> Throttle_Replay = new Queue<entry>();
         private bool replay = false;    
-        public TextReader reader;
+		public IO.TextReader reader;
         public bool EOF = false;
         public string debug_message = "nv";
 
@@ -314,7 +319,7 @@ namespace FMRS_THL
 
             Throttle_Replay.Clear();
 
-            reader = File.OpenText<FMRS_THL_Rep>("record.txt", dummy_vessel);
+            reader = IO.File.OpenText(FMRS.FILES.RECORD_TXT);
 
             while (true)
             {
@@ -415,7 +420,6 @@ namespace FMRS_THL
 /*************************************************************************************************************************/
     public class FMRS_THL_Util
     {
-        public Vessel dummy_vessel=null;
         public bool init_done = false;
 #if DEBUG
         public bool Debug_Active;

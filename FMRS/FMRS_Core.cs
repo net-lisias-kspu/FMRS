@@ -24,18 +24,18 @@
 
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
-using KSP.IO;
 using Contracts;
+using KSP.IO;
 using KSP.UI;
 using KSP.UI.Screens;
-using System.Collections;
-
+using FILES = FMRS.FILES; // Ugly, by this allows things to work. DO NO name classes and properties with the Namespace!
 namespace FMRS
 {
     public partial class FMRS_Core : FMRS_Util, IFMRS
@@ -122,7 +122,8 @@ namespace FMRS
 #if BETA //**************************
             mod_vers += FMRS_Version_Info.beta_version;
 #endif //**************************
-            init_Save_File_Content();
+			if (!System.IO.Directory.Exists(FILES.SETTINGS_FOLDER)) System.IO.Directory.CreateDirectory(FILES.SETTINGS_FOLDER);
+			init_Save_File_Content();
             load_save_file();
 
 #if DEBUG
@@ -344,7 +345,7 @@ namespace FMRS
 
                         timer_staging_active = false;
 
-                        quicksave_file_name = gamesave_name + FlightGlobals.ActiveVessel.currentStage.ToString();
+                        quicksave_file_name = FILES.GAMESAVE_NAME + FlightGlobals.ActiveVessel.currentStage.ToString();
 
                         if (Vessels_dropped.ContainsValue(quicksave_file_name) || (separated_vessel && !staged_vessel))
                         {
@@ -357,7 +358,7 @@ namespace FMRS
                                         nr_save_file = Convert.ToInt16(temp_keyvalues.Value.Substring(20)) + 1;
                             }
 
-                            quicksave_file_name = gamesave_name + "separated_" + nr_save_file;
+                            quicksave_file_name = FILES.GAMESAVE_NAME + "separated_" + nr_save_file;
                         }
 
                         separated_vessel = false;

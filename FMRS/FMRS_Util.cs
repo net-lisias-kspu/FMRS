@@ -29,7 +29,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-using KSP.IO;
+//using KSP.IO;
+using IO = System.IO;
 
 namespace FMRS
 {
@@ -152,9 +153,6 @@ namespace FMRS
 
     public class FMRS_Util : MonoBehaviour
     {
-        private string mod_version;
-        public const string gamesave_name = "FMRS_save_";
-
         public struct recover_value
         {
             public string cat;
@@ -204,9 +202,8 @@ namespace FMRS
         /*************************************************************************************************************************/
         private void Start()
         {
+		}
 
-
-        }
     public void set_save_value(save_cat cat, string key, string value)
         {
 #if DEBUG
@@ -247,7 +244,6 @@ namespace FMRS
 /*************************************************************************************************************************/
         public void write_save_values_to_file()
         {
-            Vessel dummy_vessel = null;
 #if DEBUG
            // if (Debug_Level_1_Active)
                 Log.PushStackInfo("FMRS_Util.write_save_values_to_file", "entering write_save_values_to_file()");
@@ -276,10 +272,10 @@ namespace FMRS
 
             write_vessel_dict_to_Save_File_Content();
             
-            TextWriter file = File.CreateText<FMRS>("save.txt", dummy_vessel);
+            IO.TextWriter file = IO.File.CreateText(FILES.SAVE_TXT);
             file.Flush();
             file.Close();
-            file = File.CreateText<FMRS>("save.txt", dummy_vessel);
+            file = IO.File.CreateText(FILES.SAVE_TXT);
             foreach (KeyValuePair<save_cat, Dictionary<string, string>> save_cat_block in Save_File_Content)
             {
                 foreach (KeyValuePair<string, string> writevalue in save_cat_block.Value)
@@ -418,7 +414,6 @@ namespace FMRS
 /*************************************************************************************************************************/
         public void flush_save_file()
         {
-            Vessel dummy_vessel = null;
             int anz_lines;
 #if DEBUG
           //  if (Debug_Level_1_Active)
@@ -426,14 +421,14 @@ namespace FMRS
 
             if (Debug_Active) Log.Info("flush save file");
 #endif
-            string[] lines = File.ReadAllLines<FMRS>("save.txt", dummy_vessel);
+            string[] lines = IO.File.ReadAllLines(FILES.SAVE_TXT);
             anz_lines = lines.Length;
 
 #if DEBUG
             if (Debug_Active) Log.Info("delete " + anz_lines.ToString() + " lines");
 #endif
 
-            TextWriter file = File.CreateText<FMRS>("save.txt", dummy_vessel);
+            IO.TextWriter file = IO.File.CreateText(FILES.SAVE_TXT);
             while (anz_lines != 0)
             {
                 file.WriteLine("");
@@ -457,7 +452,6 @@ namespace FMRS
 /*************************************************************************************************************************/
         public void read_save_file()
         {
-            Vessel dummy_vessel = null;
             double temp_double;
             save_cat temp_cat;
 
@@ -470,7 +464,7 @@ namespace FMRS
             foreach(KeyValuePair<save_cat,Dictionary<string,string>> content in Save_File_Content)
                 Save_File_Content[content.Key].Clear();
 
-            string[] lines = File.ReadAllLines<FMRS>("save.txt", dummy_vessel);
+			string[] lines = IO.File.ReadAllLines(FILES.SAVE_TXT);
 
             foreach (string value_string in lines)
             {
@@ -582,7 +576,6 @@ namespace FMRS
 /*************************************************************************************************************************/
         public void init_save_file()
         {
-            Vessel dummy_vessel = null;
 #if DEBUG
            // if (Debug_Level_1_Active)
                 Log.PushStackInfo("FMRS_Util.init_save_file", "enter init_save_file()");
@@ -626,7 +619,7 @@ namespace FMRS
             Debug_Active = Convert.ToBoolean(get_save_value(save_cat.SETTING, "Debug"));
 #endif
 
-            TextWriter file = File.CreateText<FMRS>("save.txt", dummy_vessel);
+            IO.TextWriter file = IO.File.CreateText(FILES.SAVE_TXT);
 
             foreach (KeyValuePair<save_cat, Dictionary<string, string>> writecat in Save_File_Content)
                 foreach (KeyValuePair<string, string> writevalue in writecat.Value)
@@ -643,9 +636,7 @@ namespace FMRS
 /*************************************************************************************************************************/
         public void load_save_file()
         {
-            Vessel dummy_vessel = null;
-
-            if (!File.Exists<FMRS>("save.txt", dummy_vessel))
+			if (!IO.File.Exists(FILES.SAVE_TXT))
                 init_save_file();
             read_save_file();
 
@@ -660,7 +651,7 @@ namespace FMRS
             if (bflush_save_file)
                 flush_save_file();
 
-            if (!File.Exists<FMRS>("recover.txt", dummy_vessel))
+            if (!IO.File.Exists(FILES.RECOVER_TXT))
                 init_recover_file();
             read_recover_file();
 
@@ -733,13 +724,12 @@ namespace FMRS
 /*************************************************************************************************************************/
         public void init_recover_file()
         {
-            Vessel dummy_vessel = null;
 #if DEBUG
            // if (Debug_Level_1_Active)
                 Log.PushStackInfo("FMRS_Util.init_recover_file", "enter init_recover_file()");
             if (Debug_Active)  Log.Info("init recover file");
 #endif
-            TextWriter file = File.CreateText<FMRS>("recover.txt", dummy_vessel);
+            IO.TextWriter file = IO.File.CreateText(FILES.RECOVER_TXT);
             file.Close();
 #if DEBUG
            // if (Debug_Level_1_Active)
@@ -752,16 +742,15 @@ namespace FMRS
         public void flush_recover_file()
         {
             int anz_lines;
-            Vessel dummy_vessel = null;
 #if DEBUG
            // if (Debug_Level_1_Active)
                 Log.PushStackInfo("fMRS_Util.flush_recover_file", "enter flush_recover_file()");
             if (Debug_Active)  Log.Info("flush recover file");
 #endif
-            string[] lines = File.ReadAllLines<FMRS>("recover.txt", dummy_vessel);
+            string[] lines = IO.File.ReadAllLines(FILES.RECOVER_TXT);
             anz_lines = lines.Length;
 
-            TextWriter file = File.CreateText<FMRS>("recover.txt", dummy_vessel);
+            IO.TextWriter file = IO.File.CreateText(FILES.RECOVER_TXT);
             while (anz_lines != 0)
             {
                 file.WriteLine("");
@@ -778,7 +767,6 @@ namespace FMRS
 /*************************************************************************************************************************/
         public void read_recover_file()
         {
-            Vessel dummy_vessel = null;
             recover_value temp_value;
 #if DEBUG
            // if (Debug_Level_1_Active)
@@ -786,7 +774,7 @@ namespace FMRS
             if (Debug_Active)  Log.Info("read recover file");
 #endif
             recover_values.Clear();
-            string[] lines = File.ReadAllLines<FMRS>("recover.txt", dummy_vessel);
+            string[] lines = IO.File.ReadAllLines(FILES.RECOVER_TXT);
 
             foreach (string value_string in lines)
             {
@@ -813,7 +801,6 @@ namespace FMRS
 /*************************************************************************************************************************/
         public void write_recover_file()
         {
-            Vessel dummy_vessel = null;
 #if DEBUG
            // if (Debug_Level_1_Active)
                 Log.PushStackInfo("FMRS_Util.write_recover_file", "enter write_recover_file()");
@@ -822,7 +809,7 @@ namespace FMRS
 #if DEBUG
             if (Debug_Active)  Log.Info("write recover file");
 #endif
-            TextWriter file = File.CreateText<FMRS>("recover.txt", dummy_vessel);
+            IO.TextWriter file = IO.File.CreateText(FILES.RECOVER_TXT);
 
             foreach (recover_value writevalue in recover_values)
             {

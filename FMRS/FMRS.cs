@@ -37,7 +37,17 @@ using ToolbarControl_NS;
 
 namespace FMRS
 {
-    [KSPAddon(KSPAddon.Startup.Flight, false)]
+	public static class FILES
+	{
+		public static readonly string SETTINGS_FOLDER   = System.IO.Path.Combine(KSPUtil.ApplicationRootPath, "PluginData/FMRS");
+		public static readonly string SAVE_TXT          = System.IO.Path.Combine(SETTINGS_FOLDER, "save.txt");
+		public static readonly string RECOVER_TXT       = System.IO.Path.Combine(SETTINGS_FOLDER, "recover.txt");
+		public static readonly string RECORD_TXT        = System.IO.Path.Combine(SETTINGS_FOLDER, "record.txt");
+
+		public const string GAMESAVE_NAME = "FMRS_save_";
+	}
+
+	[KSPAddon(KSPAddon.Startup.Flight, false)]
     public class FMRS : FMRS_Core
     {
         //public static ApplicationLauncherButton Stock_Toolbar_Button = new ApplicationLauncherButton();
