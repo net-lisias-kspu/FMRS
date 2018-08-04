@@ -49,11 +49,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AssemblyVersion.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AssemblyVersion.tt</DependentUpon>
-    </Compile>
     <Compile Include="Essentials.cs" />
     <Compile Include="FMRS.cs" />
     <Compile Include="FMRS_Core.cs" />
@@ -72,12 +67,11 @@
     <Compile Include="Settings.cs" />
     <Compile Include="ToolbarRegistration.cs" />
     <Compile Include="ToolbarWrapper.cs" />
+    <Compile Include="Version.cs">
+      <DependentUpon>Version.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AssemblyVersion.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>AssemblyVersion.cs</LastGenOutput>
-    </Content>
     <Content Include="icons\tb_blz_di.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -94,6 +88,10 @@
   <ItemGroup>
     <None Include="FMRS_MM.cfg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Version.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Version.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
