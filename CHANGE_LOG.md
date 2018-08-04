@@ -1,5 +1,7 @@
 # FMRS :: Change Log
 
+* 2017-0324: 1.2.3.1 (linuxgurugamer) for KSP 1.2.2
+	+ Updated icons 
 * 2017-0321: 1.2.3 (linuxgurugamer) for KSP 1.2.2
 	+ Thanks to @https://github.com/joaofarias, this fixes the issue of clearing contracts and strategies 
 * 2017-0310: 1.2.2.1 (linuxgurugamer) for KSP 1.2.2
