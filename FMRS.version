@@ -1,12 +1,12 @@
 {
 	"NAME":		"FMRS (Flight Manager For Reusable Stages) Unofficial",
 	"URL":		"https://raw.githubusercontent.com/net-lisias-kspu/FMRS/master/FMRS.version",
-	"DOWNLOAD":	"https://github.com/net-lisias-kspu/FMRS/releases".
+	"DOWNLOAD":	"https://github.com/net-lisias-kspu/FMRS/releases",
 	"CHANGE_LOG":	"https://raw.githubusercontent.com/net-lisias-kspu/FMRS/master/CHANGE_LOG.md",
 	"CHANGE_LOG_URL":"https://raw.githubusercontent.com/net-lisias-kspu/FMRS/master/CHANGES.md",
 	"GITHUB": {
 		"USERNAME": "net-lisias-kspu",
-		"REPOSITORY": "FMRS"
+		"REPOSITORY": "FMRS",
 		"ALLOW_PRE_RELEASE":false
 		},
 	"VERSION":{
