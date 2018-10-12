@@ -192,7 +192,8 @@ namespace FMRS
 
         public double _SAVE_Launched_At;
 
-#if DEBUG
+#if DEBUG || BETA
+		private string mod_version;
         public string mod_vers
         {
             get { return mod_version; }

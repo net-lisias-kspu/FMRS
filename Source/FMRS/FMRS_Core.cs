@@ -116,11 +116,11 @@ namespace FMRS
 #endif //**************************
 
 #if DEBUG
-            mod_vers += FMRS_Version_Info.version_number;
+            mod_vers += Version.Number;
 #endif
 
 #if BETA //**************************
-            mod_vers += FMRS_Version_Info.beta_version;
+            mod_vers += Version.Number;
 #endif //**************************
 			if (!System.IO.Directory.Exists(FILES.SETTINGS_FOLDER)) System.IO.Directory.CreateDirectory(FILES.SETTINGS_FOLDER);
 			init_Save_File_Content();
