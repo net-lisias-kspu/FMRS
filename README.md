@@ -6,10 +6,10 @@ FMRS lets you jump back and forth in time. Unofficial fork by Lisias.
 ## In a Hurry
 
 * [Latest Release](https://github.com/net-lisias-kspu/FMRS/releases)
+	+ [Binaries](https://github.com/net-lisias-kspu/FMRS/tree/Archive)
 * [Source](https://github.com/net-lisias-kspu/FMRS)
-* [Releases](https://github.com/net-lisias-kspu/FMRS/tree/Archive)
 * [Change Log](./CHANGE_LOG.md)
- 
+
 
 ## Description
 
