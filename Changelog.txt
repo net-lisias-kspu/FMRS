@@ -100,4 +100,7 @@
 1.2.7.2
 	Thanks to @whale2 for this:
 		Added onUndock to the list of separation events
-	Added new setting to control whether the undock events should be seen as seperation events
+	Added new setting to control whether the undock events should be seen as seperation events, defaults to false
+
+1.2.7.3
+	Version bump for 1.5 rebuild
