@@ -79,41 +79,6 @@ namespace FMRS
         public  bool Debug_Level_2_Active = true;
 #endif
 
-#if false
-        public override void SetDifficultyPreset(GameParameters.Preset preset)
-        {
-            switch (preset)
-            {
-                case GameParameters.Preset.Easy:
-                    toolbarEnabled = true;
-                    toolbarPopupsEnabled = true;
-                    editorMenuPopupEnabled = true;
-                    hoverTimeout = 0.5f;
-                    break;
-
-                case GameParameters.Preset.Normal:
-                    toolbarEnabled = true;
-                    toolbarPopupsEnabled = true;
-                    editorMenuPopupEnabled = true;
-                    hoverTimeout = 0.5f;
-                    break;
-
-                case GameParameters.Preset.Moderate:
-                    toolbarEnabled = true;
-                    toolbarPopupsEnabled = true;
-                    editorMenuPopupEnabled = true;
-                    hoverTimeout = 0.5f;
-                    break;
-
-                case GameParameters.Preset.Hard:
-                    toolbarEnabled = true;
-                    toolbarPopupsEnabled = true;
-                    editorMenuPopupEnabled = true;
-                    hoverTimeout = 0.5f;
-                    break;
-            }
-        }
-#endif
 
         public override bool Enabled(MemberInfo member, GameParameters parameters)
         {

@@ -55,11 +55,7 @@ namespace FMRS
         public bool revert_to_launch = false;
         public bool really_close = false;
         public bool show_setting = false;
-#if false
-        public bool blz_toolbar_available = false;
-        public IButton Toolbar_Button;
-        public Texture2D stb_texture;
-#endif
+
         public string stockTexture;
         public string blizzyTexture;
 
@@ -449,13 +445,7 @@ namespace FMRS
             if (Debug_Active)
                 Log.Info("enable plugin form toolbar");
 #endif
-#if false
-            if (blz_toolbar_available)
-                Toolbar_Button.TexturePath = "FMRS/icons/tb_blz_en";
-            stb_texture = GameDatabase.Instance.GetTexture("FMRS/icons/tb_st_en", false);
-            if (FMRS.Stock_Toolbar_Button != null)
-                FMRS.Stock_Toolbar_Button.SetTexture(stb_texture);            
-#endif
+
             stockTexture = "FMRS/icons/tb_st_en";
             blizzyTexture = "FMRS/icons/tb_blz_en";
             FMRS.toolbarControl.SetTexture(stockTexture, blizzyTexture);
@@ -523,14 +513,7 @@ namespace FMRS
             _SAVE_Flight_Reset = false;
 
             FMRS.toolbarControl.SetTexture(stockTexture, blizzyTexture);
-#if false
-            if (blz_toolbar_available)
-                Toolbar_Button.TexturePath = "FMRS/icons/tb_blz_di";
 
-            stb_texture = GameDatabase.Instance.GetTexture("FMRS/icons/tb_st_di", false);
-            if (FMRS.Stock_Toolbar_Button != null)
-                FMRS.Stock_Toolbar_Button.SetTexture(stb_texture);
-#endif
             if (_SAVE_Has_Launched && _SAVE_Switched_To_Dropped)
                 jump_to_vessel("Main");
 
