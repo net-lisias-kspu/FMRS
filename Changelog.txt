@@ -109,3 +109,6 @@
 	Version bump for 1.7.2
 	Updated AssemblyVersion.tt
 	Deleted old disabled code
+
+1.2.8.1
+	Added InstallChecker
