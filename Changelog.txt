@@ -117,3 +117,6 @@ ChangeLog
 
 1.2.9
 	Updated for KSP 1.8
+
+1.2.9.1
+	Fixed initialization of vars needed due to Unity upgrade for KSP 1.8

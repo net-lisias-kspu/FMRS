@@ -40,12 +40,12 @@ namespace FMRS
     public partial class FMRS_Core : FMRS_Util, IFMRS
     {
         internal static String _AssemblyName { get { return System.Reflection.Assembly.GetExecutingAssembly().GetName().Name; } }
-        int baseWindowID = UnityEngine.Random.Range(1000, 2000000) + _AssemblyName.GetHashCode();
+        int baseWindowID;
 
         /*************************************************************************************************************************/
         private void Start()
         {
-
+            baseWindowID = UnityEngine.Random.Range(1000, 2000000) + _AssemblyName.GetHashCode();
         }
 
         public void drawGUI()
