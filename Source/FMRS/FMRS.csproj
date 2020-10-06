@@ -67,7 +67,6 @@
     <Compile Include="RecoveryControllerWrapper.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ToolbarRegistration.cs" />
-    <Compile Include="ToolbarWrapper.cs" />
     <Compile Include="Properties\Version.cs">
       <DependentUpon>Version.tt</DependentUpon>
     </Compile>
