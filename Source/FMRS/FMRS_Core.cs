@@ -27,16 +27,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Reflection;
+
 using UnityEngine;
+
 using Contracts;
-using KSP.IO;
-using KSP.UI;
-using KSP.UI.Screens;
-using FILES = FMRS.FILES; // Ugly, by this allows things to work. DO NO name classes and properties with the Namespace!
+
 namespace FMRS
 {
     public partial class FMRS_Core : FMRS_Util, IFMRS
