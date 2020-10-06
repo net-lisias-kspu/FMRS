@@ -1,4 +1,4 @@
-# Flight Manager for Reusable Stages [FMRS] Unofficial
+# Flight Manager for Reusable Stages [FMRS] /L Unofficial
 
 FMRS lets you jump back and forth in time. Unofficial fork by Lisias.
 
@@ -87,8 +87,8 @@ This plugin is licensed under the MIT license.
 	+ [SpaceDock](https://spacedock.info/mod/1251/%20Flight%20Manager%20for%20Reusable%20Stages%20(FMRS)%20Continued)
 	+ [GitHub](https://github.com/linuxgurugamer/FMRS)
 * [Omegano](https://forum.kerbalspaceprogram.com/index.php?/profile/172838-omegano/) PARENT
-	+ [Forum](https://forum.kerbalspaceprogram.com/index.php?/topic/72605-110-flight-manager-for-reusable-stages-fmrs-x110-experimental/) 
 	+ [GitHub](https://github.com/Omegano/FMRS)
 * [SIT89](https://forum.kerbalspaceprogram.com/index.php?/profile/110467-sit89/) ROOT
 	+ [Forum](https://forum.kerbalspaceprogram.com/index.php?/topic/72605-110-flight-manager-for-reusable-stages-fmrs-x110-experimental/&)
+	+ [CurseForge](https://www.curseforge.com/kerbal/ksp-mods/fmrs-x1-1-00-01)
 	+ [GitHub](https://github.com/SIT89/FMRS)
