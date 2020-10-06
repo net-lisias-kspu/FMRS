@@ -24,11 +24,7 @@
 */
 
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using KSP.UI.Screens;
 
 namespace FMRS
 {
@@ -38,11 +34,11 @@ namespace FMRS
     {
         void Start()
         {
-            Log.Info("FMRS_Register.Start");
+            Log.info("FMRS_Register.Start");
             if (RecoveryControllerWrapper.RecoveryControllerAvailable)
             {
                 var o = RecoveryControllerWrapper.RegisterMod("FMRS");
-                Log.Info("RecoveryControllerWrapper.RegisterMod: " + o.ToString());
+                Log.info("RecoveryControllerWrapper.RegisterMod: {0}", o);
             }
         }
     }

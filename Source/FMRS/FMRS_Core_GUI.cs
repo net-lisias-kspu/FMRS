@@ -180,11 +180,6 @@ namespace FMRS
                 Timer_Stage_Delay = GUI.HorizontalSlider(new Rect(45, 35 + (30 * 6) + 15, 205, 25), Timer_Stage_Delay, 0.2f, 5.0f);
                 window_height += 45;
                 GUI.Label(new Rect(20, 35 + (30 * 7), 225, 25), "Stage Save Delay: " + Timer_Stage_Delay.ToString("F1"));
-
-#if DEBUG
-                window_height += 30;
-                Debug_Active = GUI.Toggle(new Rect(5, 35 + (30 * 5), 25, 25), Debug_Active, "write debug messages to log file");
-#endif
                 GUILayout.EndVertical();
                 window_height += 42;
             }
@@ -423,14 +418,10 @@ namespace FMRS
             if (GUILayout.Button("read savefile", button_small, GUILayout.Width(132)))
                 load_save_file();
             GUILayout.EndHorizontal();
-            GUILayout.BeginHorizontal();
-            Debug_Level_1_Active = GUILayout.Toggle(Debug_Level_1_Active, "debug lv 1", button_small, GUILayout.Width(132));
-            Debug_Level_2_Active = GUILayout.Toggle(Debug_Level_2_Active, "debug lv 2", button_small, GUILayout.Width(132));
-            GUILayout.EndHorizontal();
             GUILayout.Space(5);
 
             if (GUILayout.Button("mark bug", button_small, GUILayout.Width(115)))
-                Log.Info("##################### BUG MARKER #####################");
+                Log.info("##################### BUG MARKER #####################");
 
             GUILayout.Space(5);
 
@@ -471,7 +462,7 @@ namespace FMRS
             GUILayout.BeginVertical();
 
             if (GUILayout.Button("mark bug", button_small, GUILayout.Width(115)))
-                Log.Info("##################### BUG MARKER #####################");
+                Log.info("##################### BUG MARKER #####################");
 
             GUILayout.EndVertical();
             GUI.DragWindow(new Rect(0, 0, 10000, 20));
@@ -482,12 +473,9 @@ namespace FMRS
         /*************************************************************************************************************************/
         private void init_skin()
         {
-#if DEBUG
-            //if (Debug_Level_1_Active)
             Log.PushStackInfo("FMRS_Core.init_skin", "enter init_skin()");
-            if (Debug_Active)
-                Log.Info("init_skin");
-#endif
+            Log.dbg("init_skin");
+
             GUIStyle MyButton = new GUIStyle(HighLogic.Skin.button);
             GUIStyle MyTextArea = new GUIStyle(HighLogic.Skin.textArea);
             GUIStyle MyScrollView = new GUIStyle(HighLogic.Skin.scrollView);

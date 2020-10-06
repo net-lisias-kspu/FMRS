@@ -46,20 +46,17 @@ namespace FMRS
             string message = "", kerbal_mess = "", contract_mess = "";
             List<Strategies.Strategy> strat_list = null;
             bool recovered = false;
-#if DEBUG
-            if (Debug_Active)
-                Log.Info("enter Game recover_vessel(Guid parent_vessel, List<ProtoVessel> recover_vessels, Game recover_save, Game savegame): " + parent_vessel.ToString());
-#endif
+
+            Log.dbg("enter Game recover_vessel(Guid parent_vessel, List<ProtoVessel> recover_vessels, Game recover_save, Game savegame): {0}", parent_vessel);
+
             if (Strategies.StrategySystem.Instance == null)
-                Log.Info("Strategies.StrategySystem.Instance is null");
+                Log.info("Strategies.StrategySystem.Instance is null");
             else
                 strat_list = Strategies.StrategySystem.Instance.Strategies.FindAll(str => str.IsActive);
             if (strat_list != null)
             {
-#if DEBUG
-                if (Debug_Active)
-                    Log.Info("active Strategies found");
-#endif
+                Log.dbg("active Strategies found");
+
                 foreach (Strategies.Strategy str in strat_list)
                 {
                     foreach (Strategies.StrategyEffectConfig conf in str.Config.Effects)
@@ -67,16 +64,14 @@ namespace FMRS
                         if (conf.Config.HasValue("valueId"))
                             if (conf.Config.GetValue("valueId") == "VesselRecoveryFactor")
                             {
-#if DEBUG
-                                if (Debug_Active)
-                                    Log.Info("active recovery strategy found");
-#endif
+                                Log.dbg("active recovery strategy found");
+
                                 strat_rec_fact = float.Parse(conf.Config.GetValue("minValue"));
                                 temp_float = float.Parse(conf.Config.GetValue("maxValue"));
                                 temp_float = temp_float - strat_rec_fact;
                                 temp_float *= str.Factor;
                                 strat_rec_fact += temp_float;
-                                Log.Info("Recovery Factor Strategy = " + strat_rec_fact.ToString());
+                                Log.info("Recovery Factor Strategy = {0}", strat_rec_fact);
                             }
                     }
                 }
@@ -86,10 +81,8 @@ namespace FMRS
             {
                 if (pv.landed || pv.splashed)
                 {
-#if DEBUG
-                    if (Debug_Active)
-                        Log.Info("Recover Vessel: " + pv.vesselName);
-#endif
+                    Log.dbg("Recover Vessel: {0}", pv.vesselName);
+
                     if (pv.GetVesselCrew().Count > 0)
                     {
                         foreach (ProtoCrewMember crew_member in pv.GetVesselCrew())
@@ -100,10 +93,8 @@ namespace FMRS
                                 {
                                     member.rosterStatus = ProtoCrewMember.RosterStatus.Available;
                                     kerbal_mess += "       " + member.name + "@";
-#if DEBUG
-                                    if (Debug_Active)
-                                        Log.Info("" + crew_member.name + " set Available");
-#endif
+
+                                    Log.dbg("{0} set Available", crew_member.name );
                                 }
                             }
                         }
@@ -203,21 +194,16 @@ namespace FMRS
 
                 if (loaded_vessels.Contains(parent_vessel))
                 {
-#if DEBUG
-                    if (Debug_Active)
-                        Log.Info("loaded_vessels: removing " + parent_vessel.ToString());
-#endif
+                    Log.dbg("loaded_vessels: removing {0}", parent_vessel);
+
                     loaded_vessels.Remove(parent_vessel);
-#if DEBUG
-                    if (Debug_Active)
-                        Log.Info("loaded_vessels: " + loaded_vessels.Count.ToString());
-#endif
+
+                    Log.dbg("loaded_vessels: {0}", loaded_vessels.Count);
                 }
             }
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PopStackInfo("leave recover_vessel(Guid parent_vessel, List<ProtoVessel> recover_vessels, Game recover_save, Game savegame)");
-#endif
+
+            Log.PopStackInfo("leave recover_vessel(Guid parent_vessel, List<ProtoVessel> recover_vessels, Game recover_save, Game savegame)");
+
             return savegame;
         }
 
@@ -225,19 +211,13 @@ namespace FMRS
 /*************************************************************************************************************************/
         public void recovery_requested_handler(Vessel vessel_recovered)
         {
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS_Core.recovery_request_handler", "enter recovery_requested_handler(Vessel input) " + vessel_recovered.vesselName);
-            if (Debug_Active)
-                Log.Info("Vessel recovery_requested_handler");
-#endif
+            Log.PushStackInfo("FMRS_Core.recovery_request_handler", "enter recovery_requested_handler(Vessel input) " + vessel_recovered.vesselName);
+            Log.dbg("Vessel recovery_requested_handler");
 
             if (vessel_recovered.id == _SAVE_Main_Vessel)
             {
-#if DEBUG
-                if (Debug_Active)
-                    Log.Info("Vessel is main Vessel disable plugin");
-#endif
+                Log.dbg("Vessel is main Vessel disable plugin");
+
                 _SETTING_Enabled = false;
                 return;
             }
@@ -259,12 +239,9 @@ namespace FMRS
         {
             float partcost, float_dummy, vesselcost = 0;
             PartResourceDefinition resc_def;
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS_Core.vessels_cost", "enter float vessels_cost(ProtoVessel temp_vessel) " + temp_vessel.vesselID.ToString());
-            if (Debug_Active)
-                Log.Info("Calculate cost from: " + temp_vessel.vesselName);
-#endif
+
+            Log.PushStackInfo("FMRS_Core.vessels_cost", "enter float vessels_cost(ProtoVessel temp_vessel) {0}", temp_vessel.vesselID);
+            Log.dbg("Calculate cost from: {0}", temp_vessel.vesselName);
 
             foreach (ProtoPartSnapshot part in temp_vessel.protoPartSnapshots)
             {
@@ -277,12 +254,9 @@ namespace FMRS
                 vesselcost += partcost;
             }
 
-#if DEBUG
-            if (Debug_Active)
-                Log.Info("FMRS cost: " + vesselcost.ToString());
-           // if (Debug_Level_1_Active)
-                Log.PopStackInfo("leave float vessels_cost(ProtoVessel temp_vessel)");
-#endif
+            Log.dbg("FMRS cost: {0}", vesselcost);
+            Log.PopStackInfo("leave float vessels_cost(ProtoVessel temp_vessel)");
+
             return (vesselcost);
         }
 
@@ -293,12 +267,9 @@ namespace FMRS
             string return_string;
             Dictionary<string, int> parts = new Dictionary<string, int>();
             Dictionary<string, float> resources = new Dictionary<string, float>();
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS_Core.get_vessel_part_list", "enter get_vessel_part_list(ProtoVessel vessel)");
-            if (Debug_Active)
-                Log.Info("get vessel part list");
-#endif
+
+            Log.PushStackInfo("FMRS_Core.get_vessel_part_list", "enter get_vessel_part_list(ProtoVessel vessel)");
+            Log.dbg("get vessel part list");
 
             foreach (ProtoVessel pv in vessel_list)
             {
@@ -350,12 +321,9 @@ namespace FMRS
         {
             List<ScienceData> science_data = new List<ScienceData>();
 
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS_Core.recover_science", "enter recover_science(GUI Vessel_id, Game save) " + proto_vessel.vesselID.ToString());
-            if (Debug_Active)
-                Log.Info("Try recover science from: " + proto_vessel.vesselName);
-#endif
+            Log.PushStackInfo("FMRS_Core.recover_science", "enter recover_science(GUI Vessel_id, Game save) {0}", proto_vessel.vesselID);
+            Log.dbg("Try recover science from: {0}", proto_vessel.vesselName);
+
             foreach (ProtoPartSnapshot part in proto_vessel.protoPartSnapshots)
             {
                 foreach (ProtoPartModuleSnapshot module in part.modules)
@@ -363,17 +331,14 @@ namespace FMRS
                     foreach (ConfigNode science_node in module.moduleValues.GetNodes("ScienceData"))
                     {
                         science_data.Add(new ScienceData(science_node));
-#if DEBUG
-                        if (Debug_Active)
-                            Log.Info("ScienceData: " + science_node.GetValue("subjectID") + " found");
-#endif
+
+                        Log.dbg("ScienceData: {0 found", science_node.GetValue("subjectID"));
                     }
                 }
             }
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PopStackInfo("leave recover_science(GUI Vessel_id, Game save)");
-#endif
+
+            Log.PopStackInfo("leave recover_science(GUI Vessel_id, Game save)");
+
             return science_data;
         }
 
@@ -383,31 +348,22 @@ namespace FMRS
         {
             float factor, landing_distance;
 
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS_Core.calc_recovery_factor", "enter calc_recovery_factor(ProtoVessel proto_Vessel) " + proto_Vessel.vesselID.ToString());
-            if (Debug_Active)
-                Log.Info("calculate recovery factor for " + proto_Vessel.vesselName);
-#endif
+            Log.PushStackInfo("FMRS_Core.calc_recovery_factor", "enter calc_recovery_factor(ProtoVessel proto_Vessel) {0}", proto_Vessel.vesselID);
+            Log.dbg("calculate recovery factor for {0}", proto_Vessel.vesselName);
 
             if (proto_Vessel.landedAt.Contains("LaunchPad") || proto_Vessel.landedAt.Contains("Runway"))
             {
                 factor = 1;
-#if DEBUG
-                if (Debug_Active)
-                    Log.Info("landed at launchpad or runway");
-#endif
+                Log.dbg("landed at launchpad or runway");
             }
             else
             {
                 landing_distance = (float)SpaceCenter.Instance.GreatCircleDistance(SpaceCenter.Instance.cb.GetRelSurfaceNVector(proto_Vessel.latitude, proto_Vessel.longitude));
                 factor = Mathf.Lerp(0.98f, 0.1f, (float)(landing_distance / (SpaceCenter.Instance.cb.Radius * Math.PI)));
             }
-#if DEBUG
             Log.PopStackInfo("leaving calc_recovery_factor");
-            if (Debug_Active)
-                Log.Info("recovery factor " + factor.ToString());
-#endif
+            Log.dbg("recovery factor {0}", factor);
+
             return factor;
         }
 
@@ -415,12 +371,8 @@ namespace FMRS
 /*************************************************************************************************************************/
         private void write_recovered_values_to_save()
         {
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS_Core.write_recovered_values_to_save", "enter add_recvoered_values_to_save()");
-            if (Debug_Active)
-                Log.Info("add recovered values to game save");
-#endif
+            Log.PushStackInfo("FMRS_Core.write_recovered_values_to_save", "enter add_recvoered_values_to_save()");
+            Log.dbg("add recovered values to game save");
 
             foreach (recover_value recover_data in recover_values)
             {
@@ -429,10 +381,7 @@ namespace FMRS
                     {
                         if (recover_data.key == "add")
                         {
-#if DEBUG
-                            if (Debug_Active)
-                                Log.Info("adding " + recover_data.value + " funds");
-#endif
+                            Log.dbg("adding {0} funds", recover_data.value);
                             Funding.Instance.AddFunds(float.Parse(recover_data.value), TransactionReasons.VesselRecovery);
                         }
                     }
@@ -440,20 +389,14 @@ namespace FMRS
                 {
                     if (recover_data.cat == "science")
                     {
-#if DEBUG
-                        if (Debug_Active)
-                            Log.Info("adding " + recover_data.key + " " + recover_data.value + " science");
-#endif
+                        Log.dbg("adding {0} {1} science", recover_data.key, recover_data.value);
 
                         string[] line = recover_data.key.Split('@');
                         ScienceSubject subject;
                         subject = ResearchAndDevelopment.GetSubjectByID(line[0].Trim());
                         if (subject == null)
                         {
-#if DEBUG
-                            if (Debug_Active)
-                                Log.Info("subject not found");
-#endif
+                            Log.dbg("subject not found");
 
                             subject = new ScienceSubject(line[0].Trim(), line[1].Trim(), float.Parse(line[2].Trim()), float.Parse(line[3].Trim()), float.Parse(line[4].Trim()));
                         }
@@ -461,20 +404,14 @@ namespace FMRS
                     }
                     if (recover_data.cat == "science_sent")
                     {
-#if DEBUG
-                        if (Debug_Active)
-                            Log.Info("adding " + recover_data.key + " " + recover_data.value + " science sent");
-#endif
+                        Log.dbg("adding {0} {1} science sent", recover_data.key, recover_data.value);
 
                         string[] line = recover_data.key.Split('@');
                         ScienceSubject subject;
                         subject = ResearchAndDevelopment.GetSubjectByID(line[0].Trim());
                         if (subject == null)
                         {
-#if DEBUG
-                            if (Debug_Active)
-                                Log.Info("science subject not found");
-#endif
+                            Log.dbg("science subject not found");
 
                             subject = new ScienceSubject(line[0].Trim(), line[1].Trim(), float.Parse(line[2].Trim()), float.Parse(line[3].Trim()), float.Parse(line[4].Trim()));
                         }
@@ -502,10 +439,7 @@ namespace FMRS
                                 if (temp_contract != null)
                                     if (temp_contract.ContractState != Contract.State.Completed)
                                     {
-#if DEBUG
-                                        if (Debug_Active)
-                                            Log.Info("contract " + temp_contract.Title + " completed");
-#endif
+                                        Log.dbg("contract " + temp_contract.Title + " completed");
 
                                         temp_contract.Complete();
                                     }
@@ -515,29 +449,20 @@ namespace FMRS
 
                 if (recover_data.cat == "message" && _SETTING_Messages)
                 {
-#if DEBUG
-                    if (Debug_Active)
-                        Log.Info("printing message");
-#endif
+                    Log.dbg("printing message");
                     MessageSystem.Instance.AddMessage(new MessageSystem.Message(recover_data.key, recover_data.value.Replace("@", System.Environment.NewLine), MessageSystemButton.MessageButtonColor.GREEN, MessageSystemButton.ButtonIcons.MESSAGE));
                 }
 
                 if (recover_data.cat == "warning")
                 {
-#if DEBUG
-                    if (Debug_Active)
-                        Log.Info("printing warning");
-#endif
+                    Log.dbg("printing warning");
                     MessageSystem.Instance.AddMessage(new MessageSystem.Message(recover_data.key, recover_data.value.Replace("@", System.Environment.NewLine), MessageSystemButton.MessageButtonColor.RED, MessageSystemButton.ButtonIcons.ALERT));
                 }
             }
 
             //recover_values.Clear();
             //write_recover_file();
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PopStackInfo("leave add_recvoered_values_to_save()");
-#endif
+            Log.PopStackInfo("leave add_recvoered_values_to_save()");
         }
     }
 }

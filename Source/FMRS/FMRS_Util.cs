@@ -49,7 +49,7 @@ namespace FMRS
 
         public void Wait(float seconds, Action action)
         {
-            Log.Info("Wait, seconds: " + seconds.ToString());
+            Log.info("Wait, seconds: {0}", seconds);
             jumpInProgress = true;
             StartCoroutine(_wait(seconds, action));
         }
@@ -83,14 +83,14 @@ namespace FMRS
         public string SaveGame(string func, Game game, string saveFileName, string saveFolder, SaveMode saveMode)
         {
             saveInProgress = true;
-            Log.Info("Save: SaveGame 1: " + func);
+            Log.info("Save: SaveGame 1: {0}", func);
             return GamePersistence.SaveGame(game, saveFileName, saveFolder, saveMode);
         }
 
         public string SaveGame(string func, string saveFileName, string saveFolder, SaveMode saveMode)
         {
             saveInProgress = true;
-            Log.Info("Save: SaveGame 2: " + func);
+            Log.info("Save: SaveGame 2: {0}", func);
 
             return GamePersistence.SaveGame(saveFileName, saveFolder, saveMode);
         }
@@ -98,7 +98,7 @@ namespace FMRS
 
         public void StartAndFocusVessel(Game stateToLoad, int vesselToFocusIdx)
         {
-            Log.Info("Save: StartAndFocusVessel, saveInprogress: " + saveInProgress.ToString());
+            Log.info("Save: StartAndFocusVessel, saveInprogress: {0}", saveInProgress);
            if (saveInProgress)
          // if (false)
             {
@@ -115,14 +115,14 @@ namespace FMRS
                     doStartAndFocusVessel();
                    // Debug.Log("1 second is lost forever");
                 });
-                //Log.Info("Save: Calling FlightDriver.StartAndFocusVessel 1");
+                //Log.info("Save: Calling FlightDriver.StartAndFocusVessel 1");
                 //FlightDriver.StartAndFocusVessel(stateToLoad, vesselToFocusIdx);
             }
         }
 
         void doStartAndFocusVessel()
         {
-            Log.Info("Save: doStartAndFocusVessel, Calling FlightDriver.StartAndFocusVessel 1");
+            Log.info("Save: doStartAndFocusVessel, Calling FlightDriver.StartAndFocusVessel 1");
             FlightDriver.StartAndFocusVessel(gameToLoad, vesselToFocus);
             readyToLoad = false;
             gameToLoad = null;
@@ -131,7 +131,7 @@ namespace FMRS
 
         void OnGameStateSaved(Game game)
         {
-            Log.Info("Save: OnGameStateSaved, readyToLoad: " + readyToLoad.ToString());
+            Log.info("Save: OnGameStateSaved, readyToLoad: {0}", readyToLoad);
             saveInProgress = false;
             if (gameToLoad != null && readyToLoad)
             {
@@ -141,7 +141,7 @@ namespace FMRS
                         doStartAndFocusVessel();
                        // Debug.Log("1 second is lost forever");
                     });
-                    Log.Info("Save: Calling FlightDriver.StartAndFocusVessel 2");
+                    Log.info("Save: Calling FlightDriver.StartAndFocusVessel 2");
 
                    // FlightDriver.StartAndFocusVessel(gameToLoad, vesselToFocus);
                    // readyToLoad = false;
@@ -170,15 +170,7 @@ namespace FMRS
         public Dictionary<Guid, vesselstate> Vessel_State = new Dictionary<Guid, vesselstate>();
         public Dictionary<String, Guid> Kerbal_dropped = new Dictionary<string, Guid>();
         public List<recover_value> recover_values = new List<recover_value>();
-#if DEBUG
-        public static bool Debug_Active = true;
-        public static bool Debug_Level_1_Active = true;
-        public static bool Debug_Level_2_Active = true;
-#else
-        //public bool Debug_Active = false;
-        //public bool Debug_Level_1_Active = false;
-        //public bool Debug_Level_2_Active = false;
-#endif
+
         public bool bflush_save_file = false;
         
         public Dictionary<save_cat, Dictionary<string, string>> Save_File_Content = new Dictionary<save_cat, Dictionary<string, string>>();
@@ -192,14 +184,6 @@ namespace FMRS
 
         public double _SAVE_Launched_At;
 
-#if DEBUG || BETA
-		private string mod_version;
-        public string mod_vers
-        {
-            get { return mod_version; }
-            set { mod_version = value; }
-        }
-#endif
         /*************************************************************************************************************************/
         private void Start()
         {
@@ -207,9 +191,7 @@ namespace FMRS
 
     public void set_save_value(save_cat cat, string key, string value)
         {
-#if DEBUG
-            if (Debug_Level_2_Active)   Log.Info("entering set_save_value(int cat, string key, string value)");
-#endif
+            Log.detail("entering set_save_value(int cat, string key, string value)");
 
             if (Save_File_Content[cat].ContainsKey(key))
             {
@@ -219,21 +201,16 @@ namespace FMRS
             {
                 Save_File_Content[cat].Add(key, value);
             }
-#if DEBUG
-            if (Debug_Active) Log.Info("set_save_value: " + key + " = " + value);
 
-            if (Debug_Level_2_Active) Log.Info("leaving set_save_value(int cat, string key, string value)");
-#endif
+            Log.info("set_save_value: {0} = {1}", key, value);
+            Log.detail("leaving set_save_value(int cat, string key, string value)");
         }
 
 
 /*************************************************************************************************************************/
         public string get_save_value(save_cat cat, string key)
         {
-#if DEBUG
-            if (Debug_Level_2_Active)
-                Log.Info("entering get_save_value(int cat, string key) #### FMRS: NO LEAVE MESSAGE");
-#endif
+            Log.dbg("entering get_save_value(int cat, string key) #### FMRS: NO LEAVE MESSAGE");
 
             if (Save_File_Content[cat].ContainsKey(key))
                 return (Save_File_Content[cat][key]);
@@ -245,10 +222,7 @@ namespace FMRS
 /*************************************************************************************************************************/
         public void write_save_values_to_file()
         {
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS_Util.write_save_values_to_file", "entering write_save_values_to_file()");
-#endif
+            Log.PushStackInfo("FMRS_Util.write_save_values_to_file", "entering write_save_values_to_file()");
 
             set_save_value(save_cat.SETTING, "Window_X", Convert.ToInt32(windowPos.x).ToString());
             set_save_value(save_cat.SETTING, "Window_Y", Convert.ToInt32(windowPos.y).ToString());
@@ -259,9 +233,6 @@ namespace FMRS
             //set_save_value(save_cat.SETTING, "Auto_Cut_Off", _SETTING_Auto_Cut_Off.ToString());
             //set_save_value(save_cat.SETTING, "Auto_Recover", _SETTING_Auto_Recover.ToString());
             //set_save_value(save_cat.SETTING, "Throttle_Log", _SETTING_Throttle_Log.ToString());
-#if DEBUG
-            set_save_value(save_cat.SETTING, "Debug", Debug_Active.ToString());
-#endif
             set_save_value(save_cat.SAVE, "Main_Vessel", _SAVE_Main_Vessel.ToString());
             set_save_value(save_cat.SAVE, "Has_Launched", _SAVE_Has_Launched.ToString());
             set_save_value(save_cat.SAVE, "Launched_At", _SAVE_Launched_At.ToString());
@@ -285,11 +256,9 @@ namespace FMRS
                 }
             }
             file.Close();
-#if DEBUG
-            if (Debug_Active) Log.Info("Save File written in private void write_save_values_to_file()");
-           // if (Debug_Level_1_Active)
-                Log.PopStackInfo("leaving save_values_to_file()");
-#endif
+
+            Log.dbg("Save File written in private void write_save_values_to_file()");
+            Log.PopStackInfo("leaving save_values_to_file()");
         }
 
 
@@ -297,10 +266,8 @@ namespace FMRS
         public void write_vessel_dict_to_Save_File_Content()
         {
             List<string> delete_values = new List<string>();
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS_Util.write_vessel_dict_to_Save_File_Content", "entering write_vessel_dict_to_Save_File_Content()");
-#endif
+
+            Log.PushStackInfo("FMRS_Util.write_vessel_dict_to_Save_File_Content", "entering write_vessel_dict_to_Save_File_Content()");
 
             Save_File_Content[save_cat.DROPPED].Clear();
             Save_File_Content[save_cat.NAME].Clear();
@@ -309,46 +276,35 @@ namespace FMRS
             foreach (KeyValuePair<Guid, string> write_keyvalue in Vessels_dropped)
             {
                 set_save_value(save_cat.DROPPED, write_keyvalue.Key.ToString(), write_keyvalue.Value);
-#if DEBUG
-                if (Debug_Active)  Log.Info("write " + write_keyvalue.Key.ToString() + " to Save_File_Content DROPPED");
-#endif
+                Log.dbg("write {0} to Save_File_Content DROPPED", write_keyvalue.Key);
             }
 
             foreach (KeyValuePair<Guid, string> write_keyvalue in Vessels_dropped_names)
             {
                 set_save_value(save_cat.NAME, write_keyvalue.Key.ToString(), write_keyvalue.Value);
-#if DEBUG
-                if (Debug_Active) Log.Info("write NAME " + write_keyvalue.Key.ToString() + " to Save_File_Content NAME");
-#endif
+                Log.dbg("write NAME {0} to Save_File_Content NAME", write_keyvalue.Key);
             }
 
             foreach (KeyValuePair<Guid,vesselstate> st  in Vessel_State)
             {
                 set_save_value(save_cat.STATE, st.Key.ToString(), st.Value.ToString());
-#if DEBUG
-                if (Debug_Active)  Log.Info("write " + st.Key.ToString() + ": " + st.Value.ToString() + " to Save_File_Content STATE");
-#endif
+                Log.dbg("write {0}: {1} to Save_File_Content STATE", st.Key, st.Value);
             }
 
             foreach (KeyValuePair<Guid, string> st in Vessel_sub_save)
             {
                 set_save_value(save_cat.SUBSAVEFILE, st.Key.ToString(), st.Value.ToString());
-#if DEBUG
-                if (Debug_Active) Log.Info("write " + st.Key.ToString() + ": " + st.Value.ToString() + " to Save_File_Content SUBSAVEFILE");
-#endif
+                Log.dbg("write {0}: {1} to Save_File_Content SUBSAVEFILE", st.Key, st.Value);
             }
 
             foreach (KeyValuePair<string, Guid> write_keyvalue in Kerbal_dropped)
             {
                 set_save_value(save_cat.KERBAL_DROPPED, write_keyvalue.Key.ToString(), write_keyvalue.Value.ToString());
-#if DEBUG
-                if (Debug_Active)    Log.Info("write KERBAL_DROPPED " + write_keyvalue.Key.ToString() + " to Save_File_Content KERBAL_DROPPED");
-#endif
+                Log.dbg("write KERBAL_DROPPED {0} to Save_File_Content KERBAL_DROPPED", write_keyvalue.Key);
             }
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PopStackInfo("leaving write_vessel_dict_to_Save_File_Content()");
-#endif
+
+            Log.PopStackInfo("leaving write_vessel_dict_to_Save_File_Content()");
+
         }
 
 
@@ -416,18 +372,14 @@ namespace FMRS
         public void flush_save_file()
         {
             int anz_lines;
-#if DEBUG
-          //  if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS_Util.flush_save_file", "enter flush_save_file()");
 
-            if (Debug_Active) Log.Info("flush save file");
-#endif
+            Log.PushStackInfo("FMRS_Util.flush_save_file", "enter flush_save_file()");
+            Log.dbg("flush save file");
+
             string[] lines = IO.File.ReadAllLines(FILES.SAVE_TXT);
             anz_lines = lines.Length;
 
-#if DEBUG
-            if (Debug_Active) Log.Info("delete " + anz_lines.ToString() + " lines");
-#endif
+            Log.dbg("delete {0} lines", anz_lines);
 
             IO.TextWriter file = IO.File.CreateText(FILES.SAVE_TXT);
             while (anz_lines != 0)
@@ -456,12 +408,9 @@ namespace FMRS
             double temp_double;
             save_cat temp_cat;
 
-#if DEBUG
-           // if (Debug_Level_1_Active) 
-                Log.PushStackInfo("FMRS_Util.read_save_file", "enter read_save_file()");
-				
-			if (Debug_Active)Log.Info("read save file");
-#endif
+            Log.PushStackInfo("FMRS_Util.read_save_file", "enter read_save_file()");
+			Log.dbg("read save file");
+
             foreach(KeyValuePair<save_cat,Dictionary<string,string>> content in Save_File_Content)
                 Save_File_Content[content.Key].Clear();
 
@@ -480,11 +429,7 @@ namespace FMRS
                     }
                     catch (Exception)
                     {
-#if DEBUG
-                    //    Debug_Active = true;
-                    //    Debug_Level_1_Active = true;
-#endif
-                        Log.Info("inconsistent save file, flush save file");
+                        Log.info("inconsistent save file, flush save file");
                         bflush_save_file = true;
                         break;
                     }
@@ -495,10 +440,6 @@ namespace FMRS
 
             try
             {
-#if DEBUG
-                Debug_Active = Convert.ToBoolean(get_save_value(save_cat.SETTING, "Debug"));
-#endif
-
                 temp_double = Convert.ToDouble(get_save_value(save_cat.SETTING, "Window_X"));
                 windowPos.x = Convert.ToInt32(temp_double);
                 temp_double = Convert.ToDouble(get_save_value(save_cat.SETTING, "Window_Y"));
@@ -512,14 +453,13 @@ namespace FMRS
                 Debug_Active = true;
                 Debug_Level_1_Active = true;
 #endif
-                Log.Info("invalid save file, flush save file");
+                Log.info("invalid save file, flush save file");
                 bflush_save_file = true;
             }
 #if DEBUG
-            if (Debug_Active)
-                foreach (KeyValuePair<save_cat, Dictionary<string, string>> temp_keyvalue in Save_File_Content)
-                    foreach (KeyValuePair<string, string> readvalue in temp_keyvalue.Value)
-                        Log.Info("" + temp_keyvalue.Key.ToString() + " = " + readvalue.Key + " = " + readvalue.Value);
+            foreach (KeyValuePair<save_cat, Dictionary<string, string>> temp_keyvalue in Save_File_Content)
+                foreach (KeyValuePair<string, string> readvalue in temp_keyvalue.Value)
+                    Log.info("{0} = {1} = {2}" + temp_keyvalue.Key, readvalue.Key, readvalue.Value);
 #endif
 
             if (bflush_save_file)
@@ -535,11 +475,6 @@ namespace FMRS
                 Debug_Level_2_Active = true;
             }
 #endif
-#if BETA && DEBUG //**************************
-          //  Debug_Active = true;
-          //  Debug_Level_1_Active = true;
-#endif //**************************
-
             try
             {
                 _SETTING_Armed = Convert.ToBoolean(get_save_value(save_cat.SETTING, "Armed"));
@@ -560,36 +495,22 @@ namespace FMRS
             }
             catch (Exception)
             {
-#if DEBUG
-            //    Debug_Active = true;
-            //    Debug_Level_1_Active = true;
-#endif
-                Log.Info("invalid save file, flush save file");
+                Log.info("invalid save file, flush save file");
                 bflush_save_file = true;
             }
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PopStackInfo("leave read_save_file()");
-#endif
+            Log.PopStackInfo("leave read_save_file()");
         }
 
 
 /*************************************************************************************************************************/
         public void init_save_file()
         {
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS_Util.init_save_file", "enter init_save_file()");
-
-            if (Debug_Active)  Log.Info("init save file");
-#endif
+            Log.PushStackInfo("FMRS_Util.init_save_file", "enter init_save_file()");
+            Log.dbg("init save file");
 
             foreach (KeyValuePair<save_cat, Dictionary<string, string>> content in Save_File_Content)
                 Save_File_Content[content.Key].Clear();
 
-#if DEBUG
-            set_save_value(save_cat.SETTING,"Version", mod_version);
-#endif
             set_save_value(save_cat.SETTING, "Window_X", Convert.ToInt32(windowPos.x).ToString());
             set_save_value(save_cat.SETTING, "Window_Y", Convert.ToInt32(windowPos.y).ToString());
             set_save_value(save_cat.SETTING, "Enabled", true.ToString());
@@ -609,16 +530,6 @@ namespace FMRS
             set_save_value(save_cat.SAVE, "Kick_To_Main", false.ToString());
             set_save_value(save_cat.SAVE, "Switched_To_Savefile", "");
             set_save_value(save_cat.SAVE, "SaveFolder", HighLogic.SaveFolder);
-
-
-#if DEBUG //**************************
-           // set_save_value(save_cat.SETTING,"Debug", true.ToString());
-           // set_save_value(save_cat.SETTING, "Debug_Level", "0");
-#endif //**************************
-
-#if DEBUG
-            Debug_Active = Convert.ToBoolean(get_save_value(save_cat.SETTING, "Debug"));
-#endif
 
             IO.TextWriter file = IO.File.CreateText(FILES.SAVE_TXT);
 
@@ -645,7 +556,7 @@ namespace FMRS
             if (!bflush_save_file)
                 if (get_save_value(save_cat.SETTING, "Version") != mod_version)
                 {
-                    Log.Info("diferent version, flush save file");
+                    Log.info("diferent version, flush save file");
                     bflush_save_file = true;
                 }
 #endif
@@ -674,68 +585,52 @@ namespace FMRS
                     foreach(KeyValuePair<string,string> save_value in savecat.Value)
                     {
                         Vessels_dropped.Add(new Guid(save_value.Key), save_value.Value);
-#if DEBUG
-                        if (Debug_Active)  Debug.Log(" #### FMRS: " + save_value.Key.ToString() + " set to " + save_value.Value + " in Vessels_dropped");
-#endif
+                        Log.dbg(" #### FMRS: {0} set to {1} in Vessels_dropped", save_value.Key, save_value.Value);
                     }
 
                 if (savecat.Key == save_cat.NAME)
                     foreach (KeyValuePair<string, string> save_value in savecat.Value)
                     {
                         Vessels_dropped_names.Add(new Guid(save_value.Key), save_value.Value);
-#if DEBUG
-                        if (Debug_Active)   Debug.Log(" #### FMRS: " + save_value.Key.ToString() + " set to " + save_value.Value + " in Vessels_dropped_names");
-#endif
+                        Log.dbg(" #### FMRS: {0} set to {1} in Vessels_dropped_names", save_value.Key, save_value.Value);
                     }
 
                 if (savecat.Key == save_cat.STATE)
                     foreach (KeyValuePair<string, string> save_value in savecat.Value)
                     {
                         Vessel_State.Add(new Guid(save_value.Key), parse_vesselstate(save_value.Value));
-#if DEBUG
-                        if (Debug_Active)   Debug.Log(" #### FMRS: " + save_value.Key.ToString() + " set to " + save_value.Value + " in Vessels_dropped_landed");
-#endif
+                        Log.dbg(" #### FMRS: {0} set to {1} in Vessels_dropped_landed", save_value.Key, save_value.Value);
                     }
 
                 if (savecat.Key == save_cat.SUBSAVEFILE)
                     foreach (KeyValuePair<string, string> save_value in savecat.Value)
                     {
                         Vessel_sub_save.Add(new Guid(save_value.Key), save_value.Value);
-#if DEBUG
-                        if (Debug_Active)  Debug.Log(" #### FMRS: " + save_value.Key.ToString() + " set to " + save_value.Value + " in Vessel_sub_save");
-#endif
+                        Log.dbg(" #### FMRS: {0} set to {1} in Vessel_sub_save", save_value.Key, save_value.Value);
                     }
 
                 if (savecat.Key == save_cat.KERBAL_DROPPED)
                     foreach (KeyValuePair<string, string> save_value in savecat.Value)
                     {
                         Kerbal_dropped.Add(save_value.Key, new Guid(save_value.Value));
-#if DEBUG
-                        if (Debug_Active) Debug.Log(" #### FMRS: " + save_value.Key + " set to " + save_value.Value + " in Kerbal_dropped");
-#endif
+                        Log.dbg(" #### FMRS: {0} set to {1} in Kerbal_dropped", save_value.Key, save_value.Value);
                     }
             }
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PopStackInfo("leaving get_dropped_vessels()");
-#endif
+
+            Log.PopStackInfo("leaving get_dropped_vessels()");
         }
 
 
 /*************************************************************************************************************************/
         public void init_recover_file()
         {
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS_Util.init_recover_file", "enter init_recover_file()");
-            if (Debug_Active)  Log.Info("init recover file");
-#endif
+            Log.PushStackInfo("FMRS_Util.init_recover_file", "enter init_recover_file()");
+            Log.dbg("init recover file");
+
             IO.TextWriter file = IO.File.CreateText(FILES.RECOVER_TXT);
             file.Close();
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PopStackInfo("leave init_recover_file()");
-#endif
+
+            Log.PopStackInfo("leave init_recover_file()");
         }
 
 
@@ -743,11 +638,10 @@ namespace FMRS
         public void flush_recover_file()
         {
             int anz_lines;
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PushStackInfo("fMRS_Util.flush_recover_file", "enter flush_recover_file()");
-            if (Debug_Active)  Log.Info("flush recover file");
-#endif
+
+            Log.PushStackInfo("fMRS_Util.flush_recover_file", "enter flush_recover_file()");
+            Log.dbg("flush recover file");
+
             string[] lines = IO.File.ReadAllLines(FILES.RECOVER_TXT);
             anz_lines = lines.Length;
 
@@ -758,10 +652,8 @@ namespace FMRS
                 anz_lines--;
             }
             file.Close();
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PopStackInfo("leave flush_recover_file()");
-#endif
+
+            Log.PopStackInfo("leave flush_recover_file()");
         }
 
 
@@ -769,11 +661,10 @@ namespace FMRS
         public void read_recover_file()
         {
             recover_value temp_value;
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS_Util.read_recover_file", "enter read_recover_file()");
-            if (Debug_Active)  Log.Info("read recover file");
-#endif
+
+            Log.PushStackInfo("FMRS_Util.read_recover_file", "enter read_recover_file()");
+            Log.dbg("read recover file");
+
             recover_values.Clear();
             string[] lines = IO.File.ReadAllLines(FILES.RECOVER_TXT);
 
@@ -789,12 +680,10 @@ namespace FMRS
                 }
             }
 #if DEBUG
-            if (Debug_Active)
-                foreach (recover_value temp in recover_values)
-                    Log.Info("recover value: " + temp.cat + " = " + temp.key + " = " + temp.value);
+            foreach (recover_value temp in recover_values)
+                Log.info("recover value: {0} = {1} = {2}", temp.cat, temp.key, temp.value);
 
-           // if (Debug_Level_1_Active)
-                Log.PopStackInfo("leave read_recover_file()");
+            Log.PopStackInfo("leave read_recover_file()");
 #endif
         }
 
@@ -802,14 +691,12 @@ namespace FMRS
 /*************************************************************************************************************************/
         public void write_recover_file()
         {
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS_Util.write_recover_file", "enter write_recover_file()");
-#endif
+            Log.PushStackInfo("FMRS_Util.write_recover_file", "enter write_recover_file()");
+
             flush_recover_file();
-#if DEBUG
-            if (Debug_Active)  Log.Info("write recover file");
-#endif
+
+            Log.dbg("write recover file");
+
             IO.TextWriter file = IO.File.CreateText(FILES.RECOVER_TXT);
 
             foreach (recover_value writevalue in recover_values)
@@ -817,10 +704,8 @@ namespace FMRS
                 file.WriteLine(writevalue.cat + "=" + writevalue.key + "=" + writevalue.value);
             }
             file.Close();
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PopStackInfo("leave write_recover_file()");
-#endif
+
+            Log.PopStackInfo("leave write_recover_file()");
         }
 
 
@@ -828,29 +713,24 @@ namespace FMRS
         public void set_recoverd_value(string cat, string key, string value)
         {
             recover_value temp_value;
-#if DEBUG
-            if (Debug_Level_2_Active)
-                Log.Info("enter set_recoverd_value(string key, string value)");
-            if (Debug_Active) Log.Info("add to recover file: " + cat + " = " + key + " = " + value);
-#endif
+
+            Log.dbg("enter set_recoverd_value(string key, string value)");
+            Log.dbg("add to recover file: {0} = {1} = {2}", cat, key, value);
 
             temp_value.cat = cat;
             temp_value.key = key;
             temp_value.value = value;
             recover_values.Add(temp_value);
-#if DEBUG
-            if (Debug_Level_2_Active)  Log.Info("set_recoverd_value(string key, string value)");
-#endif
+
+            Log.dbg("set_recoverd_value(string key, string value)");
         }
 
 
 /*************************************************************************************************************************/
         public save_cat save_cat_parse(string in_string)
         {
-#if DEBUG
-            if (Debug_Level_2_Active)
-                Log.Info("enter save_cat_parse(string in_string) " + in_string + " NO LEAVE MESSAGE");
-#endif
+            Log.dbg("enter save_cat_parse(string in_string) {0} NO LEAVE MESSAGE", in_string);
+
             switch (in_string)
             {
                 case "SETTING":
@@ -879,9 +759,8 @@ namespace FMRS
 /*************************************************************************************************************************/
         public string save_cat_toString(save_cat cat)
         {
-#if DEBUG
-            if (Debug_Level_2_Active)  Log.Info("enter string save_cat_toString(save_cat cat) " + cat.ToString() + " NO LEAVE MESSAGE");
-#endif
+            Log.dbg("enter string save_cat_toString(save_cat cat) {0} NO LEAVE MESSAGE", cat);
+
             switch (cat)
             {
                 case save_cat.SETTING:
@@ -911,10 +790,9 @@ namespace FMRS
         public void delete_dropped_vessels()
         {
             List<string> temp_list = new List<string>();
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS_Util.delete_dropped_vessels", "entering delete_dropped_vessels()");
-#endif
+
+            Log.PushStackInfo("FMRS_Util.delete_dropped_vessels", "entering delete_dropped_vessels()");
+
             Vessels_dropped.Clear();
             Vessels_dropped_names.Clear();
             Vessel_State.Clear();
@@ -923,10 +801,8 @@ namespace FMRS
             Save_File_Content[save_cat.SAVEFILE].Clear();
 
             write_save_values_to_file();
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PopStackInfo("leaving delete_dropped_vessels()");
-#endif
+
+            Log.PopStackInfo("leaving delete_dropped_vessels()");
         }
 
 
@@ -935,12 +811,10 @@ namespace FMRS
         {
             List<string> temp_list = new List<string>();
             string temp_string = null;
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS_Util.delete_dropped_vessel", "entering delete_dropped_vessel(Guid vessel_guid) " + vessel_guid.ToString());
 
-            if (Debug_Active)  Log.Info("remove vessel" + vessel_guid.ToString());
-#endif
+            Log.PushStackInfo("FMRS_Util.delete_dropped_vessel", "entering delete_dropped_vessel(Guid vessel_guid) {0}", vessel_guid);
+            Log.dbg("remove vessel {0}", vessel_guid);
+
             if (Vessels_dropped.ContainsKey(vessel_guid))
                 Vessels_dropped.Remove(vessel_guid);
             if (Vessels_dropped_names.ContainsKey(vessel_guid))
@@ -958,10 +832,8 @@ namespace FMRS
  
 
             write_save_values_to_file();
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PopStackInfo("leaving delete_dropped_vessel(Guid vessel_guid)");
-#endif
+
+            Log.PopStackInfo("leaving delete_dropped_vessel(Guid vessel_guid)");
         }
 
 
@@ -995,20 +867,16 @@ namespace FMRS
 
             if (!Save_File_Content.ContainsKey(save_cat.KERBAL_DROPPED))
                 Save_File_Content.Add(save_cat.KERBAL_DROPPED, new Dictionary<string, string>());
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PopStackInfo("leaving init_Save_File_Content()");
-#endif
+
+            Log.PopStackInfo("leaving init_Save_File_Content()");
         }
 
       
         /*************************************************************************************************************************/
         public string vesselstate_toString(vesselstate vs)
         {
-#if DEBUG
-            if (Debug_Level_2_Active)
-                Log.Info("entering vesselstate_toString(vesselstate vs) " + vs.ToString() + " NO LEAVE ENTRY");
-#endif
+            Log.dbg("entering vesselstate_toString(vesselstate vs) {0} NO LEAVE ENTRY", vs);
+
             switch (vs)
             {
                 case vesselstate.DESTROYED:
@@ -1028,9 +896,8 @@ namespace FMRS
 /*************************************************************************************************************************/
         public vesselstate parse_vesselstate (string str)
         {
-#if DEBUG
-            if (Debug_Level_2_Active)  Log.Info("entering  parse_vesselstate (string str) " + str + " NO LEAVE ENTRY");
-#endif
+            Log.dbg("entering  parse_vesselstate (string str) {0} NO LEAVE ENTRY", str);
+
             switch (str)
             {
                 case "DESTROYED":
@@ -1050,17 +917,12 @@ namespace FMRS
 /*************************************************************************************************************************/
         public vesselstate get_vessel_state(Guid id)
         {
-#if DEBUG
-            if (Debug_Level_2_Active)
-                Log.Info("entering  vesselstate get_vessel_state(Guid id) " + id.ToString() + " NO LEAVE ENTRY");
-#endif
+            Log.dbg("entering  vesselstate get_vessel_state(Guid id) {0} NO LEAVE ENTRY", id);
             if (Vessel_State.ContainsKey(id))
                 return Vessel_State[id];
             else
             {
-#if DEBUG
-                if (Debug_Active) Log.Info("" + id.ToString() + " NOT IN Vessel_State");
-#endif
+                Log.dbg("{0} NOT IN Vessel_State", id);
                 return vesselstate.NONE;
             }
         }
@@ -1069,9 +931,8 @@ namespace FMRS
 /*************************************************************************************************************************/
         public bool set_vessel_state(Guid id, vesselstate state)
         {
-#if DEBUG
-            if (Debug_Level_2_Active)   Log.Info("entering  bool set_vessel_state(Guid id, vesselstate state) " + id.ToString() + " " + state.ToString() + " NO LEAVE ENTRY");
-#endif
+            Log.dbg("entering  bool set_vessel_state(Guid id, vesselstate state) {0} {1} NO LEAVE ENTRY", id, state);
+
             if (Vessel_State.ContainsKey(id))
             {
                 Vessel_State[id] = state;
@@ -1079,9 +940,7 @@ namespace FMRS
             }
             else
             {
-#if DEBUG
-                if (Debug_Active)  Log.Info("" + id.ToString() + " NOT IN Vessel_State");
-#endif
+                Log.dbg("{0} NOT IN Vessel_State", id);
                 return false;
             }
         }

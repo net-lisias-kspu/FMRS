@@ -88,15 +88,6 @@ namespace FMRS
         public bool _SETTING_Default_to_StageRecovery = true;
 #endif
 
-#if DEBUG
-        [GameParameters.CustomParameterUI("Debug mode (spams the log file")]
-        public  bool Debug_Active = true;
-        [GameParameters.CustomParameterUI("Debug mode 1 initial")]
-        public  bool Debug_Level_1_Active = true;
-        [GameParameters.CustomParameterUI("Debug mode 2 initial")]
-        public  bool Debug_Level_2_Active = true;
-#endif
-
 #if false
         public override void SetDifficultyPreset(GameParameters.Preset preset)
         {

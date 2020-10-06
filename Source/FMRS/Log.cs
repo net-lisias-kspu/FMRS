@@ -2,7 +2,6 @@
  * The MIT License (MIT)
  * 
  * Copyright (c) 2018-2020 LisiasT
- * Copyright (c) 2015 SIT89
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,147 +24,106 @@
 
 
 using System;
-using System.Collections;
+using KSPe.Util.Log;
 using System.Diagnostics;
-//using UnityEngine;
+
+#if DEBUG
+using System.Collections;
+using System.Collections.Generic;
+#endif
+
 namespace FMRS
 {
+	public static class Log
+	{
+		private static readonly Logger log = Logger.CreateForType<Startup>();
 
+		internal static void force(string msg, params object[] @params)
+		{
+			log.force(msg, @params);
+		}
 
-    public static class Log
-    {
-        public enum LEVEL
-        {
-            OFF = 0,
-            ERROR = 1,
-            WARNING = 2,
-            INFO = 3,
-            DETAIL = 4,
-            TRACE = 5
-        };
+		internal static void info(string msg, params object[] @params)
+		{
+			Log.info(msg, @params);
+		}
 
-        public static LEVEL level = LEVEL.INFO;
+		internal static void warn(string msg, params object[] @params)
+		{
+			log.warn(msg, @params);
+		}
 
-        private static readonly String PREFIX = "FMRS" + ": ";
+		internal static void detail(string msg, params object[] @params)
+		{
+			log.detail(msg, @params);
+		}
 
-        public static LEVEL GetLevel()
-        {
-            return level;
-        }
+		internal static void error(Exception e, object offended)
+		{
+			log.error(offended, e);
+		}
 
-        public static void SetLevel(LEVEL level)
-        {
-            UnityEngine.Debug.Log("log level " + level);
-            Log.level = level;
-        }
+		internal static void error(string msg, params object[] @params)
+		{
+			log.error(msg, @params);
+		}
 
-        public static LEVEL GetLogLevel()
-        {
-            return level;
-        }
+		[ConditionalAttribute("DEBUG")]
+		internal static void dbg(string msg, params object[] @params)
+		{
+			log.trace(msg, @params);
+		}
 
-        private static bool IsLevel(LEVEL level)
-        {
-            return level == Log.level;
-        }
-
-        public static bool IsLogable(LEVEL level)
-        {
-            return level <= Log.level;
-        }
-
-        public static void Trace(String msg)
-        {
-            if (IsLogable(LEVEL.TRACE))
-            {
-                UnityEngine.Debug.Log(PREFIX + msg);
-            }
-        }
-
-        public static void Detail(String msg)
-        {
-            if (IsLogable(LEVEL.DETAIL))
-            {
-                UnityEngine.Debug.Log(PREFIX + msg);
-            }
-        }
-
-        [ConditionalAttribute("DEBUG")]
-        public static void Info(String msg)
-        {
-            if (IsLogable(LEVEL.INFO))
-            {
-                UnityEngine.Debug.Log(PREFIX + msg);
-            }
-        }
-
-        [ConditionalAttribute("DEBUG")]
-        public static void Test(String msg)
-        {
-            //if (IsLogable(LEVEL.INFO))
-            {
-                UnityEngine.Debug.LogWarning(PREFIX + "TEST:" + msg);
-            }
-        }
-
-        static Stack funcStack = new Stack();
-
-        [ConditionalAttribute("DEBUG")]
-        public static void PushStackInfo(string funcName, string msg)
-        {
-            funcStack.Push(funcName);
 #if DEBUG
-            if (FMRS_Util.Debug_Level_1_Active)
+		private static readonly HashSet<string> DBG_SET = new HashSet<string>();
+		static Stack funcStack = new Stack();
 #endif
-                Log.Info(msg);
-        }
 
-        [ConditionalAttribute("DEBUG")]
-        public static void PopStackInfo(string msg)
-        {
-            if (funcStack.Count > 0)
-            {
-                string f = (string)funcStack.Pop();
-            }
-            else
-                Log.Info("Pop failed, no values on stack");
+		[ConditionalAttribute("DEBUG")]
+		internal static void dbgOnce(string msg, params object[] @params)
+		{
+			string new_msg = string.Format(msg, @params);
 #if DEBUG
-            if (FMRS_Util.Debug_Level_1_Active)
+			if (DBG_SET.Contains(new_msg)) return;
+			DBG_SET.Add(new_msg);
 #endif
-                Log.Info(msg);
-        }
-        [ConditionalAttribute("DEBUG")]
-        public static void ShowStackInfo()
-        {
-            int cnt = 0;
-            Log.Info("Stack size: " + funcStack.Count.ToString());
-            foreach(var obj in funcStack)
-            {
-                Log.Info("Stack["+ cnt.ToString() + "] = " + (string)obj);
-                cnt++;
-            }
-        }
+			log.trace(new_msg);
+		}
 
-        public static void Warning(String msg)
-        {
-            if (IsLogable(LEVEL.WARNING))
-            {
-                UnityEngine.Debug.LogWarning(PREFIX + msg);
-            }
-        }
+		[ConditionalAttribute("DEBUG")]
+		public static void ShowStackInfo()
+		{
+#if DEBUG
+			int cnt = 0;
+			Log.detail("Stack size: {0}", funcStack.Count);
+			foreach(var obj in funcStack)
+			{
+				Log.detail("Stack[{0}] = {1}", cnt, obj);
+				cnt++;
+			}
+#endif
+		}
 
-        public static void Error(String msg)
-        {
-            if (IsLogable(LEVEL.ERROR))
-            {
-                UnityEngine.Debug.LogError(PREFIX + msg);
-            }
-        }
+		[ConditionalAttribute("DEBUG")]
+		public static void PushStackInfo(string funcName, string msg, params object[] @params)
+		{
+#if DEBUG
+			funcStack.Push(funcName);
+#endif
+			Log.detail(msg, @params);
+		}
 
-        public static void Exception(Exception e)
-        {
-            Log.Error("exception caught: " + e.GetType() + ": " + e.Message);
-        }
-
-    }
+		public static void PopStackInfo(string msg)
+		{
+#if DEBUG
+			if (funcStack.Count > 0)
+			{
+				string f = (string)funcStack.Pop();
+			}
+			else
+				Log.warn("Pop failed, no values on stack");
+#endif
+			Log.detail(msg);
+		}
+	}
 }
