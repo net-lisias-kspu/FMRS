@@ -32,6 +32,8 @@ using UnityEngine;
 
 using Contracts;
 
+using File = KSPe.IO.File<FMRS.Startup>;
+
 namespace FMRS
 {
     public partial class FMRS_Core : FMRS_Util, IFMRS
@@ -95,7 +97,8 @@ namespace FMRS
         {
             Log.PushStackInfo("FMRS_Core.FMRS_core_awake", "entering FMRS_core_awake()");
 
-			if (!System.IO.Directory.Exists(FILES.SETTINGS_FOLDER)) System.IO.Directory.CreateDirectory(FILES.SETTINGS_FOLDER);
+            Log.force("FMRS CODE AWAKE {0}", FILES.SETTINGS_FOLDER);
+            if (!System.IO.Directory.Exists(FILES.SETTINGS_FOLDER)) System.IO.Directory.CreateDirectory(FILES.SETTINGS_FOLDER);
 			init_Save_File_Content();
             load_save_file();
 
@@ -387,9 +390,12 @@ namespace FMRS
             Log.PushStackInfo("FMRS_Core.toolbar_open", "enter toolbar_open()");
             Log.dbg("enable plugin form toolbar");
 
-            stockTexture = "FMRS/icons/tb_st_en";
-            blizzyTexture = "FMRS/icons/tb_blz_en";
-            FMRS.toolbarControl.SetTexture(stockTexture, blizzyTexture);
+            stockTexture = "tb_st_en";
+            blizzyTexture = "tb_blz_en";
+            FMRS.toolbarControl.SetTexture(
+                    File.Asset.Solve("icons", stockTexture),
+                    File.Asset.Solve("icons", blizzyTexture)
+                );
             Log.info("SetTexture 2, stockTexture: {0},   blizzyTexture {1}", stockTexture, blizzyTexture);
 
             _SETTING_Enabled = true;
@@ -438,7 +444,10 @@ namespace FMRS
             really_close = false;
             _SAVE_Flight_Reset = false;
 
-            FMRS.toolbarControl.SetTexture(stockTexture, blizzyTexture);
+            FMRS.toolbarControl.SetTexture(
+                    File.Asset.Solve("icons", stockTexture),
+                    File.Asset.Solve("icons", blizzyTexture)
+                );
 
             if (_SAVE_Has_Launched && _SAVE_Switched_To_Dropped)
                 jump_to_vessel("Main");

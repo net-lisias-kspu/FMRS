@@ -31,16 +31,18 @@ using UnityEngine;
 
 using KSP.UI.Screens;
 
+using Asset = KSPe.IO.Asset<FMRS.Startup>;
+using File = KSPe.IO.File<FMRS.Startup>;
 using ToolbarControl_NS;
 
 namespace FMRS
 {
 	public static class FILES
 	{
-		public static readonly string SETTINGS_FOLDER   = System.IO.Path.Combine(KSPUtil.ApplicationRootPath, "PluginData/FMRS");
-		public static readonly string SAVE_TXT          = System.IO.Path.Combine(SETTINGS_FOLDER, "save.txt");
-		public static readonly string RECOVER_TXT       = System.IO.Path.Combine(SETTINGS_FOLDER, "recover.txt");
-		public static readonly string RECORD_TXT        = System.IO.Path.Combine(SETTINGS_FOLDER, "record.txt");
+		public static readonly string SETTINGS_FOLDER   = System.IO.Path.GetFullPath(File.Data.Solve(".")); // Something in need to be revised on KSPe...
+		public static readonly string SAVE_TXT          = File.Data.Solve("save.txt");
+		public static readonly string RECOVER_TXT       = File.Data.Solve("recover.txt");
+		public static readonly string RECORD_TXT        = File.Data.Solve("record.txt");
 
 		public const string GAMESAVE_NAME = "FMRS_save_";
 	}
@@ -71,15 +73,11 @@ namespace FMRS
             //stb_texture.LoadImage(System.IO.File.ReadAllBytes(Path.Combine(KSPUtil.ApplicationRootPath, "GameData/FMRS/icons/tb_st_di.png")));
 
             //stb_texture = GameDatabase.Instance.GetTexture("FMRS/icons/tb_st_di", false);
-            stockTexture = "FMRS/icons/tb_st_di";
-            blizzyTexture = "FMRS/icons/tb_blz_di";
+            stockTexture = "tb_st_di";
+            blizzyTexture = "tb_blz_di";
 
-            upArrow = new Texture2D(2,2, TextureFormat.ARGB32, false);
-            ToolbarControl.LoadImageFromFile(ref upArrow, "FMRS/Icons/up"); //   GameDatabase.Instance.GetTexture("FMRS/Icons/up", false);
-
-            downArrow = new Texture2D(2, 2, TextureFormat.ARGB32, false);
-            ToolbarControl.LoadImageFromFile(ref upArrow, "FMRS/Icons/down");
-            //downArrow = GameDatabase.Instance.GetTexture("FMRS/Icons/down", false);
+            upArrow   = Asset.Texture2D.LoadFromFile(2, 2, false, "icons", "up");   // GameDatabase.Instance.GetTexture("FMRS/Icons/up", false);
+            downArrow = Asset.Texture2D.LoadFromFile(2, 2, false, "icons", "down"); // GameDatabase.Instance.GetTexture("FMRS/Icons/down", false);
 
             upContent = new GUIContent("", upArrow, "");
             downContent = new GUIContent("", downArrow, "");
@@ -119,17 +117,20 @@ namespace FMRS
             {
                 flight_scene_start_routine();
                 //stb_texture = GameDatabase.Instance.GetTexture("FMRS/icons/tb_st_en", false);                             
-                stockTexture = "FMRS/icons/tb_st_en";
-                blizzyTexture = "FMRS/icons/tb_blz_en";
+                stockTexture = "tb_st_en";
+                blizzyTexture = "tb_blz_en";
             }
             else
             {
-                stockTexture = "FMRS/icons/tb_st_di";
-                blizzyTexture = "FMRS/icons/tb_blz_di";
+                stockTexture = "tb_st_di";
+                blizzyTexture = "tb_blz_di";
             }
             Log.info("SetTexture 1, stockTexture: {0},   blizzyTexture: {1}", stockTexture, blizzyTexture);
              if (toolbarControl != null)
-                toolbarControl.SetTexture(stockTexture, blizzyTexture);
+                toolbarControl.SetTexture(
+                    File.Asset.Solve("icons", stockTexture),
+                    File.Asset.Solve("icons", blizzyTexture)
+                );
 #if DEBUG
            // if (Debug_Level_1_Active)
                 Log.PopStackInfo("leaving FMRS.Start ()");
@@ -205,8 +206,8 @@ namespace FMRS
                 ApplicationLauncher.AppScenes.FLIGHT | ApplicationLauncher.AppScenes.MAPVIEW,
                 MODID,
                 "fmrsButton",
-                "FMRS/icons/tb_st_di",
-                "FMRS/icons/tb_blz_di",
+                File.Asset.Solve("icons", "tb_st_di"),
+                File.Asset.Solve("icons", "tb_blz_di"),
                 MODNAME
             );
 
@@ -244,10 +245,10 @@ namespace FMRS
 /*************************************************************************************************************************/
         void Awake()
         {
+            Log.dbg("FMRS_Space_Center On Awake");
+
             FMRS_core_awake();
             _SAVE_SaveFolder = HighLogic.SaveFolder;
-
-            Log.dbg("FMRS_Space_Center On Awake");
 
             ReloadSettings();
         }
