@@ -1,3 +1,5 @@
+ChangeLog
+
 1.2.0.0
 		Initial LinuxGuruGamer release for 1.2.2
 		Added additional parachutes in addition to the RealChutes
@@ -100,4 +102,21 @@
 1.2.7.2
 	Thanks to @whale2 for this:
 		Added onUndock to the list of separation events
-	Added new setting to control whether the undock events should be seen as seperation events
+	Added new setting to control whether the undock events should be seen as seperation events, defaults to false
+
+1.2.7.3
+	Version bump for 1.5 rebuild
+
+1.2.8
+	Version bump for 1.7.2
+	Updated AssemblyVersion.tt
+	Deleted old disabled code
+
+1.2.8.1
+	Added InstallChecker
+
+1.2.9
+	Updated for KSP 1.8
+
+1.2.9.1
+	Fixed initialization of vars needed due to Unity upgrade for KSP 1.8

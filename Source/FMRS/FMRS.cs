@@ -86,14 +86,7 @@ namespace FMRS
             upContent = new GUIContent("", upArrow, "");
             downContent = new GUIContent("", downArrow, "");
             buttonContent = downContent;
-#if false
-            //if (Stock_Toolbar_Button != null)
-            //    Stock_Toolbar_Button.SetTexture(stb_texture);
 
-
-            GameEvents.onGUIApplicationLauncherReady.Add(add_toolbar_button);
-            GameEvents.onGUIApplicationLauncherUnreadifying.Add(remove_toolbar_button);
-#endif
             add_toolbar_button();
             //if (ApplicationLauncher.Ready == true)
             //{
@@ -129,23 +122,7 @@ namespace FMRS
                 _SETTING_Enabled = true;
                 GameEvents.onLaunch.Add(launch_routine);
             }
-#if false
-            if (ToolbarManager.ToolbarAvailable)
-            {
-                Toolbar_Button = ToolbarManager.Instance.add("FMRS", "FMRSbutton");
 
-                blz_toolbar_available = true;
-
-                if (_SETTING_Enabled)
-                    Toolbar_Button.TexturePath = "FMRS/icons/tb_blz_en";
-                else
-                    Toolbar_Button.TexturePath = "FMRS/icons/tb_blz_di";
-
-                Toolbar_Button.ToolTip = "Flight Manager for Reusable Stages";
-                Toolbar_Button.Visibility = new GameScenesVisibility(GameScenes.FLIGHT);
-                Toolbar_Button.OnClick += (e) => toolbar_button_clicked();
-            }
-#endif
             if (_SETTING_Enabled)
             {
                 flight_scene_start_routine();
@@ -225,13 +202,7 @@ namespace FMRS
                 Log.PushStackInfo("FMRS.OnDestroy", "enter OnDestroy()");
 #endif
             destroy_FMRS();
-#if false
-            if (ToolbarManager.ToolbarAvailable)
-                Toolbar_Button.Destroy();
 
-            GameEvents.onGUIApplicationLauncherReady.Remove(add_toolbar_button);
-            GameEvents.onGUIApplicationLauncherUnreadifying.Remove(remove_toolbar_button);
-#endif
             remove_toolbar_button();
 
             //RenderingManager.RemoveFromPostDrawQueue(3, new Callback(drawGUI));
@@ -245,14 +216,6 @@ namespace FMRS
         /*************************************************************************************************************************/
         public void add_toolbar_button()
         {
-#if false
-            Stock_Toolbar_Button = ApplicationLauncher.Instance.AddModApplication(
-                toolbar_button_clicked,
-                toolbar_button_clicked,
-                null, null, null, null,
-                ApplicationLauncher.AppScenes.FLIGHT | ApplicationLauncher.AppScenes.MAPVIEW,
-                stb_texture);
-#endif
             toolbarControl = gameObject.AddComponent<ToolbarControl>();
             toolbarControl.AddToAllToolbars(toolbar_button_clicked, toolbar_button_clicked,
                 ApplicationLauncher.AppScenes.FLIGHT | ApplicationLauncher.AppScenes.MAPVIEW,
@@ -267,9 +230,6 @@ namespace FMRS
 
         public void remove_toolbar_button()
         {
-#if false
-            ApplicationLauncher.Instance.RemoveModApplication(Stock_Toolbar_Button);
-#endif
             toolbarControl.OnDestroy();
             Destroy(toolbarControl);
         }
