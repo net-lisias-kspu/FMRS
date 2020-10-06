@@ -163,17 +163,17 @@ namespace FMRS
         public enum save_cat : int { SETTING = 1, SAVE, SAVEFILE, SUBSAVEFILE, DROPPED, NAME, STATE, KERBAL_DROPPED, UNDEF };
         public enum vesselstate : int {NONE = 1, FLY, LANDED, DESTROYED, RECOVERED }
 
-        public List<Guid> Vessels = new List<Guid>();
-        public Dictionary<Guid, string> Vessels_dropped = new Dictionary<Guid, string>();
-        public Dictionary<Guid, string> Vessels_dropped_names = new Dictionary<Guid, string>();
-        public Dictionary<Guid, string> Vessel_sub_save = new Dictionary<Guid, string>();
-        public Dictionary<Guid, vesselstate> Vessel_State = new Dictionary<Guid, vesselstate>();
-        public Dictionary<String, Guid> Kerbal_dropped = new Dictionary<string, Guid>();
-        public List<recover_value> recover_values = new List<recover_value>();
+        public readonly List<Guid> Vessels = new List<Guid>();
+        public readonly Dictionary<Guid, string> Vessels_dropped = new Dictionary<Guid, string>();
+        public readonly Dictionary<Guid, string> Vessels_dropped_names = new Dictionary<Guid, string>();
+        public readonly Dictionary<Guid, string> Vessel_sub_save = new Dictionary<Guid, string>();
+        public readonly Dictionary<Guid, vesselstate> Vessel_State = new Dictionary<Guid, vesselstate>();
+        public readonly Dictionary<String, Guid> Kerbal_dropped = new Dictionary<string, Guid>();
+        public readonly List<recover_value> recover_values = new List<recover_value>();
 
         public bool bflush_save_file = false;
         
-        public Dictionary<save_cat, Dictionary<string, string>> Save_File_Content = new Dictionary<save_cat, Dictionary<string, string>>();
+        public readonly Dictionary<save_cat, Dictionary<string, string>> Save_File_Content = new Dictionary<save_cat, Dictionary<string, string>>();
         public Rect windowPos;
         public Guid _SAVE_Main_Vessel;
         public string _SAVE_Switched_To_Savefile, _SAVE_SaveFolder;
@@ -840,33 +840,11 @@ namespace FMRS
 /*************************************************************************************************************************/
         public void init_Save_File_Content()
         {
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS_Util.init_Save_File_Content", "entering init_Save_File_Content()");
-#endif
-            if (!Save_File_Content.ContainsKey(save_cat.SETTING))
-                Save_File_Content.Add(save_cat.SETTING, new Dictionary<string, string>());
+            Log.PushStackInfo("FMRS_Util.init_Save_File_Content", "entering init_Save_File_Content()");
 
-            if (!Save_File_Content.ContainsKey(save_cat.SAVE))
-                Save_File_Content.Add(save_cat.SAVE, new Dictionary<string, string>());
-
-            if (!Save_File_Content.ContainsKey(save_cat.SAVEFILE))
-                Save_File_Content.Add(save_cat.SAVEFILE, new Dictionary<string, string>());
-
-            if (!Save_File_Content.ContainsKey(save_cat.SUBSAVEFILE))
-                Save_File_Content.Add(save_cat.SUBSAVEFILE, new Dictionary<string, string>());
-
-            if (!Save_File_Content.ContainsKey(save_cat.DROPPED))
-                Save_File_Content.Add(save_cat.DROPPED, new Dictionary<string, string>());
-
-            if (!Save_File_Content.ContainsKey(save_cat.NAME))
-                Save_File_Content.Add(save_cat.NAME, new Dictionary<string, string>());
-
-            if (!Save_File_Content.ContainsKey(save_cat.STATE))
-                Save_File_Content.Add(save_cat.STATE, new Dictionary<string, string>());
-
-            if (!Save_File_Content.ContainsKey(save_cat.KERBAL_DROPPED))
-                Save_File_Content.Add(save_cat.KERBAL_DROPPED, new Dictionary<string, string>());
+            foreach (save_cat sc in (save_cat[]) Enum.GetValues(typeof(save_cat)))
+                if (!Save_File_Content.ContainsKey(sc))
+                    Save_File_Content.Add(sc, new Dictionary<string, string>());
 
             Log.PopStackInfo("leaving init_Save_File_Content()");
         }
