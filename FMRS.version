@@ -1,5 +1,5 @@
 {
-	"NAME"		: "FMRS (Flight Manager For Reusable Stages) Unofficial",
+	"NAME"		: "Flight Manager For Reusable Stages (FMRS) /L Unofficial",
 	"URL"		: "https://raw.githubusercontent.com/net-lisias-kspu/FMRS/master/FMRS.version",
 	"DOWNLOAD"	: "https://github.com/net-lisias-kspu/FMRS/releases",
 	"CHANGE_LOG"	: "https://raw.githubusercontent.com/net-lisias-kspu/FMRS/master/CHANGE_LOG.md",
@@ -7,21 +7,12 @@
 	"VERSION":{
 		"MAJOR":1,
 		"MINOR":2,
-		"PATCH":7,
-		"BUILD":3
-		},
-	"KSP_VERSION":{
-		"MAJOR":1,
-		"MINOR":4
+		"PATCH":9,
+		"BUILD":2
 		},
 	"KSP_VERSION_MIN":{
 		"MAJOR":1,
 		"MINOR":4,
-		"PATCH":1
-		},
-	"KSP_VERSION_MAX":{
-		"MAJOR":1,
-		"MINOR":4,
-		"PATCH":99
+		"PATCH":0
 		}
 }
