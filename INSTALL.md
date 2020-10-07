@@ -47,5 +47,5 @@ The following file layout must be present after installation:
 * [KSP API Extensions/L](https://github.com/net-lisias-ksp/KSPAPIExtensions)
 	+ **Not Included** 
 * [Toolbar Controller](https://github.com/net-lisias-kspu/ToolbarControl)
-	+ **Not Included**
 	+ It should work also with the Forum's [Official version](https://forum.kerbalspaceprogram.com/index.php?/topic/169509-*). Drop me a note if you find any problem. 
+	+ **Not Included**
