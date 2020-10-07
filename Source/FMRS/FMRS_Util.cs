@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using IO = System.IO;
+using Registry = FMRS.Registry;
 
 namespace FMRS
 {
@@ -173,7 +174,6 @@ namespace FMRS
 
         public bool bflush_save_file = false;
         
-        public readonly Dictionary<save_cat, Dictionary<string, string>> Save_File_Content = new Dictionary<save_cat, Dictionary<string, string>>();
         public Rect windowPos;
         public Guid _SAVE_Main_Vessel;
         public string _SAVE_Switched_To_Savefile, _SAVE_SaveFolder;
@@ -191,44 +191,10 @@ namespace FMRS
 
         public void set_save_value(save_cat cat, string key, string value)
         {
-            Log.detail("entering set_save_value(int cat, string key, string value)");
+            Log.detail("entering set_save_value(int cat, string key, string value) {0}, {1}, {2}", cat, key, value);
 
-            if (Save_File_Content[cat].ContainsKey(key))
-            {
-                Log.dbg("ContainsKey {0}, {1}, {2}", cat, key, value);
-                Save_File_Content[cat][key] = value;
-            }
-            else
-            {
-                Log.dbg("!ContainsKey {0}, {1}, {2}", cat, key, value);
-                Log.dbg("Save_File_Content[{0}] check = {1}", cat, Save_File_Content.ContainsKey(cat));
+            Registry.SaveFileContent.Instance.Set(cat, key, value);
 
-                /*
-                 * Believe it of not, the line ahead was crashing KSP **on the spot!**
-                 * 
-                 * Behaviour detected on KSP 1.3.1 (Mono 3.5, Unity5). Same for KSP 1.2.2.
-                 * 
-                 * On KSP 1.4 (Mono 3.5, Unity 2017) things work fine!
-                 * 
-                 * I tried many different solutions, but all I managed to do is to delay the crash to the next occurence of
-                 * the Dictionary access. It's not a concurrency problem, I refactored all the access to the Save_File_Content
-                 * and protected them on a critical section, no dice.
-                 * 
-                 * This code is here since commmit 826baad (2014-0812), we are talking KSP V0.90 or older here. This could not pass unoticed
-                 * all these years, the damn thing is crashing my KSP on Awake (on Main Menu), God Damnit!
-                 * 
-                 * I don't have the slightest idea about what's happening, but it appears to be Unity5 related and I'm guessing it's something
-                 * related to me using a MacOS machine for development (could not think on any other reason, and on Unity2017 I can't compile
-                 * against the KSP/MAC Managed DLLs or the thing will not work on Windows, while by compiling using the Windows DLLs the damned thing runs
-                 * on everything, including Macs.
-                 * 
-                 * In a way or another, I'm dropping KSP 1.3.1 for while.
-                 */
-                Save_File_Content[cat].Add(key, value);
-
-            }
-
-            Log.info("set_save_value: {0} = {1}", key, value);
             Log.detail("leaving set_save_value(int cat, string key, string value)");
         }
 
@@ -238,10 +204,7 @@ namespace FMRS
         {
             Log.dbg("entering get_save_value(int cat, string key) #### FMRS: NO LEAVE MESSAGE");
 
-            if (Save_File_Content[cat].ContainsKey(key))
-                return (Save_File_Content[cat][key]);
-            else
-                return (false.ToString());
+            return Registry.SaveFileContent.Instance.Get(cat, key);
         }
 
 
@@ -274,13 +237,7 @@ namespace FMRS
             file.Flush();
             file.Close();
             file = IO.File.CreateText(FILES.SAVE_TXT);
-            foreach (KeyValuePair<save_cat, Dictionary<string, string>> save_cat_block in Save_File_Content)
-            {
-                foreach (KeyValuePair<string, string> writevalue in save_cat_block.Value)
-                {
-                   file.WriteLine(save_cat_toString(save_cat_block.Key) + "=" + writevalue.Key + "=" + writevalue.Value);
-                }
-            }
+            Registry.SaveFileContent.Instance.DumpTo(file);
             file.Close();
 
             Log.dbg("Save File written in private void write_save_values_to_file()");
@@ -295,9 +252,9 @@ namespace FMRS
 
             Log.PushStackInfo("FMRS_Util.write_vessel_dict_to_Save_File_Content", "entering write_vessel_dict_to_Save_File_Content()");
 
-            Save_File_Content[save_cat.DROPPED].Clear();
-            Save_File_Content[save_cat.NAME].Clear();
-            Save_File_Content[save_cat.STATE].Clear();
+            Registry.SaveFileContent.Instance.Clear(save_cat.DROPPED);
+            Registry.SaveFileContent.Instance.Clear(save_cat.NAME);
+            Registry.SaveFileContent.Instance.Clear(save_cat.STATE);
             
             foreach (KeyValuePair<Guid, string> write_keyvalue in Vessels_dropped)
             {
@@ -415,8 +372,7 @@ namespace FMRS
             }
             file.Close();
 
-            foreach (KeyValuePair<save_cat, Dictionary<string, string>> content in Save_File_Content)
-                Save_File_Content[content.Key].Clear();
+            Registry.SaveFileContent.Instance.Clear();
 
             bflush_save_file = false;
             init_save_file();
@@ -437,8 +393,7 @@ namespace FMRS
             Log.PushStackInfo("FMRS_Util.read_save_file", "enter read_save_file()");
 			Log.dbg("read save file");
 
-            foreach(KeyValuePair<save_cat,Dictionary<string,string>> content in Save_File_Content)
-                Save_File_Content[content.Key].Clear();
+            Registry.SaveFileContent.Instance.Clear();
 
 			string[] lines = IO.File.ReadAllLines(FILES.SAVE_TXT);
 
@@ -451,7 +406,7 @@ namespace FMRS
 
                     try
                     {
-                        Save_File_Content[temp_cat].Add(line[1].Trim(), line[2].Trim());
+                        Registry.SaveFileContent.Instance.Set(temp_cat, line[1].Trim(), line[2].Trim());
                     }
                     catch (Exception)
                     {
@@ -482,11 +437,8 @@ namespace FMRS
                 Log.info("invalid save file, flush save file");
                 bflush_save_file = true;
             }
-#if DEBUG
-            foreach (KeyValuePair<save_cat, Dictionary<string, string>> temp_keyvalue in Save_File_Content)
-                foreach (KeyValuePair<string, string> readvalue in temp_keyvalue.Value)
-                    Log.info("{0} = {1} = {2}" + temp_keyvalue.Key, readvalue.Key, readvalue.Value);
-#endif
+
+            Registry.SaveFileContent.Instance.DumpToLog();
 
             if (bflush_save_file)
                 return;
@@ -534,8 +486,7 @@ namespace FMRS
             Log.PushStackInfo("FMRS_Util.init_save_file", "enter init_save_file()");
             Log.dbg("init save file");
 
-            foreach (KeyValuePair<save_cat, Dictionary<string, string>> content in Save_File_Content)
-                Save_File_Content[content.Key].Clear();
+            Registry.SaveFileContent.Instance.Clear();
 
             set_save_value(save_cat.SETTING, "Window_X", Convert.ToInt32(windowPos.x).ToString());
             set_save_value(save_cat.SETTING, "Window_Y", Convert.ToInt32(windowPos.y).ToString());
@@ -558,10 +509,7 @@ namespace FMRS
             set_save_value(save_cat.SAVE, "SaveFolder", HighLogic.SaveFolder);
 
             IO.TextWriter file = IO.File.CreateText(FILES.SAVE_TXT);
-
-            foreach (KeyValuePair<save_cat, Dictionary<string, string>> writecat in Save_File_Content)
-                foreach (KeyValuePair<string, string> writevalue in writecat.Value)
-                    file.WriteLine(writecat.Key.ToString() + "=" + writevalue.Key + "=" + writevalue.Value);
+            Registry.SaveFileContent.Instance.DumpTo(file);
 
             file.Close();
 #if DEBUG
@@ -600,48 +548,41 @@ namespace FMRS
 /*************************************************************************************************************************/
         public void get_dropped_vessels()
         {
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS_Util.get_dropped_vessels", "entering get_dropped_vessels()");
-#endif
+            Log.PushStackInfo("FMRS_Util.get_dropped_vessels", "entering get_dropped_vessels()");
 
-            foreach (KeyValuePair<save_cat, Dictionary<string, string>> savecat in Save_File_Content)
-            {
-                if (savecat.Key == save_cat.DROPPED)
-                    foreach(KeyValuePair<string,string> save_value in savecat.Value)
+            foreach (save_cat savecat in (save_cat[]) Enum.GetValues(typeof(save_cat)))
+                foreach (KeyValuePair<string, string> save_value in Registry.SaveFileContent.Instance.Get(savecat))
+                {
+                    if (savecat == save_cat.DROPPED)
                     {
                         Vessels_dropped.Add(new Guid(save_value.Key), save_value.Value);
                         Log.dbg(" #### FMRS: {0} set to {1} in Vessels_dropped", save_value.Key, save_value.Value);
                     }
 
-                if (savecat.Key == save_cat.NAME)
-                    foreach (KeyValuePair<string, string> save_value in savecat.Value)
+                    if (savecat == save_cat.NAME)
                     {
                         Vessels_dropped_names.Add(new Guid(save_value.Key), save_value.Value);
                         Log.dbg(" #### FMRS: {0} set to {1} in Vessels_dropped_names", save_value.Key, save_value.Value);
                     }
 
-                if (savecat.Key == save_cat.STATE)
-                    foreach (KeyValuePair<string, string> save_value in savecat.Value)
+                    if (savecat == save_cat.STATE)
                     {
                         Vessel_State.Add(new Guid(save_value.Key), parse_vesselstate(save_value.Value));
                         Log.dbg(" #### FMRS: {0} set to {1} in Vessels_dropped_landed", save_value.Key, save_value.Value);
                     }
 
-                if (savecat.Key == save_cat.SUBSAVEFILE)
-                    foreach (KeyValuePair<string, string> save_value in savecat.Value)
+                    if (savecat == save_cat.SUBSAVEFILE)
                     {
                         Vessel_sub_save.Add(new Guid(save_value.Key), save_value.Value);
                         Log.dbg(" #### FMRS: {0} set to {1} in Vessel_sub_save", save_value.Key, save_value.Value);
                     }
 
-                if (savecat.Key == save_cat.KERBAL_DROPPED)
-                    foreach (KeyValuePair<string, string> save_value in savecat.Value)
+                    if (savecat == save_cat.KERBAL_DROPPED)
                     {
                         Kerbal_dropped.Add(save_value.Key, new Guid(save_value.Value));
                         Log.dbg(" #### FMRS: {0} set to {1} in Kerbal_dropped", save_value.Key, save_value.Value);
                     }
-            }
+                }
 
             Log.PopStackInfo("leaving get_dropped_vessels()");
         }
@@ -783,36 +724,6 @@ namespace FMRS
 
 
 /*************************************************************************************************************************/
-        public string save_cat_toString(save_cat cat)
-        {
-            Log.dbg("enter string save_cat_toString(save_cat cat) {0} NO LEAVE MESSAGE", cat);
-
-            switch (cat)
-            {
-                case save_cat.SETTING:
-                    return "SETTING";
-                case save_cat.SAVE:
-                    return "SAVE";
-                case save_cat.SAVEFILE:
-                    return "SAVEFILE";
-                case save_cat.SUBSAVEFILE:
-                    return "SUBSAVEFILE";
-                case save_cat.DROPPED:
-                    return "VESSEL_DROPPED";
-                case save_cat.NAME:
-                    return "VESSEL_NAME";
-                case save_cat.STATE:
-                    return "VESSEL_STATE";
-                case save_cat.KERBAL_DROPPED:
-                    return "KERBAL_DROPPED";
-
-                default:
-                    return "UNDEF";
-            }
-        }
-
-        
-/*************************************************************************************************************************/
         public void delete_dropped_vessels()
         {
             List<string> temp_list = new List<string>();
@@ -824,7 +735,7 @@ namespace FMRS
             Vessel_State.Clear();
             Vessel_sub_save.Clear();
             Kerbal_dropped.Clear();
-            Save_File_Content[save_cat.SAVEFILE].Clear();
+            Registry.SaveFileContent.Instance.Clear(save_cat.SAVEFILE);
 
             write_save_values_to_file();
 
@@ -868,9 +779,7 @@ namespace FMRS
         {
             Log.PushStackInfo("FMRS_Util.init_Save_File_Content", "entering init_Save_File_Content()");
 
-            foreach (save_cat sc in (save_cat[]) Enum.GetValues(typeof(save_cat)))
-                if (!Save_File_Content.ContainsKey(sc))
-                    Save_File_Content.Add(sc, new Dictionary<string, string>());
+            Registry.SaveFileContent.Instance.Init();
 
             Log.PopStackInfo("leaving init_Save_File_Content()");
         }

@@ -71,6 +71,7 @@
       <DependentUpon>Version.tt</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
+    <Compile Include="Registry\SaveFileContent.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="icons\tb_blz_di.png">
@@ -112,6 +113,9 @@
     <Reference Include="ToolbarControl">
       <HintPath>..\..\..\..\..\..\LIB\plugins\ToolbarControl.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Registry\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
