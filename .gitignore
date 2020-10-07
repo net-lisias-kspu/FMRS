@@ -1,4 +1,6 @@
-.vs
-bin
-FMRS
+/bin
+**/obj
+/*.user
 GameData
+.vs
+Source
