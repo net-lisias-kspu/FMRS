@@ -71,6 +71,7 @@
       <DependentUpon>Version.tt</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
+    <Compile Include="ModuleManagerSupport.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="icons\tb_blz_di.png">
