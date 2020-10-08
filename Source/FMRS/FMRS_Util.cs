@@ -203,28 +203,6 @@ namespace FMRS
             {
                 Log.dbg("!ContainsKey {0}, {1}, {2}", cat, key, value);
                 Log.dbg("Save_File_Content[{0}] check = {1}", cat, Save_File_Content.ContainsKey(cat));
-
-                /*
-                 * Believe it of not, the line ahead was crashing KSP **on the spot!**
-                 * 
-                 * Behaviour detected on KSP 1.3.1 (Mono 3.5, Unity5). Same for KSP 1.2.2.
-                 * 
-                 * On KSP 1.4 (Mono 3.5, Unity 2017) things work fine!
-                 * 
-                 * I tried many different solutions, but all I managed to do is to delay the crash to the next occurence of
-                 * the Dictionary access. It's not a concurrency problem, I refactored all the access to the Save_File_Content
-                 * and protected them on a critical section, no dice.
-                 * 
-                 * This code is here since commmit 826baad (2014-0812), we are talking KSP V0.90 or older here. This could not pass unoticed
-                 * all these years, the damn thing is crashing my KSP on Awake (on Main Menu), God Damnit!
-                 * 
-                 * I don't have the slightest idea about what's happening, but it appears to be Unity5 related and I'm guessing it's something
-                 * related to me using a MacOS machine for development (could not think on any other reason, and on Unity2017 I can't compile
-                 * against the KSP/MAC Managed DLLs or the thing will not work on Windows, while by compiling using the Windows DLLs the damned thing runs
-                 * on everything, including Macs.
-                 * 
-                 * In a way or another, I'm dropping KSP 1.3.1 for while.
-                 */
                 Save_File_Content[cat].Add(key, value);
 
             }

@@ -36,42 +36,70 @@ namespace FMRS
 {
 	public static class Log
 	{
+#if UNITY2019
 		private static readonly Logger log = Logger.CreateForType<Startup>();
-
+#endif
 		internal static void force(string msg, params object[] @params)
 		{
+#if UNITY2019
 			log.force(msg, @params);
+#else
+			if (null != @params && @params.Length > 0) UnityEngine.Debug.LogFormat("[FMRS] "+msg, @params);
+			else UnityEngine.Debug.Log("[FMRS] "+msg);
+#endif
 		}
 
+		[ConditionalAttribute("DEBUG")]
 		internal static void info(string msg, params object[] @params)
 		{
+#if UNITY2019
 			Log.info(msg, @params);
+#endif
 		}
 
+		[ConditionalAttribute("DEBUG")]
 		internal static void warn(string msg, params object[] @params)
 		{
+#if UNITY2019
 			log.warn(msg, @params);
+#endif
 		}
 
+		[ConditionalAttribute("DEBUG")]
 		internal static void detail(string msg, params object[] @params)
 		{
+#if UNITY2019
 			log.detail(msg, @params);
+#endif
 		}
 
+		[ConditionalAttribute("DEBUG")]
 		internal static void error(Exception e, object offended)
 		{
+#if UNITY2019
 			log.error(offended, e);
+#else
+			UnityEngine.Debug.LogException(e);
+#endif
 		}
 
+		[ConditionalAttribute("DEBUG")]
 		internal static void error(string msg, params object[] @params)
 		{
+#if UNITY2019
 			log.error(msg, @params);
+#else
+			if (null != @params && @params.Length > 0) UnityEngine.Debug.LogErrorFormat(msg, @params);
+			else UnityEngine.Debug.LogError(msg);
+#endif
 		}
 
 		[ConditionalAttribute("DEBUG")]
 		internal static void dbg(string msg, params object[] @params)
 		{
+#if UNITY2019
 			log.trace(msg, @params);
+#endif
 		}
 
 #if DEBUG
@@ -87,7 +115,9 @@ namespace FMRS
 			if (DBG_SET.Contains(new_msg)) return;
 			DBG_SET.Add(new_msg);
 #endif
+#if UNITY2019
 			log.trace(new_msg);
+#endif
 		}
 
 		[ConditionalAttribute("DEBUG")]
@@ -122,8 +152,8 @@ namespace FMRS
 			}
 			else
 				Log.warn("Pop failed, no values on stack");
-#endif
 			Log.detail(msg);
+#endif
 		}
 	}
 }
