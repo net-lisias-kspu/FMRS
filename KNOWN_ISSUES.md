@@ -6,3 +6,6 @@
 	+ This can affect also [1.4.0 \<= KSP \<= 1.7.3], so Unity 2017 also have the problem
 	+ Unity 2019 (KSP \>= 1.8) **is not affected**.
 	+ Complete history on [KSPe's Issue #7](https://github.com/net-lisias-ksp/KSPAPIExtensions/issues/7)
+* KSP 1.2 is known to crash using this fork
+	+ It's unrelated to the previous issue, the crash dump is completely different.
+	+ It may work on Windows, who knows? Let me know if you manage to make this thing work on 1.2.x
