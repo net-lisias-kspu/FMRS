@@ -65,7 +65,7 @@ namespace FMRS
 /*************************************************************************************************************************/
         void Awake()
         {
-            Log.info("Awake"); 
+            Log.dbg("Awake"); 
             
             FMRS_core_awake();
 
@@ -98,10 +98,8 @@ namespace FMRS
         void Start()
         {
             //RenderingManager.AddToPostDrawQueue(3, new Callback(drawGUI));     
-#if DEBUG
-            //if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS.Start", "entering Start()");
-#endif
+            Log.PushStackInfo("FMRS.Start", "entering Start()");
+
             if (!_SAVE_Has_Launched)
                 _SETTING_Enabled = false;
 
@@ -131,10 +129,7 @@ namespace FMRS
                     File.Asset.Solve("icons", stockTexture),
                     File.Asset.Solve("icons", blizzyTexture)
                 );
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PopStackInfo("leaving FMRS.Start ()");
-#endif
+            Log.PopStackInfo("leaving FMRS.Start ()");
             GameEvents.onShowUI.Add(ShowUI);
             GameEvents.onHideUI.Add(HideUI);
 
@@ -182,19 +177,14 @@ namespace FMRS
 /*************************************************************************************************************************/
         void OnDestroy()
         {
-#if DEBUG
-            //if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS.OnDestroy", "enter OnDestroy()");
-#endif
+            Log.PushStackInfo("FMRS.OnDestroy", "enter OnDestroy()");
+
             destroy_FMRS();
 
             remove_toolbar_button();
 
             //RenderingManager.RemoveFromPostDrawQueue(3, new Callback(drawGUI));
-#if DEBUG
-            //if (Debug_Level_1_Active)
-                Log.PopStackInfo("leave OnDestroy()");
-#endif
+            Log.PopStackInfo("leave OnDestroy()");
         }
 
     
@@ -345,6 +335,7 @@ namespace FMRS
 /*************************************************************************************************************************/
         void OnDestroy()
         {
+            Log.dbg("FMRS_Space_Center OnDestroy()");
         }
     }
 
@@ -429,6 +420,7 @@ namespace FMRS
 /*************************************************************************************************************************/
         void OnDestroy()
         {
+            Log.dbg("FMRS_TrackingStation OnDestroy()");
             destroy_FMRS();
         }
     }
@@ -454,8 +446,8 @@ namespace FMRS
 /*************************************************************************************************************************/
         void Awake()
         {
-            FMRS_core_awake();
             Log.dbg("FMRS_MainMenu On Awake");
+            FMRS_core_awake();
         }
 
 /*************************************************************************************************************************/
@@ -504,6 +496,7 @@ namespace FMRS
 /*************************************************************************************************************************/
         void OnDestroy()
         {
+            Log.dbg("FMRS_Main_Menu OnDestroy()");
             //nothing
         }
     }

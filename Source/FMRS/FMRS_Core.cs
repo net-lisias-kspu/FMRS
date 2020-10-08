@@ -97,7 +97,7 @@ namespace FMRS
         {
             Log.PushStackInfo("FMRS_Core.FMRS_core_awake", "entering FMRS_core_awake()");
 
-            Log.force("FMRS CODE AWAKE {0}", FILES.SETTINGS_FOLDER);
+            Log.dbg("FMRS CODE AWAKE {0}", FILES.SETTINGS_FOLDER);
             if (!System.IO.Directory.Exists(FILES.SETTINGS_FOLDER)) System.IO.Directory.CreateDirectory(FILES.SETTINGS_FOLDER);
 			init_Save_File_Content();
             load_save_file();
@@ -112,12 +112,8 @@ namespace FMRS
         /*************************************************************************************************************************/
         public void flight_scene_start_routine()
         {
-#if DEBUG
-            //if (Debug_Level_1_Active)
             Log.PushStackInfo("FMRS_Core.flight_scene_start_routine", "entering flight_scene_start_routine()");
-//            if (Debug_Active)
-                Log.info("FMRS flight_scene_start_routine");
-#endif
+            Log.dbg("FMRS flight_scene_start_routine");
 
             plugin_active = true;
             if (FlightGlobals.ActiveVessel == null)
@@ -126,10 +122,7 @@ namespace FMRS
             {
                 if (FlightGlobals.ActiveVessel.situation == Vessel.Situations.PRELAUNCH || n_launchpad_preflight || flight_preflight)
                 {
-#if DEBUG
-//                if (Debug_Active)
-                    Log.info("FMRS Vessel is prelaunch");
-#endif
+                    Log.dbg("FMRS Vessel is prelaunch");
 
                     delete_dropped_vessels();
                     _SETTING_Enabled = true;
@@ -338,9 +331,8 @@ namespace FMRS
                     launch_routine(dummy_event);
                 }
             }
-#if DEBUG
+
             Log.PopStackInfo("leaving flight_scene_update_routine");
-#endif
         }
 
 

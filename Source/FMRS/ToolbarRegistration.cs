@@ -34,6 +34,7 @@ namespace FMRS
     {
         void Start()
         {
+            Log.dbg("Toolbar Registering {0} {1}", FMRS.MODID, FMRS.MODNAME);
             ToolbarControl.RegisterMod(FMRS.MODID, FMRS.MODNAME);
         }
     }

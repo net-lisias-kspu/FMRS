@@ -76,10 +76,7 @@ namespace FMRS
         {
             get
             {
-#if false
-                return FMRS_Version_Info.version_number;
-#endif
-                return "n/a";
+                return Version.Number;
             }
         }
 

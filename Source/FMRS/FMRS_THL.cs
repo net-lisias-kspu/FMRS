@@ -204,7 +204,7 @@ namespace FMRS_THL
 /*************************************************************************************************************************/
         public FMRS_THL_Rep(bool Debug_Active = false, bool Debug_Level_1_Active = false)
         {
-            Debug.Log("### FMRS_THL_Rep: constructor");
+            Log.detail("### FMRS_THL_Rep: constructor");
         }
 
 

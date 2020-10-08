@@ -227,10 +227,8 @@ namespace FMRS
             _SAVE_Switched_To_Dropped = false;
 
             write_save_values_to_file();
-#if DEBUG
-            //if (Debug_Level_1_Active)
-                Log.PopStackInfo("leave recovery_requested_handler(Vessel input)");
-#endif
+
+            Log.PopStackInfo("leave recovery_requested_handler(Vessel input)");
         }
 
 
@@ -308,10 +306,8 @@ namespace FMRS
                 return_string += Math.Round(keyvlaue.Value, 2).ToString();
                 return_string += "@       ";
             }
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PopStackInfo("leave get_vessel_part_list(ProtoVessel vessel)");
-#endif
+
+            Log.PopStackInfo("leave get_vessel_part_list(ProtoVessel vessel)");
             return return_string;
         }
 

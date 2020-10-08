@@ -77,6 +77,7 @@ namespace FMRS
 
         private void OnDestroy()
         {
+            Log.dbg("FMRS_SAVE_Util OnDestroy()");
             GameEvents.onGameStateSaved.Remove(OnGameStateSaved);
         }
 
@@ -191,7 +192,7 @@ namespace FMRS
 
         public void set_save_value(save_cat cat, string key, string value)
         {
-            Log.detail("entering set_save_value(int cat, string key, string value)");
+            Log.dbg("entering set_save_value(int cat, string key, string value)");
 
             if (Save_File_Content[cat].ContainsKey(key))
             {
@@ -228,20 +229,22 @@ namespace FMRS
 
             }
 
-            Log.info("set_save_value: {0} = {1}", key, value);
-            Log.detail("leaving set_save_value(int cat, string key, string value)");
+            Log.dbg("set_save_value: {0} = {1}", key, value);
+            Log.dbg("leaving set_save_value(int cat, string key, string value)");
         }
 
 
 /*************************************************************************************************************************/
         public string get_save_value(save_cat cat, string key)
         {
-            Log.dbg("entering get_save_value(int cat, string key) #### FMRS: NO LEAVE MESSAGE");
+            Log.dbg("entering get_save_value(int cat, string key) {0} {1}", cat, key);
 
-            if (Save_File_Content[cat].ContainsKey(key))
-                return (Save_File_Content[cat][key]);
-            else
-                return (false.ToString());
+            string r = Save_File_Content[cat].ContainsKey(key)
+                ? (Save_File_Content[cat][key])
+                : (false.ToString())
+            ;
+            Log.dbg("entering get_save_value(int cat, string key) = {0}", r);
+            return r;
         }
 
 
@@ -421,10 +424,8 @@ namespace FMRS
             bflush_save_file = false;
             init_save_file();
             read_save_file();
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PopStackInfo("leave flush_save_file()");
-#endif
+
+            Log.PopStackInfo("leave flush_save_file()");
         }
 
 
@@ -463,6 +464,7 @@ namespace FMRS
             }
             if (bflush_save_file)
                 return;
+			Log.dbg("readed save file with success.");
 
             try
             {
@@ -470,37 +472,24 @@ namespace FMRS
                 windowPos.x = Convert.ToInt32(temp_double);
                 temp_double = Convert.ToDouble(get_save_value(save_cat.SETTING, "Window_Y"));
                 windowPos.y = Convert.ToInt32(temp_double);
-                Debug.Log("windowPos loaded from file");
+                Log.dbg("windowPos loaded from file");
             }
             catch (Exception)
             {
-#if false
-                // DEBUG
-                Debug_Active = true;
-                Debug_Level_1_Active = true;
-#endif
-                Log.info("invalid save file, flush save file");
+                Log.error("invalid save file, flush save file");
                 bflush_save_file = true;
             }
 #if DEBUG
+            Log.detail("Dumping Save_File_Content...");
             foreach (KeyValuePair<save_cat, Dictionary<string, string>> temp_keyvalue in Save_File_Content)
                 foreach (KeyValuePair<string, string> readvalue in temp_keyvalue.Value)
-                    Log.info("{0} = {1} = {2}" + temp_keyvalue.Key, readvalue.Key, readvalue.Value);
+                    Log.detail("{0} = {1} = {2}", temp_keyvalue.Key, readvalue.Key, readvalue.Value);
+            Log.detail("Save_File_Content dumped.");
 #endif
 
             if (bflush_save_file)
                 return;
-#if false
-            // DEBUG
-            if (get_save_value(save_cat.SETTING,"Debug_Level") == "1" && Debug_Active)
-                Debug_Level_1_Active = true;
 
-            if (get_save_value(save_cat.SETTING,"Debug_Level") == "2" && Debug_Active)
-            {
-                Debug_Level_1_Active = true;
-                Debug_Level_2_Active = true;
-            }
-#endif
             try
             {
                 _SETTING_Armed = Convert.ToBoolean(get_save_value(save_cat.SETTING, "Armed"));
@@ -521,7 +510,7 @@ namespace FMRS
             }
             catch (Exception)
             {
-                Log.info("invalid save file, flush save file");
+                Log.error("invalid save file, flush save file");
                 bflush_save_file = true;
             }
             Log.PopStackInfo("leave read_save_file()");
@@ -564,10 +553,7 @@ namespace FMRS
                     file.WriteLine(writecat.Key.ToString() + "=" + writevalue.Key + "=" + writevalue.Value);
 
             file.Close();
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PopStackInfo("leave init_save_file()");
-#endif
+            Log.PopStackInfo("leave init_save_file()");
         }
 
 
@@ -600,11 +586,8 @@ namespace FMRS
 /*************************************************************************************************************************/
         public void get_dropped_vessels()
         {
-#if DEBUG
-           // if (Debug_Level_1_Active)
-                Log.PushStackInfo("FMRS_Util.get_dropped_vessels", "entering get_dropped_vessels()");
-#endif
-
+            Log.PushStackInfo("FMRS_Util.get_dropped_vessels", "entering get_dropped_vessels()");
+ 
             foreach (KeyValuePair<save_cat, Dictionary<string, string>> savecat in Save_File_Content)
             {
                 if (savecat.Key == save_cat.DROPPED)

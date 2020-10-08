@@ -542,10 +542,8 @@ namespace FMRS
             scrollbar_stlye.overflow = new RectOffset(1, 1, 1, 1);
 
             skin_init = true;
-#if DEBUG
-            //if (Debug_Level_1_Active)
+
             Log.PopStackInfo("leave init_skin()");
-#endif
         }
     }
 }

@@ -113,21 +113,21 @@ namespace FMRS
                         }
                         else
                         {
-                            Debug.Log(func + " not available in RecoveryController");
+                            Log.detail("{0} not available in RecoveryController", func);
                         }
                     }
                     else
                     {
-                        Debug.Log(func + "  failed");
+                        Log.warn("{0} failed", func);
                         return null;
                     }
                 }
-                Debug.Log("calledtype failed");
+                Log.warn("calledtype failed");
                 return null;
             }
             catch (Exception e)
             {
-                Debug.Log("Error calling type: " + e);
+                Log.error("Error calling type: {0}", e);
                 return null;
             }
         }
