@@ -64,15 +64,13 @@ namespace FMRS
          private void Awake()
         {
             Instance = this;
+            DontDestroyOnLoad(this);
         }
 
         private void Start()
         {
-            Instance = this;
             jumpInProgress = false;
             GameEvents.onGameStateSaved.Add(OnGameStateSaved);
-            jumpInProgress = false;
-            DontDestroyOnLoad(this);
         }
 
         private void OnDestroy()
