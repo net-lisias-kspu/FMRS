@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("FMRS /L Unofficial")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("FMRS /L Unleashed")]
+[assembly: AssemblyDescription("FMRS lets you jump back and forth in time")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("FMRS")]
-[assembly: AssemblyCopyright("Copyright © 2018-2020 LisiasT")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCompany(FMRS.LegalMamboJambo.Company)]
+[assembly: AssemblyProduct(FMRS.LegalMamboJambo.Product)]
+[assembly: AssemblyCopyright(FMRS.LegalMamboJambo.Copyright)]
+[assembly: AssemblyTrademark(FMRS.LegalMamboJambo.Trademark)]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

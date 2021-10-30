@@ -72,6 +72,7 @@
     </Compile>
     <Compile Include="Startup.cs" />
     <Compile Include="ModuleManagerSupport.cs" />
+    <Compile Include="Properties\LegalMamboJambo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="icons\tb_blz_di.png">

@@ -1,6 +1,8 @@
-# Flight Manager for Reusable Stages [FMRS] /L Unofficial
+# Flight Manager for Reusable Stages [FMRS] /L Unleashed
 
-FMRS lets you jump back and forth in time. Unofficial fork by Lisias.
+FMRS lets you jump back and forth in time.
+
+[Unleashed](https://ksp.lisias.net/add-ons-unleashed/) fork by Lisias.
 
 
 ## In a Hurry
@@ -81,18 +83,44 @@ Copy the FMRS Folder into the GameData Folder of you KSP install.
 
 ### Licence
 
-This plugin is licensed under the MIT license.
+* This work is double licensed as follows:
+	+ [SKL 1.0](https://ksp.lisias.net/SKL-1_0.txt). See [here](./LICENSE.KSPe.SKL-1_0)
+		+ You are free to:
+			- Use : unpack and use the material in any computer or device
+			- Redistribute : redistribute the original package in any medium
+		+ Under the following terms:
+			- You agree to use the material only on (or to) KSP
+			- You don't alter the package in any form or way (but you can embedded it)
+			- You don't change the material in any way, and retain any copyright notices
+			- You must explicitly state the author's Copyright, as well an Official Site for downloading the original and new versions (the one you used to download is good enough)
+	+ [GPL 2.0](https://www.gnu.org/licenses/gpl-2.0.txt). See [here](./LICENSE.KSPe.GPL-2_0)
+		+ You are free to:
+			- Use : unpack and use the material in any computer or device
+			- Redistribute : redistribute the original package in any medium
+			- Adapt : Reuse, modify or incorporate source code into your works (and redistribute it!) 
+		+ Under the following terms:
+			- You retain any copyright notices
+			- You recognise and respect any trademarks
+			- You don't impersonate the authors, neither redistribute a derivative that could be misrepresented as theirs.
+			- You credit the author and republish the copyright notices on your works where the code is used.
+			- You relicense (and fully comply) your works using GPL 2.0
+			- You don't mix your work with GPL incompatible works.
+	* If by some reason the GPL would be invalid for you, rest assured that you still retain the right to Use the Work under SKL 1.0. 
+
+Releases previous to 1.2.10.0 are still available under the [MIT](https://opensource.org/licenses/MIT) license [here](https://github.com/net-lisias-kspu/FMRS/tree/Source/CMIT).
+
+Please note the copyrights and trademarks in [NOTICE](./NOTICE).
 
 
 ## UPSTREAM
 
-* [linuxgurugamer](https://forum.kerbalspaceprogram.com/index.php?/profile/129964-linuxgurugamer/) CURRENT MAINTAINER
-	+ [Forum](https://forum.kerbalspaceprogram.com/index.php?/topic/157214-141_-flight-manager-for-reusable-stages-fmrs-now-with-recoverycontroller-integration/)
-	+ [SpaceDock](https://spacedock.info/mod/1251/%20Flight%20Manager%20for%20Reusable%20Stages%20(FMRS)%20Continued)
-	+ [GitHub](https://github.com/linuxgurugamer/FMRS)
-* [Omegano](https://forum.kerbalspaceprogram.com/index.php?/profile/172838-omegano/) PARENT
-	+ [GitHub](https://github.com/Omegano/FMRS)
 * [SIT89](https://forum.kerbalspaceprogram.com/index.php?/profile/110467-sit89/) ROOT
 	+ [Forum](https://forum.kerbalspaceprogram.com/index.php?/topic/72605-110-flight-manager-for-reusable-stages-fmrs-x110-experimental/&)
 	+ [CurseForge](https://www.curseforge.com/kerbal/ksp-mods/fmrs-x1-1-00-01)
 	+ [GitHub](https://github.com/SIT89/FMRS)
+* [Omegano](https://forum.kerbalspaceprogram.com/index.php?/profile/172838-omegano/) Previous
+	+ [GitHub](https://github.com/Omegano/FMRS)
+* [linuxgurugamer](https://forum.kerbalspaceprogram.com/index.php?/profile/129964-linuxgurugamer/) Maintainer
+	+ [Forum](https://forum.kerbalspaceprogram.com/index.php?/topic/157214-141_-flight-manager-for-reusable-stages-fmrs-now-with-recoverycontroller-integration/)
+	+ [SpaceDock](https://spacedock.info/mod/1251/%20Flight%20Manager%20for%20Reusable%20Stages%20(FMRS)%20Continued)
+	+ [GitHub](https://github.com/linuxgurugamer/FMRS)

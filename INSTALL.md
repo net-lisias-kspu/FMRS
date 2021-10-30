@@ -1,4 +1,4 @@
-# FMRS /L Unofficial
+# FMRS /L Unleashed
 
 A simple KSP mod to change to any resolution.
 
