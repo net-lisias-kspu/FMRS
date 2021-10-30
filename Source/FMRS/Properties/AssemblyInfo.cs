@@ -35,6 +35,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion(FMRS.Version.Number)]
 
 [assembly: KSPAssembly("SlingShotter", 1, 0)]
-[assembly: KSPAssemblyDependency("KSPe", 2, 2)]
-[assembly: KSPAssemblyDependency("KSPe.UI", 2, 2)]
-[assembly: KSPAssemblyDependency("ToolbarController", 1, 0)]
+[assembly: KSPAssemblyDependency("KSPe", 2, 4)]
+[assembly: KSPAssemblyDependency("KSPe.UI", 2, 4)]

@@ -51,9 +51,6 @@ namespace FMRS
         public bool really_close = false;
         public bool show_setting = false;
 
-        public string stockTexture;
-        public string blizzyTexture;
-
         public static Texture2D upArrow;
         public static Texture2D downArrow;
         public GUIContent upContent;
@@ -379,14 +376,6 @@ namespace FMRS
             Log.PushStackInfo("FMRS_Core.toolbar_open", "enter toolbar_open()");
             Log.dbg("enable plugin form toolbar");
 
-            stockTexture = "tb_st_en";
-            blizzyTexture = "tb_blz_en";
-            FMRS.toolbarControl.SetTexture(
-                    File.Asset.Solve("icons", stockTexture),
-                    File.Asset.Solve("icons", blizzyTexture)
-                );
-            Log.info("SetTexture 2, stockTexture: {0},   blizzyTexture {1}", stockTexture, blizzyTexture);
-
             _SETTING_Enabled = true;
 
             if (FlightGlobals.ActiveVessel.situation == Vessel.Situations.PRELAUNCH)
@@ -432,11 +421,6 @@ namespace FMRS
             delete_dropped_vessels();
             really_close = false;
             _SAVE_Flight_Reset = false;
-
-            FMRS.toolbarControl.SetTexture(
-                    File.Asset.Solve("icons", stockTexture),
-                    File.Asset.Solve("icons", blizzyTexture)
-                );
 
             if (_SAVE_Has_Launched && _SAVE_Switched_To_Dropped)
                 jump_to_vessel("Main");

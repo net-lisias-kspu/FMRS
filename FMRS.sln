@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27428.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FMRS", "Source\FMRS\FMRS.csproj", "{64746823-6B47-496D-98BE-ADB13653D9DA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FMRSSolutionFolder", "Source\FMRSSolutionFolder", "{FA7ABE92-C2B4-40BE-A3F2-4F72444411E5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FMRSSolutionFolder", "FMRSSolutionFolder", "{FA7ABE92-C2B4-40BE-A3F2-4F72444411E5}"
 	ProjectSection(SolutionItems) = preProject
 		buildRelease.bat = buildRelease.bat
 		Changelog.txt = Changelog.txt
@@ -39,5 +39,11 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E9F09A62-2393-4F22-8A66-F6F7563C4647}
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.TextStylePolicy = $1
+		$1.FileWidth = 132
+		$1.scope = text/plain
 	EndGlobalSection
 EndGlobal
