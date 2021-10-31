@@ -1,6 +1,8 @@
 # FMRS :: Change Log
 
-* 2020-1008: 1.2.9.2 (lisias) for KSP >= 1.3
+* 2021-1031: 1.2.10. (lisias) for KSP >= 1.3
+	+ Updates to KSPe.UI v2.4 facilities
+* 2020-1008: 1.2.9.3 (lisias) for KSP >= 1.3
 	+ Added KSPe facilities for:
 		- Log, UI, Instalment checks
 	+ Moved the whole shebang to the `net.lisias.ksp` folder hierarchy
